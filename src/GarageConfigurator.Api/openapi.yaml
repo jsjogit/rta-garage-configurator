@@ -1,0 +1,252 @@
+openapi: 3.0.3
+info:
+  title: RTA Garage Wall Solver API
+  version: 1.0.0
+  description: >
+    Solves a garage wall into complete, priced, buildable cabinet layouts from the Signature Gray
+    line, and stores a design so it can be shared or reloaded. Dimensions are inches as decimals;
+    money is decimal USD. Prices are applied per request, never stored with a layout.
+servers:
+  - url: /api
+paths:
+  /solve:
+    post:
+      operationId: solve
+      summary: Solve a wall into up to three ranked, priced layouts.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SolveRequest' }
+      responses:
+        '200':
+          description: Up to three layouts, or none with a failure reason the customer can read.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SolveResponse' }
+        '400':
+          description: The request could not be understood.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+  /validate:
+    post:
+      operationId: validate
+      summary: Check an edited layout against the design rules.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ValidateRequest' }
+      responses:
+        '200':
+          description: Violations, empty when the layout is buildable.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ValidateResponse' }
+        '400':
+          description: The request could not be understood.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+  /price:
+    post:
+      operationId: price
+      summary: Price a layout at current prices.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PriceRequest' }
+      responses:
+        '200':
+          description: Line items rolled up by SKU, with list and promotional subtotals.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PricedLayout' }
+        '400':
+          description: The request could not be understood.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+  /design:
+    post:
+      operationId: saveDesign
+      summary: Store a design and get back a short shareable code.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SaveDesignRequest' }
+      responses:
+        '200':
+          description: The config id for /garage/design/{configId}.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  configId: { type: string, example: 7K2MQ4, minLength: 6, maxLength: 6 }
+        '400':
+          description: The request could not be understood.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+  /design/{configId}:
+    get:
+      operationId: getDesign
+      summary: Load a stored design, repriced at current prices.
+      parameters:
+        - name: configId
+          in: path
+          required: true
+          schema: { type: string, minLength: 6, maxLength: 6 }
+      responses:
+        '200':
+          description: The stored wall, goal and layout, priced.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DesignResponse' }
+        '404':
+          description: No design with that code.
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        message: { type: string }
+    Obstruction:
+      type: object
+      required: [type, startX, width, height, bottomY]
+      properties:
+        type:
+          type: string
+          enum: [ElectricalPanel, WaterHeater, Window, SideDoor, GarageDoorTrack, Outlet]
+        startX: { type: number, format: double }
+        width: { type: number, format: double }
+        height: { type: number, format: double }
+        bottomY: { type: number, format: double }
+    Wall:
+      type: object
+      required: [length, ceiling]
+      properties:
+        length: { type: number, format: double, description: Wall length in inches. }
+        ceiling:
+          type: number
+          format: double
+          description: >
+            Ceiling height in inches. Required, not defaulted: assuming 96 on an older 84 inch
+            garage quotes tall cabinets that do not fit.
+        obstructions:
+          type: array
+          items: { $ref: '#/components/schemas/Obstruction' }
+    PlacedItem:
+      type: object
+      required: [sku, x, y, width, height, depth, zone]
+      properties:
+        sku: { type: string }
+        x: { type: number, format: double }
+        y: { type: number, format: double }
+        width: { type: number, format: double }
+        height: { type: number, format: double }
+        depth: { type: number, format: double }
+        zone:
+          type: string
+          enum: [Base, Counter, Wall, Tall, Filler]
+    Layout:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/PlacedItem' }
+        label: { type: string, nullable: true }
+        configId: { type: string, nullable: true }
+    LineItem:
+      type: object
+      properties:
+        sku: { type: string }
+        quantity: { type: integer }
+        unitList: { type: number, format: double }
+        unitPromo: { type: number, format: double }
+        extendedList: { type: number, format: double }
+        extendedPromo: { type: number, format: double }
+    PricedLayout:
+      type: object
+      properties:
+        layout: { $ref: '#/components/schemas/Layout' }
+        lineItems:
+          type: array
+          items: { $ref: '#/components/schemas/LineItem' }
+        subtotalList: { type: number, format: double }
+        subtotalPromo: { type: number, format: double }
+    Goal:
+      type: string
+      enum: [Workbench, Storage, HideTheMess, Balanced]
+    SolveRequest:
+      type: object
+      required: [wall, goal]
+      properties:
+        wall: { $ref: '#/components/schemas/Wall' }
+        goal: { $ref: '#/components/schemas/Goal' }
+    SolveResponse:
+      type: object
+      properties:
+        layouts:
+          type: array
+          maxItems: 3
+          items: { $ref: '#/components/schemas/PricedLayout' }
+        failure:
+          nullable: true
+          type: object
+          properties:
+            code:
+              type: string
+              enum: [WallTooShort, CeilingTooLow, NoLayoutFits]
+            message: { type: string }
+        notices:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                enum: [TallsExcludedLowCeiling]
+              message: { type: string }
+    ValidateRequest:
+      type: object
+      required: [layout, wall]
+      properties:
+        layout: { $ref: '#/components/schemas/Layout' }
+        wall: { $ref: '#/components/schemas/Wall' }
+    ValidateResponse:
+      type: object
+      properties:
+        violations:
+          type: array
+          items:
+            type: object
+            properties:
+              code: { type: string }
+              message: { type: string }
+              sku: { type: string, nullable: true }
+    PriceRequest:
+      type: object
+      required: [layout]
+      properties:
+        layout: { $ref: '#/components/schemas/Layout' }
+    SaveDesignRequest:
+      type: object
+      required: [wall, goal, layout]
+      properties:
+        wall: { $ref: '#/components/schemas/Wall' }
+        goal: { $ref: '#/components/schemas/Goal' }
+        layout: { $ref: '#/components/schemas/Layout' }
+    DesignResponse:
+      type: object
+      properties:
+        configId: { type: string }
+        wall: { $ref: '#/components/schemas/Wall' }
+        goal: { $ref: '#/components/schemas/Goal' }
+        design: { $ref: '#/components/schemas/PricedLayout' }
+        savedAtUtc: { type: string, format: date-time }

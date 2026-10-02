@@ -36,10 +36,16 @@
 | 2026-10-02 | Stacked 15" uppers are enabled for Storage at ceilings ≥ 108 | Cubic-feet-per-dollar alone always prefers a tall over an upper, so stacking would never have been chosen and the feature would have been dead code. |
 | 2026-10-02 | A counter needs its whole contiguous base run ≤ 98" | Falls out of "no joining end to end": a 240" unbroken base run cannot be topped at all, so the solver must break runs with talls to offer a workbench. |
 | 2026-10-02 | Solver output is snapshotted in golden files per fixture | Scoring changes silently reshuffle what the customer sees. Verified the snapshots bite: corrupting a golden fails 1 test, changing one SKU mapping fails 8. Regenerate with GOLDEN_UPDATE=1. |
+| 2026-10-02 | `Price(Layout, PriceMap)` added to Core | Documented in SOLVER_RULES' validation API but missed in Session 2; POST /price needs it. Returns line items plus list and promo subtotals per SPEC. |
+| 2026-10-02 | config_id is Crockford base32 (no I, L, O, U) | Customers read these aloud to a designer from a share link. 32^6 is ~1.07 billion codes; the store rejects duplicates and the service redraws up to 8 times. |
+| 2026-10-02 | All API behaviour lives in `GarageApi`; Function classes are thin wrappers | `func` is not installed in this environment and a Functions host is awkward to spin up in tests, so the testable surface must not require one. 69 API tests run with no host. |
+| 2026-10-02 | Designs persist via `IDesignStore`; Table Storage in Azure, in-memory locally | Resolves the open "where does config_id persistence live" question along PLAN's proposal. `TrySaveAsync` returns false rather than overwriting, which is what makes id collisions safe. |
+| 2026-10-02 | The API refuses to start in a deployed environment without `DesignStorageConnection` | Falling back to in-memory would hand customers share links that vanish on the next restart — a silent failure worth a loud startup error. |
+| 2026-10-02 | A loaded design is repriced on read, never served from stored money | Prices come from nopCommerce at request time. A design saved during a promotion must not quote that promotion back months later. |
+| 2026-10-02 | openapi.yaml is hand-written, with a test that walks the real [HttpTrigger] routes | The generated-spec packages for the isolated worker are fragile; a sync test gives the same protection against drift in both directions. |
 
 ## Needs Joshua
 - An 84" ceiling is the knife edge: an 84" pantry fits only if assembled upright in place (its tipping
   diagonal is ~87"). Should `minCeilingForTallsAndWalls` be raised above 84?
 - Confirm the electrical-panel clearance numbers (30" wide, floor to 78") with ops/legal before launch.
 - Which nopCommerce endpoint should "add entire wall" call? (bulk add vs. sequential)
-- Where should config_id persistence live for Phase 1? (Azure Table Storage proposed)

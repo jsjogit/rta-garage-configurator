@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{68150FE3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarageConfigurator.Core.Tests", "tests\GarageConfigurator.Core.Tests\GarageConfigurator.Core.Tests.csproj", "{13A78A1E-E70A-4809-B0FD-9378A2585CA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarageConfigurator.Api.Tests", "tests\GarageConfigurator.Api.Tests\GarageConfigurator.Api.Tests.csproj", "{0BE9FA22-8BE0-4CE6-BE23-60247A662696}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,9 +30,14 @@ Global
 		{13A78A1E-E70A-4809-B0FD-9378A2585CA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13A78A1E-E70A-4809-B0FD-9378A2585CA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13A78A1E-E70A-4809-B0FD-9378A2585CA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BE9FA22-8BE0-4CE6-BE23-60247A662696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BE9FA22-8BE0-4CE6-BE23-60247A662696}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BE9FA22-8BE0-4CE6-BE23-60247A662696}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BE9FA22-8BE0-4CE6-BE23-60247A662696}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3D72F649-EADF-45E9-8F7B-4A6BFFB75548} = {DE550955-6364-4D48-AEBB-ADB2E5FDD3BD}
 		{13A78A1E-E70A-4809-B0FD-9378A2585CA5} = {68150FE3-CF89-43D3-BAE0-F882C9CB0915}
+		{0BE9FA22-8BE0-4CE6-BE23-60247A662696} = {68150FE3-CF89-43D3-BAE0-F882C9CB0915}
 	EndGlobalSection
 EndGlobal
