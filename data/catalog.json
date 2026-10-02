@@ -17,7 +17,7 @@
     { "sku": "MV-DB30-4",   "name": "4-Drawer Base Cabinet",          "zone": "Base", "type": "Drawer",     "w": 30, "h": 34.5, "d": 24, "drawers": 4, "listPrice": 1326.60, "promoPrice": 994.95 },
     { "sku": "MV-B24-F",    "name": "Full Height Door Base Cabinet",  "zone": "Base", "type": "FullDoor",   "w": 24, "h": 34.5, "d": 24, "listPrice": 683.10,  "promoPrice": 512.32 },
     { "sku": "MV-B30-F",    "name": "Full Height Door Base Cabinet",  "zone": "Base", "type": "FullDoor",   "w": 30, "h": 34.5, "d": 24, "listPrice": 883.08,  "promoPrice": 662.31 },
-    { "sku": "MV-BWB15-PS", "name": "Waste Pullout Drawer",           "zone": "Base", "type": "WastePull",  "w": 15, "h": 30,   "d": 24, "listPrice": 833.58,  "promoPrice": 625.18, "notes": "30in tall, not 34.5 — VERIFY whether it sits under counter" },
+    { "sku": "MV-BWB15-PS", "name": "Waste Pullout Drawer",           "zone": "Base", "type": "WastePull",  "w": 15, "h": 34.5, "d": 24, "listPrice": 833.58,  "promoPrice": 625.18, "notes": "Site lists 30in H — confirmed wrong by Joshua 2026-10-01; it is 34.5 like every other base. Site fix pending." },
     { "sku": "MV-W1530",    "name": "Single Door Wall Cabinet",       "zone": "Wall", "type": "Door",       "w": 15, "h": 30,   "d": 12, "listPrice": 211.86,  "promoPrice": 158.90 },
     { "sku": "MV-W2430",    "name": "Double Door Wall Cabinet",       "zone": "Wall", "type": "Door",       "w": 24, "h": 30,   "d": 12, "listPrice": 310.86,  "promoPrice": 233.14 },
     { "sku": "MV-W2415",    "name": "Double Door Wall Cabinet",       "zone": "Wall", "type": "Door",       "w": 24, "h": 15,   "d": 12, "listPrice": 205.92,  "promoPrice": 154.44 },
@@ -33,7 +33,7 @@
     { "sku": "MV-CTHW9825", "name": "Wood Butcher Block Countertop 98in", "w": 98, "h": 1.5, "d": 25, "idealRun": 96, "listPrice": 791.13, "promoPrice": 593.35 }
   ],
   "kits": [
-    { "sku": "MV-GARAGE-KIT-6", "name": "Signature Gray 6-Piece Garage Cabinet Set", "listPrice": 3694.44, "promoPrice": 2770.83, "bom": null, "notes": "BOM unknown — needs Joshua. When known, solver should price a matching layout as the kit." }
+    { "sku": "MV-GARAGE-KIT-6", "name": "Signature Gray 6-Piece Garage Cabinet Set", "listPrice": 3694.44, "promoPrice": 2770.83, "bom": null, "virtual": true, "excludeFromSolver": true, "notes": "Virtual marketplace-listing SKU only (Joshua 2026-10-01). Orderable in theory, never ordered in practice. Not a real assortment — solver must never emit it or price against it." }
   ],
   "excludedFromSolver": [
     { "sku": "RV-BWB18GRAY",        "reason": "18in waste pullout insert from kitchen line; no 18in garage base" },
@@ -50,6 +50,18 @@
     "endGapNeedsFillerAt": 3,
     "endGapPenaltyAt": 6,
     "legHeightMin": 4,
-    "legHeightMax": 6.25
+    "legHeightMax": 6.25,
+    "minWallLength": 15,
+    "minCeiling": 36,
+    "minCeilingForTallsAndWalls": 84,
+    "minCeilingForStackedWall": 108,
+    "maxCounterRunWidth": 98,
+    "maxFillersPerEnd": 1,
+    "maxFillersPerObstructionEdge": 1,
+    "obstructionClearance": {
+      "ElectricalPanel": { "minKeepOutWidth": 30, "keepOutFromFloorToY": 78, "_note": "Modeled on NEC 110.26 working space: >=30in wide, floor to 6.5ft, measured from the panel face. Confirm final numbers with ops." },
+      "SideDoor":        { "sideMargin": 3, "_note": "Casing/trim margin each side. Assumes the door does not swing flat against this wall." },
+      "_default":        { "sideMargin": 0 }
+    }
   }
 }

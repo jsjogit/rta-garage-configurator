@@ -5,8 +5,11 @@
   { "id": "three-car-door",    "length": 360, "ceiling": 108, "goal": "Storage",
     "obstructions": [ { "type": "SideDoor", "startX": 300, "width": 38, "height": 84, "bottomY": 0 } ] },
   { "id": "tight-10ft",        "length": 120, "ceiling": 96,  "obstructions": [], "goal": "HideTheMess" },
-  { "id": "budget-3k",         "length": 200, "ceiling": 96,  "obstructions": [], "goal": "Workbench", "budgetMax": 3000 },
+  { "id": "workbench-200",     "length": 200, "ceiling": 96,  "obstructions": [], "goal": "Workbench" },
   { "id": "water-heater",      "length": 240, "ceiling": 96,  "goal": "Balanced",
     "obstructions": [ { "type": "WaterHeater", "startX": 0, "width": 30, "height": 72, "bottomY": 0 } ] },
-  { "id": "too-short",         "length": 12,  "ceiling": 96,  "obstructions": [], "goal": "Balanced", "expect": "no valid layout" }
+  { "id": "low-ceiling-84",    "length": 240, "ceiling": 84,  "obstructions": [], "goal": "Storage", "expect": "no talls, no wall cabinets", "expectNotice": "TallsExcludedLowCeiling" },
+  { "id": "tall-ceiling-120",  "length": 240, "ceiling": 120, "obstructions": [], "goal": "Storage", "expect": "15in wall may stack on 30in wall" },
+  { "id": "ceiling-too-low",   "length": 240, "ceiling": 30,  "obstructions": [], "goal": "Balanced", "expect": "no valid layout", "expectReason": "CeilingTooLow" },
+  { "id": "too-short",         "length": 12,  "ceiling": 96,  "obstructions": [], "goal": "Balanced", "expect": "no valid layout", "expectReason": "WallTooShort" }
 ]

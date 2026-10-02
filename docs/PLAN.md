@@ -18,8 +18,8 @@ Finish every session with `dotnet test` green and DECISIONS.md updated.
 > after the rule. Use data/fixtures/walls.json for wall shapes. Make constants come from catalog.json "constants".
 
 ### Session 3 — Solver
-> Implement Solve(Wall, Goal, PriceMap, budgetMax?) → top 3 Layouts using the DP-over-width search
-> described in SOLVER_RULES.md, scored by the goal heuristics. Add a golden-file test per fixture wall
+> Implement Solve(Wall, Goal, PriceMap) → top 3 Layouts using the DP-over-width search
+> described in SOLVER_RULES.md, scored by the goal heuristics. All three layouts share the requested goal. Add a golden-file test per fixture wall
 > that snapshots the SKUs and price of each returned layout. Add a benchmark asserting < 50 ms per solve.
 
 ### Session 4 — API

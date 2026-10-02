@@ -17,7 +17,7 @@ Read `docs/SPEC.md`, `docs/SOLVER_RULES.md`, and `docs/PLAN.md` before starting 
 - **Solver / domain:** .NET 8 class library `src/GarageConfigurator.Core` — pure, no I/O, 100% unit-testable.
 - **API:** Azure Functions (isolated worker, .NET 8) `src/GarageConfigurator.Api`. Thin wrappers over Core.
 - **Web:** `web/` — React 18 + Vite + TypeScript. Phase 1 renders an SVG elevation; Phase 2 adds Three.js.
-- **Tests:** xUnit + FluentAssertions in `tests/GarageConfigurator.Core.Tests`. Vitest for web.
+- **Tests:** xUnit + Shouldly in `tests/GarageConfigurator.Core.Tests`. Vitest for web.
 - **Hosting target:** Azure Static Web Apps (web) + Azure Functions (API) + Blob Storage (renders/exports) + App Insights.
 - **Store integration:** nopCommerce (custom .NET fork, RTA). Phase 1 integrates via the existing add-to-cart
   endpoints; the solver library is designed to be referenced from the nop solution later.

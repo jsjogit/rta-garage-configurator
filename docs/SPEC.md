@@ -6,7 +6,7 @@ pick items one by one with no guidance on how a wall goes together. Result: high
 friction, low confidence, slow conversion.
 
 ## Goal
-In under 60 seconds and with 3 inputs, show the customer a complete, priced, buildable wall of
+In under 60 seconds and in 3 steps, show the customer a complete, priced, buildable wall of
 cabinets they can add to cart in one click — and let them tweak it with live re-pricing.
 
 ## Success metrics (instrument from day one)
@@ -20,21 +20,34 @@ Secondary: share-link created, design emailed, "talk to a designer" clicks.
    - Single-car side wall ≈ 240" (20 ft)
    - Two-car back wall ≈ 240" (20 ft) / three-car ≈ 360" (30 ft)
    - "I'll measure" (free input)
+1b. **Ceiling height** — same step as wall length, one-tap quick-picks, default 8 ft:
+   - 8 ft (96") · 9 ft (108") · 10 ft (120") · free input
+   Required, because the line's talls and the 84" datum do not fit under an older 7-ft garage ceiling.
+   Not a free-text measurement — it is the one dimension a customer can answer by looking up.
 2. **Obstructions** — optional list of blocks on the wall: `{type, startX, width, height, bottomY}`.
    Presets: electrical panel, water heater, window, side door, garage-door track zone, outlet.
-3. **Goal** — one of: `Workbench`, `Storage`, `HideTheMess`, `Balanced`. Optional `budgetMax`.
+3. **Goal** — one of: `Workbench`, `Storage`, `HideTheMess`, `Balanced`.
+   (No `budgetMax` in V1 — deferred to a later phase.)
 
 ## Output
-`SolveResponse` with up to 3 ranked `Layout`s. Each layout:
+`SolveResponse` with up to 3 ranked `Layout`s — all three are variants of the **one goal the customer
+chose**, not one layout per goal (the cross-goal spread is a post-V1 feature). Each layout:
 - Ordered list of placed items: `{sku, x, y, w, h, d, zone: Base|Counter|Wall|Tall|Filler}`
 - Line items rolled up by SKU with qty, unit price, extended price
 - Subtotal (list), subtotal (promo if a promo map is supplied)
-- Human label ("Workbench Hub", "Max Storage", "Budget Wall")
+- Human label. Rank 1 is "Recommended"; ranks 2–3 are labelled by how they differ from rank 1
+  ("More storage", "Lower cost", "Bigger workbench"). Revisit the wording in Session 5 against real cards.
 - A short `config_id` (base32, 6 chars) persisted so the layout can be reloaded/shared
 
+If no layout is possible, `SolveResponse` returns zero layouts and a typed reason code. For a wall under
+15" that is `WallTooShort`, shown to the customer as **"This wall is too short for our smallest cabinet."**
+For a ceiling under 36" that is `CeilingTooLow`. A ceiling under 84" still solves, but returns a
+`TallsExcludedLowCeiling` notice so the UI can explain why no pantries appear.
+
 ## UI (Phase 1)
-- Step 1: wall length (3 quick-picks + free input) → Step 2: drag obstruction chips onto a wall strip
-  → Step 3: goal + optional budget → Results.
+- Step 1: wall length (3 quick-picks + free input) + ceiling height (3 quick-picks, 8 ft default)
+  → Step 2: drag obstruction chips onto a wall strip
+  → Step 3: goal → Results.
 - Results: three cards side-by-side, each with an **SVG front elevation** (true proportions, gray
   slab fronts, black bar pulls, wood-tone counter), price, and "Add entire wall to cart".
 - Tap any cabinet in the elevation → side panel with SKU, dims, price, swap options (same width,
@@ -44,6 +57,7 @@ Secondary: share-link created, design emailed, "talk to a designer" clicks.
 
 ## Non-goals (Phase 1)
 No photo upload, no 3D, no AI, no multi-wall rooms, no account requirement.
+No budget cap, and no cross-goal comparison (three layouts always share the chosen goal).
 
 ## Later phases (see PLAN.md)
 Phase 2: Three.js 3D scene, drag-to-rearrange, GLB/USDZ export.
