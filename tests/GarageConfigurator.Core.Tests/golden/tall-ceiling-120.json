@@ -1,0 +1,40 @@
+{
+  "fixture": "tall-ceiling-120",
+  "goal": "Storage",
+  "failure": null,
+  "notices": [],
+  "layouts": [
+    {
+      "label": "Recommended",
+      "listTotal": 12444.32,
+      "lineItems": [
+        "MV-PC3084 x6",
+        "MV-B30 x2",
+        "MV-W3030 x2",
+        "IC-MW-W3015 x2"
+      ]
+    },
+    {
+      "label": "Another option",
+      "listTotal": 12800.72,
+      "lineItems": [
+        "MV-PC3084 x6",
+        "MV-B30 x1",
+        "MV-B15 x2",
+        "MV-W3030 x2",
+        "IC-MW-W3015 x2"
+      ]
+    },
+    {
+      "label": "Another option",
+      "listTotal": 12287.90,
+      "lineItems": [
+        "MV-PC3084 x4",
+        "MV-B24 x3",
+        "MV-W3030 x2",
+        "IC-MW-W3015 x2",
+        "MV-PC2484 x2"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "fixture": "water-heater",
+  "goal": "Balanced",
+  "failure": null,
+  "notices": [],
+  "layouts": [
+    {
+      "label": "Recommended",
+      "listTotal": 11546.49,
+      "lineItems": [
+        "MV-B30 x1",
+        "MV-DB24-4 x3",
+        "MV-B24 x2",
+        "MV-CTHW9825 x1",
+        "MV-W3030 x5",
+        "MV-W1530 x1",
+        "MV-PC3084 x1",
+        "MV-B15 x2"
+      ]
+    },
+    {
+      "label": "Another option",
+      "listTotal": 11657.37,
+      "lineItems": [
+        "MV-B30 x1",
+        "MV-DB24-4 x1",
+        "MV-B24 x2",
+        "MV-CTHW9825 x1",
+        "MV-W3030 x5",
+        "MV-W1530 x1",
+        "MV-PC3084 x1",
+        "MV-B15 x4",
+        "MV-BWB15-PS x1",
+        "MV-F384 x1"
+      ]
+    },
+    {
+      "label": "Lower cost",
+      "listTotal": 9535.68,
+      "lineItems": [
+        "MV-B30 x7",
+        "MV-W3030 x7"
+      ]
+    }
+  ]
+}

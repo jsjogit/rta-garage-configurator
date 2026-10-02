@@ -30,8 +30,16 @@
 | 2026-10-02 | Obstruction blocking is plain rectangle intersection against the keep-out | "Floor-reaching obstructions block bases and talls; others block only wall cabinets" needs no special case — a window at 40"–64" simply misses a 0"–34.5" base and catches a 54"–84" wall cabinet. Less code, same rule. |
 | 2026-10-02 | `Validate` is `new LayoutValidator(catalog).Validate(layout, wall)` | Keeps the documented two-argument call shape while injecting constants and SKU data from catalog.json, per PLAN Session 2. |
 | 2026-10-02 | A break in the floor run is exempt from the butt-together rule when a keep-out explains it | Otherwise every wall with a water heater reports a false gap violation. Fillers may likewise sit against a keep-out edge. |
+| 2026-10-02 | Fixture `low-ceiling-84` was wrong and became `low-ceiling-80` | At exactly 84" the rules put talls in the standard band (84 ≤ ceiling < 108), so the fixture asserted an exclusion the rules do not make. Added `ceiling-exactly-84` to pin the boundary. |
+| 2026-10-02 | A filler counts as an end filler when it lands within 3" of a wall end or keep-out edge | Requiring an exact touch rejected every layout on the panel wall: a 3" filler closing a 5" gap leaves 2", which the rules already accept as-is. |
+| 2026-10-02 | At most one waste pullout per wall | BWB15-PS is the only 15" drawer unit, so the run builder reached for it at every narrow drawer slot. One shop bin is useful; two is a mistake no customer wants. |
+| 2026-10-02 | Stacked 15" uppers are enabled for Storage at ceilings ≥ 108 | Cubic-feet-per-dollar alone always prefers a tall over an upper, so stacking would never have been chosen and the feature would have been dead code. |
+| 2026-10-02 | A counter needs its whole contiguous base run ≤ 98" | Falls out of "no joining end to end": a 240" unbroken base run cannot be topped at all, so the solver must break runs with talls to offer a workbench. |
+| 2026-10-02 | Solver output is snapshotted in golden files per fixture | Scoring changes silently reshuffle what the customer sees. Verified the snapshots bite: corrupting a golden fails 1 test, changing one SKU mapping fails 8. Regenerate with GOLDEN_UPDATE=1. |
 
 ## Needs Joshua
+- An 84" ceiling is the knife edge: an 84" pantry fits only if assembled upright in place (its tipping
+  diagonal is ~87"). Should `minCeilingForTallsAndWalls` be raised above 84?
 - Confirm the electrical-panel clearance numbers (30" wide, floor to 78") with ops/legal before launch.
 - Which nopCommerce endpoint should "add entire wall" call? (bulk add vs. sequential)
 - Where should config_id persistence live for Phase 1? (Azure Table Storage proposed)

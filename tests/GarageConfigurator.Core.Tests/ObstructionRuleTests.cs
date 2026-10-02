@@ -103,6 +103,20 @@ public class ObstructionRuleTests
     }
 
     [Fact]
+    public void Filler_landing_just_short_of_an_obstruction_still_counts_as_an_end_filler()
+    {
+        // The 3" filler leaves 2" before the keep-out — acceptable as-is, not a stranded filler.
+        var layout = Layout(
+            Base("MV-B30", 0m, 30m),
+            Filler(30m),
+            Base("MV-B30", 65m, 30m),
+            Filler(95m));
+
+        Validator.Validate(layout, WallWith(100m, WaterHeater(35m))).Codes()
+            .ShouldNotContain(ViolationCode.FillerBetweenCabinets);
+    }
+
+    [Fact]
     public void Electrical_panel_keep_out_on_the_two_car_fixture_spans_173_to_203()
     {
         var wall = WallFixtures.Get("two-car-panel");
@@ -119,7 +133,7 @@ public class ObstructionRuleTests
     [Fact]
     public void Every_fixture_wall_loads_with_a_length_and_a_ceiling()
     {
-        WallFixtures.All.Count.ShouldBe(10);
+        WallFixtures.All.Count.ShouldBe(11);
         WallFixtures.All.Values.ShouldAllBe(w => w.Length > 0m && w.Ceiling > 0m);
     }
 }

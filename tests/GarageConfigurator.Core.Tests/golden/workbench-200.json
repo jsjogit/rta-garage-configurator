@@ -1,0 +1,49 @@
+{
+  "fixture": "workbench-200",
+  "goal": "Workbench",
+  "failure": null,
+  "notices": [],
+  "layouts": [
+    {
+      "label": "Recommended",
+      "listTotal": 12006.96,
+      "lineItems": [
+        "MV-B24 x3",
+        "MV-DB24-4 x3",
+        "MV-CTHW9825 x2",
+        "MV-W3030 x5",
+        "MV-PC2484 x1",
+        "MV-BWB15-PS x1",
+        "MV-B15 x1",
+        "MV-W1530 x1"
+      ]
+    },
+    {
+      "label": "Another option",
+      "listTotal": 12260.40,
+      "lineItems": [
+        "MV-B24 x2",
+        "MV-DB24-4 x2",
+        "MV-CTHW9825 x2",
+        "MV-W3030 x5",
+        "MV-PC2484 x1",
+        "MV-B15 x4",
+        "MV-BWB15-PS x1",
+        "MV-W1530 x1",
+        "MV-F384 x1"
+      ]
+    },
+    {
+      "label": "Lower cost",
+      "listTotal": 11081.71,
+      "lineItems": [
+        "MV-B24 x4",
+        "MV-DB24-4 x3",
+        "MV-CTHW9825 x1",
+        "MV-W3030 x5",
+        "MV-PC3084 x1",
+        "MV-CTHW7425 x1"
+      ]
+    }
+  ]
+}

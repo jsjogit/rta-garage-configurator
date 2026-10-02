@@ -155,10 +155,16 @@ public sealed class LayoutValidator
     {
         foreach (var group in ContiguousFillerGroups(floorRun))
         {
-            var touchesAnEnd = group[0].X == 0m || group[^1].Right == wall.Length;
-            var touchesAnObstruction = keepOuts.Any(k => k.TouchesAt(group[0].X) || k.TouchesAt(group[^1].Right));
+            // A filler belongs at a hard edge: the end of the wall, or an obstruction. It counts as
+            // "at" one when what is left over is small enough to accept as-is.
+            var edges = new List<decimal> { 0m, wall.Length };
+            edges.AddRange(keepOuts.SelectMany(k => new[] { k.Left, k.Right }));
 
-            if (!touchesAnEnd && !touchesAnObstruction)
+            var atAnEdge = edges.Any(edge =>
+                Math.Abs(group[0].X - edge) < Constants.EndGapNeedsFillerAt
+                || Math.Abs(group[^1].Right - edge) < Constants.EndGapNeedsFillerAt);
+
+            if (!atAnEdge)
             {
                 violations.Add(new Violation(
                     ViolationCode.FillerBetweenCabinets,

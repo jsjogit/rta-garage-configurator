@@ -1,0 +1,54 @@
+{
+  "fixture": "three-car-door",
+  "goal": "Storage",
+  "failure": null,
+  "notices": [],
+  "layouts": [
+    {
+      "label": "Recommended",
+      "listTotal": 16464.72,
+      "lineItems": [
+        "MV-PC3084 x6",
+        "MV-B30 x3",
+        "MV-B24 x1",
+        "MV-W3030 x3",
+        "IC-MW-W3015 x3",
+        "MV-W2430 x1",
+        "MV-W2415 x1",
+        "MV-F384 x2",
+        "MV-B15 x1",
+        "MV-W1530 x1"
+      ]
+    },
+    {
+      "label": "Another option",
+      "listTotal": 16451.86,
+      "lineItems": [
+        "MV-PC3084 x5",
+        "MV-B24 x5",
+        "MV-W3030 x4",
+        "IC-MW-W3015 x4",
+        "MV-PC2484 x1",
+        "MV-F384 x2",
+        "MV-B15 x1",
+        "MV-W1530 x1"
+      ]
+    },
+    {
+      "label": "Another option",
+      "listTotal": 16633.02,
+      "lineItems": [
+        "MV-PC3084 x6",
+        "MV-B30 x1",
+        "MV-B24 x3",
+        "MV-B15 x2",
+        "MV-W3030 x3",
+        "IC-MW-W3015 x3",
+        "MV-W2430 x1",
+        "MV-W2415 x1",
+        "MV-W1530 x1",
+        "MV-F384 x1"
+      ]
+    }
+  ]
+}

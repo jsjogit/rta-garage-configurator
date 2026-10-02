@@ -1,0 +1,32 @@
+{
+  "fixture": "tight-10ft",
+  "goal": "HideTheMess",
+  "failure": null,
+  "notices": [],
+  "layouts": [
+    {
+      "label": "Recommended",
+      "listTotal": 6336.00,
+      "lineItems": [
+        "MV-PC2484 x5"
+      ]
+    },
+    {
+      "label": "Lower cost",
+      "listTotal": 4809.42,
+      "lineItems": [
+        "MV-B24-F x5",
+        "MV-W3030 x4"
+      ]
+    },
+    {
+      "label": "Lower cost",
+      "listTotal": 6056.82,
+      "lineItems": [
+        "MV-F384 x2",
+        "MV-PC3084 x3",
+        "MV-PC2484 x1"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "fixture": "ceiling-too-low",
+  "goal": "Balanced",
+  "failure": "CeilingTooLow",
+  "notices": [],
+  "layouts": []
+}

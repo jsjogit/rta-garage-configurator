@@ -1,0 +1,33 @@
+{
+  "fixture": "low-ceiling-80",
+  "goal": "Storage",
+  "failure": null,
+  "notices": [
+    "TallsExcludedLowCeiling"
+  ],
+  "layouts": [
+    {
+      "label": "Recommended",
+      "listTotal": 8110.08,
+      "lineItems": [
+        "MV-B30 x8"
+      ]
+    },
+    {
+      "label": "Another option",
+      "listTotal": 8064.54,
+      "lineItems": [
+        "MV-B30 x4",
+        "MV-B24 x5"
+      ]
+    },
+    {
+      "label": "Another option",
+      "listTotal": 8466.48,
+      "lineItems": [
+        "MV-B30 x7",
+        "MV-B15 x2"
+      ]
+    }
+  ]
+}

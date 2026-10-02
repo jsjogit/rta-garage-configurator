@@ -8,7 +8,8 @@
   { "id": "workbench-200",     "length": 200, "ceiling": 96,  "obstructions": [], "goal": "Workbench" },
   { "id": "water-heater",      "length": 240, "ceiling": 96,  "goal": "Balanced",
     "obstructions": [ { "type": "WaterHeater", "startX": 0, "width": 30, "height": 72, "bottomY": 0 } ] },
-  { "id": "low-ceiling-84",    "length": 240, "ceiling": 84,  "obstructions": [], "goal": "Storage", "expect": "no talls, no wall cabinets", "expectNotice": "TallsExcludedLowCeiling" },
+  { "id": "low-ceiling-80",    "length": 240, "ceiling": 80,  "obstructions": [], "goal": "Storage", "expect": "no talls, no wall cabinets", "expectNotice": "TallsExcludedLowCeiling" },
+  { "id": "ceiling-exactly-84", "length": 240, "ceiling": 84,  "obstructions": [], "goal": "Storage", "expect": "talls allowed — 84 is the boundary, not below it" },
   { "id": "tall-ceiling-120",  "length": 240, "ceiling": 120, "obstructions": [], "goal": "Storage", "expect": "15in wall may stack on 30in wall" },
   { "id": "ceiling-too-low",   "length": 240, "ceiling": 30,  "obstructions": [], "goal": "Balanced", "expect": "no valid layout", "expectReason": "CeilingTooLow" },
   { "id": "too-short",         "length": 12,  "ceiling": 96,  "obstructions": [], "goal": "Balanced", "expect": "no valid layout", "expectReason": "WallTooShort" }

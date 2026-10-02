@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Content Include="../../src/GarageConfigurator.Core/GarageConfigurator.Core.csproj" Link="GarageConfigurator.Core.csproj.txt" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="golden/*.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../data/catalog.json" Link="data/catalog.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../data/fixtures/walls.json" Link="data/fixtures/walls.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

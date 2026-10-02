@@ -10,6 +10,17 @@ internal static class WallFixtures
 
     internal static Wall Get(string id) => Cached.Value[id];
 
+    internal static Goal GoalFor(string id) => Goals.Value[id];
+
+    private static readonly Lazy<IReadOnlyDictionary<string, Goal>> Goals = new(() =>
+    {
+        using var document = JsonDocument.Parse(File.ReadAllText(TestCatalog.Path("fixtures/walls.json")));
+
+        return document.RootElement.EnumerateArray().ToDictionary(
+            fixture => fixture.GetProperty("id").GetString()!,
+            fixture => Enum.Parse<Goal>(fixture.GetProperty("goal").GetString()!));
+    });
+
     internal static IReadOnlyDictionary<string, Wall> All => Cached.Value;
 
     private static IReadOnlyDictionary<string, Wall> Load()

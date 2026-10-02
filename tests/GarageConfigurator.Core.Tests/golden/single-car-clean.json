@@ -1,0 +1,43 @@
+{
+  "fixture": "single-car-clean",
+  "goal": "Balanced",
+  "failure": null,
+  "notices": [],
+  "layouts": [
+    {
+      "label": "Recommended",
+      "listTotal": 12710.73,
+      "lineItems": [
+        "MV-B30 x2",
+        "MV-DB30-4 x1",
+        "MV-CTHW9825 x1",
+        "MV-W3030 x7",
+        "MV-PC3084 x1",
+        "MV-B24 x3",
+        "MV-DB24-4 x2"
+      ]
+    },
+    {
+      "label": "Another option",
+      "listTotal": 12799.83,
+      "lineItems": [
+        "MV-B30 x4",
+        "MV-DB30-4 x3",
+        "MV-CTHW9825 x1",
+        "MV-W3030 x7",
+        "MV-PC3084 x1"
+      ]
+    },
+    {
+      "label": "Bigger workbench",
+      "listTotal": 12879.03,
+      "lineItems": [
+        "MV-B24 x5",
+        "MV-DB24-4 x4",
+        "MV-CTHW9825 x1",
+        "MV-W3030 x7",
+        "MV-PC2484 x1"
+      ]
+    }
+  ]
+}

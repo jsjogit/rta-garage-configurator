@@ -1,0 +1,58 @@
+{
+  "fixture": "two-car-panel",
+  "goal": "Workbench",
+  "failure": null,
+  "notices": [],
+  "layouts": [
+    {
+      "label": "Recommended",
+      "listTotal": 12531.01,
+      "lineItems": [
+        "MV-B24 x2",
+        "MV-DB24-4 x2",
+        "MV-CTHW9825 x1",
+        "MV-W3030 x5",
+        "MV-PC3084 x1",
+        "MV-B15 x4",
+        "MV-BWB15-PS x1",
+        "MV-CTHW5025 x2",
+        "MV-W1530 x1",
+        "MV-F384 x2"
+      ]
+    },
+    {
+      "label": "Another option",
+      "listTotal": 12331.32,
+      "lineItems": [
+        "MV-B30 x1",
+        "MV-DB30-4 x1",
+        "MV-B24 x2",
+        "MV-CTHW9825 x1",
+        "MV-W3030 x4",
+        "MV-W2430 x2",
+        "MV-PC3084 x1",
+        "MV-BWB15-PS x1",
+        "MV-B15 x3",
+        "MV-CTHW7425 x1",
+        "MV-F384 x3",
+        "MV-CTHW5025 x1"
+      ]
+    },
+    {
+      "label": "Lower cost",
+      "listTotal": 11925.13,
+      "lineItems": [
+        "MV-F384 x4",
+        "MV-B30 x3",
+        "MV-DB30-4 x1",
+        "MV-CTHW9825 x1",
+        "MV-W3030 x5",
+        "MV-PC3084 x1",
+        "MV-BWB15-PS x1",
+        "MV-CTHW5025 x2",
+        "MV-W1530 x1",
+        "MV-B15 x2"
+      ]
+    }
+  ]
+}
