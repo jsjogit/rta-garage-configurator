@@ -1,0 +1,55 @@
+{
+  "_meta": {
+    "source": "https://www.rtacabinetstore.com/garage-cabinets",
+    "captured": "2026-10-01",
+    "units": "inches",
+    "currency": "USD",
+    "note": "listPrice/promoPrice are a DEV SEED only (promo = PUMPKIN26, 25% off). Production pricing is supplied by nopCommerce at request time."
+  },
+  "line": { "name": "Signature Gray Garage", "finish": "Gray TFL", "doorStyle": "Full overlay slab", "pulls": "Matte black square bar (included)" },
+  "cabinets": [
+    { "sku": "MV-B15",      "name": "Single Door Base Cabinet",       "zone": "Base", "type": "Door",       "w": 15, "h": 34.5, "d": 24, "listPrice": 685.08,  "promoPrice": 513.81 },
+    { "sku": "MV-B24",      "name": "Double Door Base Cabinet",       "zone": "Base", "type": "Door",       "w": 24, "h": 34.5, "d": 24, "listPrice": 801.90,  "promoPrice": 601.42 },
+    { "sku": "MV-B30",      "name": "Double Door Base Cabinet",       "zone": "Base", "type": "Door",       "w": 30, "h": 34.5, "d": 24, "listPrice": 1013.76, "promoPrice": 760.32 },
+    { "sku": "MV-DB24-3",   "name": "3-Drawer Base Cabinet",          "zone": "Base", "type": "Drawer",     "w": 24, "h": 34.5, "d": 24, "drawers": 3, "listPrice": 1017.72, "promoPrice": 763.29 },
+    { "sku": "MV-DB24-4",   "name": "4-Drawer Base Cabinet",          "zone": "Base", "type": "Drawer",     "w": 24, "h": 34.5, "d": 24, "drawers": 4, "listPrice": 1092.96, "promoPrice": 819.72 },
+    { "sku": "MV-DB30-3",   "name": "3-Drawer Base Cabinet",          "zone": "Base", "type": "Drawer",     "w": 30, "h": 34.5, "d": 24, "drawers": 3, "listPrice": 1239.48, "promoPrice": 929.61 },
+    { "sku": "MV-DB30-4",   "name": "4-Drawer Base Cabinet",          "zone": "Base", "type": "Drawer",     "w": 30, "h": 34.5, "d": 24, "drawers": 4, "listPrice": 1326.60, "promoPrice": 994.95 },
+    { "sku": "MV-B24-F",    "name": "Full Height Door Base Cabinet",  "zone": "Base", "type": "FullDoor",   "w": 24, "h": 34.5, "d": 24, "listPrice": 683.10,  "promoPrice": 512.32 },
+    { "sku": "MV-B30-F",    "name": "Full Height Door Base Cabinet",  "zone": "Base", "type": "FullDoor",   "w": 30, "h": 34.5, "d": 24, "listPrice": 883.08,  "promoPrice": 662.31 },
+    { "sku": "MV-BWB15-PS", "name": "Waste Pullout Drawer",           "zone": "Base", "type": "WastePull",  "w": 15, "h": 30,   "d": 24, "listPrice": 833.58,  "promoPrice": 625.18, "notes": "30in tall, not 34.5 — VERIFY whether it sits under counter" },
+    { "sku": "MV-W1530",    "name": "Single Door Wall Cabinet",       "zone": "Wall", "type": "Door",       "w": 15, "h": 30,   "d": 12, "listPrice": 211.86,  "promoPrice": 158.90 },
+    { "sku": "MV-W2430",    "name": "Double Door Wall Cabinet",       "zone": "Wall", "type": "Door",       "w": 24, "h": 30,   "d": 12, "listPrice": 310.86,  "promoPrice": 233.14 },
+    { "sku": "MV-W2415",    "name": "Double Door Wall Cabinet",       "zone": "Wall", "type": "Door",       "w": 24, "h": 15,   "d": 12, "listPrice": 205.92,  "promoPrice": 154.44 },
+    { "sku": "MV-W3030",    "name": "Double Door Wall Cabinet",       "zone": "Wall", "type": "Door",       "w": 30, "h": 30,   "d": 12, "listPrice": 348.48,  "promoPrice": 261.36 },
+    { "sku": "IC-MW-W3015", "name": "Double Door Wall Cabinet",       "zone": "Wall", "type": "Door",       "w": 30, "h": 15,   "d": 12, "listPrice": 256.42,  "promoPrice": 192.32, "notes": "SKU prefix differs from the rest of the line" },
+    { "sku": "MV-PC2484",   "name": "Double Door Pantry Cabinet",     "zone": "Tall", "type": "Pantry",     "w": 24, "h": 84,   "d": 24, "listPrice": 1267.20, "promoPrice": 950.40 },
+    { "sku": "MV-PC3084",   "name": "Double Door Pantry Cabinet",     "zone": "Tall", "type": "Pantry",     "w": 30, "h": 84,   "d": 24, "listPrice": 1534.50, "promoPrice": 1150.88 },
+    { "sku": "MV-F384",     "name": "Wall Filler",                    "zone": "Filler", "type": "Filler",   "w": 3,  "h": 84,   "d": 24, "listPrice": 93.06,   "promoPrice": 69.80 }
+  ],
+  "countertops": [
+    { "sku": "MV-CTHW5025", "name": "Wood Butcher Block Countertop 50in", "w": 50, "h": 1.5, "d": 25, "idealRun": 48, "listPrice": 350.69, "promoPrice": 263.02 },
+    { "sku": "MV-CTHW7425", "name": "Wood Butcher Block Countertop 74in", "w": 74, "h": 1.5, "d": 25, "idealRun": 72, "listPrice": 527.20, "promoPrice": 395.40 },
+    { "sku": "MV-CTHW9825", "name": "Wood Butcher Block Countertop 98in", "w": 98, "h": 1.5, "d": 25, "idealRun": 96, "listPrice": 791.13, "promoPrice": 593.35 }
+  ],
+  "kits": [
+    { "sku": "MV-GARAGE-KIT-6", "name": "Signature Gray 6-Piece Garage Cabinet Set", "listPrice": 3694.44, "promoPrice": 2770.83, "bom": null, "notes": "BOM unknown — needs Joshua. When known, solver should price a matching layout as the kit." }
+  ],
+  "excludedFromSolver": [
+    { "sku": "RV-BWB18GRAY",        "reason": "18in waste pullout insert from kitchen line; no 18in garage base" },
+    { "sku": "RV-BWB18GRAYPREMIER", "reason": "same" }
+  ],
+  "constants": {
+    "baseHeight": 34.5,
+    "counterThickness": 1.5,
+    "wallCabinetBottomAboveCounter": 54,
+    "datumTop": 84,
+    "defaultCeiling": 96,
+    "maxCounterOverhangPerSide": 4,
+    "preferredCounterOverhangPerSide": 2,
+    "endGapNeedsFillerAt": 3,
+    "endGapPenaltyAt": 6,
+    "legHeightMin": 4,
+    "legHeightMax": 6.25
+  }
+}
