@@ -1,0 +1,136 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environmentName:
+        description: Environment to deploy (dev or prod)
+        required: true
+        default: dev
+        type: choice
+        options: [dev, prod]
+
+permissions:
+  contents: read
+  id-token: write # federated credentials, so no stored Azure secret
+
+concurrency:
+  group: deploy-${{ inputs.environmentName || 'dev' }}
+  cancel-in-progress: false
+
+env:
+  ENVIRONMENT_NAME: ${{ inputs.environmentName || 'dev' }}
+
+jobs:
+  infrastructure:
+    name: provision
+    runs-on: ubuntu-latest
+    environment: garage-${{ inputs.environmentName || 'dev' }}
+    outputs:
+      apiName: ${{ steps.deploy.outputs.apiName }}
+      webHostname: ${{ steps.deploy.outputs.webHostname }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: What would change
+        run: |
+          az deployment group what-if \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --template-file infra/main.bicep \
+            --parameters environmentName=$ENVIRONMENT_NAME
+
+      - name: Deploy
+        id: deploy
+        run: |
+          az deployment group create \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name garage-$ENVIRONMENT_NAME-${{ github.run_number }} \
+            --template-file infra/main.bicep \
+            --parameters environmentName=$ENVIRONMENT_NAME \
+            --query properties.outputs -o json > outputs.json
+          echo "apiName=$(jq -r .apiName.value outputs.json)" >> "$GITHUB_OUTPUT"
+          echo "webHostname=$(jq -r .webHostname.value outputs.json)" >> "$GITHUB_OUTPUT"
+
+  api:
+    name: api
+    runs-on: ubuntu-latest
+    needs: infrastructure
+    environment: garage-${{ inputs.environmentName || 'dev' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      # Never deploy something the tests have not passed, even on a re-run.
+      - run: dotnet test --configuration Release
+
+      - name: Publish
+        run: dotnet publish src/GarageConfigurator.Api -c Release -o publish
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ needs.infrastructure.outputs.apiName }}
+          package: publish
+
+  web:
+    name: web
+    runs-on: ubuntu-latest
+    needs: [infrastructure, api]
+    environment: garage-${{ inputs.environmentName || 'dev' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - run: npm ci
+        working-directory: web
+
+      - run: npm test
+        working-directory: web
+
+      - uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: upload
+          app_location: web
+          output_location: dist
+          # The API is a linked backend, not a managed function app, so SWA builds no API here.
+          skip_api_build: true
+
+  smoke:
+    name: smoke test
+    runs-on: ubuntu-latest
+    needs: [infrastructure, web]
+    steps:
+      - name: Solve a real wall through the deployed API
+        run: |
+          set -euo pipefail
+          host="https://${{ needs.infrastructure.outputs.webHostname }}"
+
+          body='{"wall":{"length":240,"ceiling":96},"goal":"Balanced"}'
+          response=$(curl -fsS -X POST "$host/api/solve" -H 'Content-Type: application/json' -d "$body")
+
+          echo "$response" | jq -e '.options | length >= 1' > /dev/null
+          echo "$response" | jq -e '.options[0].standard.subtotalList > 0' > /dev/null
+          echo "Deployed API returned $(echo "$response" | jq '.options | length') layouts."

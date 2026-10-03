@@ -87,6 +87,23 @@ public class CartHandoffTests
     }
 
     [Fact]
+    public void The_handoff_names_the_origin_the_posts_have_to_come_from()
+    {
+        // nopCommerce identifies the cart by session cookie. A page served from a Static Web App
+        // cannot add to it, so the browser has to be told where these requests belong.
+        ApiWith(("MV-B24-F", 101), ("MV-CTHW7425", 202)).BuildCart(new CartRequestDto(Wall))
+            .StoreOrigin.ShouldBe("https://www.rtacabinetstore.com");
+    }
+
+    [Fact]
+    public void The_requests_are_relative_so_they_only_work_from_that_origin()
+    {
+        var handoff = ApiWith(("MV-B24-F", 101), ("MV-CTHW7425", 202)).BuildCart(new CartRequestDto(Wall));
+
+        handoff.Requests.ShouldAllBe(r => r.Url.StartsWith("/"));
+    }
+
+    [Fact]
     public void An_empty_layout_is_rejected_at_the_edge()
     {
         Should.Throw<BadRequestException>(() =>

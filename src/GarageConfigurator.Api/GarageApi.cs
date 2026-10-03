@@ -149,11 +149,15 @@ public sealed class GarageApi
                 ? lines.Select(l => new CartRequestStep(
                     $"/addproducttocart/catalog/{l.ProductId}/1/{l.Quantity}", "POST")).ToArray()
                 : Array.Empty<CartRequestStep>(),
-            CartUrl);
+            CartUrl,
+            StoreOrigin);
     }
 
     /// <summary>Where the customer lands once the lines are in. Supplied by RTA.</summary>
     public const string CartUrl = "https://www.rtacabinetstore.com/cart";
+
+    /// <summary>The storefront origin the add-to-cart posts have to come from.</summary>
+    public const string StoreOrigin = "https://www.rtacabinetstore.com";
 
     public async Task<SaveDesignResponse> SaveDesignAsync(SaveDesignRequest request, CancellationToken cancellationToken = default)
     {

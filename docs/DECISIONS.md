@@ -71,8 +71,17 @@
 | 2026-10-02 | Share links are `/garage/design/{configId}`; the design saves on first share | Matches SPEC. Asking for a link, an email or a designer all save once and reuse the same code, so one wall does not become three rows. |
 | 2026-10-02 | Funnel events post to `/api/events` and are logged as App Insights custom events | No JS SDK in the bundle, the funnel sits next to the API's own telemetry, and `sendBeacon` means telemetry cannot block or break the page. |
 | 2026-10-02 | The UA focus ring is suppressed on elevation hit areas and redrawn on the cabinet outline | Chrome draws a large rounded rect around an SVG `<g>` that swamps the drawing. Focus is still visible — it is drawn on the cabinet's own edge. |
+| 2026-10-02 | Static Web App is Standard, not Free | Linked backends are a Standard feature, and linking the Function App is what makes `/api/*` same-origin with the page. On Free we would be running the API on a separate host with CORS. |
+| 2026-10-02 | The cart hand-off carries a `storeOrigin` and the browser checks it before posting | Writing the runbook surfaced that add-to-cart cannot work from a Static Web App: nopCommerce identifies a cart by session cookie, so relative posts from another origin quietly 404. Off-origin the button now saves the design and sends the customer to the cart instead of pretending. Three routes out are in README. |
+| 2026-10-02 | Deploys authenticate with federated credentials, not a stored secret | The only repository secret with real power is the Static Web Apps deploy token, which Azure scopes to that one app. |
+| 2026-10-02 | Every deploy ends in a smoke test against the live API | It solves a real 240" wall and fails the run unless a priced layout comes back, so green means the thing works rather than that the upload succeeded. `what-if` runs first and prints the infrastructure diff. |
+| 2026-10-02 | Bicep was compiled locally before committing | `az` is not installed here, so I pulled the standalone Bicep CLI rather than ship unvalidated infrastructure. It builds clean, warnings included — the storage account name is provably 18-24 characters by construction rather than truncated and hoped for. |
 
 ## Needs Joshua
+- **Where should the wizard actually be served from?** Add-to-cart only completes when the page shares
+  an origin with the store, so hosting it inside nopCommerce is the route that makes the cart work
+  end to end; a Static Web App is the better preview and staging environment. README has the three
+  options. This is the decision that determines whether Phase 1 can close the loop.
 - **The SKU → nopCommerce product id map.** This is the last thing between us and one-click add-to-cart.
   I checked the storefront: the garage page links products by slug and exposes no integer ids, so I
   cannot derive it. Whoever can export it from nop should drop a flat `{"MV-B24-F": 1234, ...}` into

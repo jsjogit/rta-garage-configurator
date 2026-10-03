@@ -386,6 +386,12 @@ components:
               url: { type: string, example: /addproducttocart/catalog/101/1/2 }
               method: { type: string, example: POST }
         cartUrl: { type: string }
+        storeOrigin:
+          type: string
+          description: >
+            The origin these requests must be posted from. nopCommerce identifies the cart by session
+            cookie, so a page served from anywhere else cannot add to it. Clients must compare this
+            against their own origin before posting.
     LayoutOption:
       type: object
       description: >

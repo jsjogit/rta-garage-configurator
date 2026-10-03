@@ -56,7 +56,13 @@ public sealed record CartHandoffDto(
     bool Ready,
     string[] UnmappedSkus,
     CartRequestStep[] Requests,
-    string CartUrl);
+    string CartUrl,
+    /// <summary>
+    /// The origin these requests must be posted from. nopCommerce identifies the cart by session
+    /// cookie, so a page served from anywhere else cannot add to it — the browser checks this
+    /// rather than firing requests that would quietly 404.
+    /// </summary>
+    string StoreOrigin);
 
 public sealed record SaveDesignRequest(WallDto Wall, string Goal, LayoutDto Layout);
 

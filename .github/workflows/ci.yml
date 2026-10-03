@@ -1,0 +1,65 @@
+name: build and test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  dotnet:
+    name: solver and api
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          # global.json pins the SDK; this honours it.
+          global-json-file: global.json
+
+      - run: dotnet restore
+
+      # The solver's rules are the product. A warning here is a rule we stopped enforcing.
+      - run: dotnet build --no-restore --configuration Release /warnaserror
+
+      - run: dotnet test --no-build --configuration Release --logger "trx;LogFileName=test-results.trx"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dotnet-test-results
+          path: '**/test-results.trx'
+          if-no-files-found: ignore
+
+  web:
+    name: web
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - run: npm ci
+      - run: npx tsc -b
+      - run: npm test
+      - run: npm run build
+
+  infra:
+    name: infrastructure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile the Bicep
+        # Fails the build on warnings too: an unprovable resource name is a deploy-time failure.
+        run: az bicep build --file infra/main.bicep --stdout > /dev/null

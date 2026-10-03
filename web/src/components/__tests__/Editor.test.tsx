@@ -12,11 +12,12 @@ interface Stubs {
   subtotal?: number
   cartReady?: boolean
   unmapped?: string[]
+  storeOrigin?: string
 }
 
 let calls: { url: string; body?: unknown }[] = []
 
-function stubFetch({ violations = [], subtotal = 1234, cartReady = true, unmapped = [] }: Stubs = {}) {
+function stubFetch({ violations = [], subtotal = 1234, cartReady = true, unmapped = [], storeOrigin }: Stubs = {}) {
   calls = []
 
   vi.stubGlobal(
@@ -57,6 +58,8 @@ function stubFetch({ violations = [], subtotal = 1234, cartReady = true, unmappe
           unmappedSkus: unmapped,
           requests: cartReady ? [{ url: '/addproducttocart/catalog/101/1/2', method: 'POST' }] : [],
           cartUrl: 'https://www.rtacabinetstore.com/cart',
+          // Tests run same-origin with the "store" so the posts are attempted.
+          storeOrigin: storeOrigin ?? window.location.origin,
         })
       }
 
@@ -198,6 +201,18 @@ describe('adding to cart', () => {
     await waitFor(() =>
       expect(calls.some((c) => c.url === '/addproducttocart/catalog/101/1/2')).toBe(true),
     )
+  })
+
+  it('does not post add-to-cart from a page the store is not serving', async () => {
+    // On a Static Web App the session cookie is not ours; posting would quietly 404.
+    const user = userEvent.setup()
+    stubFetch({ storeOrigin: 'https://www.rtacabinetstore.com' })
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+
+    await user.click(screen.getAllByRole('button', { name: /add this wall to cart/i })[0])
+
+    await waitFor(() => expect(calls.some((c) => c.url === '/api/cart')).toBe(true))
+    expect(calls.some((c) => c.url.startsWith('/addproducttocart'))).toBe(false)
   })
 
   it('adds nothing and says so when the store cannot map every SKU', async () => {

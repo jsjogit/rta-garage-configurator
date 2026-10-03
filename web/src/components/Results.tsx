@@ -212,6 +212,14 @@ function AddToCart({
         return
       }
 
+      // The cart is identified by the store's session cookie, so these posts only land when this
+      // page is being served by the store. Anywhere else they would quietly 404.
+      if (window.location.origin !== handoff.storeOrigin) {
+        track('cart_add_all', configId, { rank: String(rank), handoff: 'offsite' })
+        window.location.href = handoff.cartUrl
+        return
+      }
+
       track('cart_add_all', configId, { rank: String(rank), lines: String(handoff.lines.length) })
 
       for (const step of handoff.requests) {

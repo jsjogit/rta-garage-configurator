@@ -80,6 +80,7 @@ export interface CartHandoff {
   unmappedSkus: string[]
   requests: { url: string; method: string }[]
   cartUrl: string
+  storeOrigin: string
 }
 
 export interface DesignResponse {
