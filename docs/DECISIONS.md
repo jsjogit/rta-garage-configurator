@@ -63,8 +63,21 @@
 | 2026-10-02 | Dev-only `?demo=<fixture>` renders a stored payload | `func` is not installed here, so the UI would otherwise be undevelopable and unscreenshottable. Guarded by `import.meta.env.DEV`, so it never ships. |
 | 2026-10-02 | Result labels are now guaranteed unique | Found in the browser: 28 of 52 fixture/goal pairs produced two cards both reading "Another option", and React warned on the duplicate key. Labels are picked from the biggest real difference, never reused. |
 | 2026-10-02 | The tier switch shows "Standard" and "Premiere" | Joshua: the brand names are more compelling. Because the names do not say what changes, a one-line caption under the switch does — "Full-height doors on the base cabinets" / "Drawer banks instead, wherever the width allows" — so the customer still knows what they are buying. |
+| 2026-10-02 | The cart hand-off refuses entirely when any SKU is unmapped | nopCommerce adds by integer product id; the solver only knows SKUs. `POST /api/cart` returns the exact posts to make, or `ready: false` plus the missing SKUs and no requests at all. Adding 6 of 7 cabinets would ship a wall that cannot be built. |
+| 2026-10-02 | SKU → product id lives in `data/nop-product-ids.json`, empty until RTA fills it | Researched the storefront: products are linked by slug and no integer ids are exposed, so this map cannot be derived from outside. Until it exists the cart button explains itself and offers a designer rather than failing silently. |
+| 2026-10-02 | Every edit re-validates and re-prices through the API, never in the browser | The rules and the money then live in one place, and the price on screen is the price the cart will charge. A stale response from a slower earlier request is discarded by ticket. |
+| 2026-10-02 | A broken wall cannot be added to the cart | If validation returns anything, the cart button disables and says "Fix the wall first". The violation messages are the validator's own customer-facing copy. |
+| 2026-10-02 | Swapping works in both directions between a base and a knee space | Opening up a base is the edit people actually want after seeing the vignette, and filling one back in is its undo. The validator catches a knee space that ends up at a run end. |
+| 2026-10-02 | Share links are `/garage/design/{configId}`; the design saves on first share | Matches SPEC. Asking for a link, an email or a designer all save once and reuse the same code, so one wall does not become three rows. |
+| 2026-10-02 | Funnel events post to `/api/events` and are logged as App Insights custom events | No JS SDK in the bundle, the funnel sits next to the API's own telemetry, and `sendBeacon` means telemetry cannot block or break the page. |
+| 2026-10-02 | The UA focus ring is suppressed on elevation hit areas and redrawn on the cabinet outline | Chrome draws a large rounded rect around an SVG `<g>` that swamps the drawing. Focus is still visible — it is drawn on the cabinet's own edge. |
 
 ## Needs Joshua
+- **The SKU → nopCommerce product id map.** This is the last thing between us and one-click add-to-cart.
+  I checked the storefront: the garage page links products by slug and exposes no integer ids, so I
+  cannot derive it. Whoever can export it from nop should drop a flat `{"MV-B24-F": 1234, ...}` into
+  `data/nop-product-ids.json` (see `data/nop-product-ids.README.md`). Until then the cart button tells
+  the customer we cannot add it automatically and offers a designer.
 - **Is the 15" bridge width-matched to the knee space, or can a 30"-wide IC-MW-W3015 span a 24" knee
   space?** We currently require a width match (W2415 over a 24" knee, IC-MW-W3015 over a 30" knee),
   which is what the vendor vignette shows. If a wider bridge is allowed the solver gains layouts on
@@ -76,6 +89,6 @@
   we show, not whether a customer is left alone with the problem.)
 
 ## For me to work out (not Joshua)
-- Cart is https://www.rtacabinetstore.com/cart. Before Session 6, determine from the nopCommerce fork:
-  whether lines can be added in one request or must be posted one at a time, whether an anti-forgery
-  token or auth cookie is needed, and what comes back so `config_id` can be attributed to the order.
+- Whether `/addproducttocart/catalog/{id}/1/{qty}` needs an anti-forgery token on RTA's fork. The web
+  app is same-origin with the storefront in Phase 1, so the session cookie rides along; if the fork
+  requires a token, the hand-off needs to carry one. Testable as soon as a product id exists.

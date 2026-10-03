@@ -13,6 +13,9 @@ cabinets they can add to cart in one click — and let them tweak it with live r
 Funnel events, mirrored in App Insights and the store's ai_* reporting pattern:
 `wizard_started → wall_defined → layouts_returned → layout_viewed → layout_edited → cart_add_all →
 cart_add_item → order_placed (via config_id attribution)`.
+Emitted by the browser to `POST /api/events`, which logs them as App Insights custom events. All
+except `order_placed` are wired; that one needs the cart hand-off to carry `config_id` into the order,
+which waits on the product-id map.
 Secondary: share-link created, design emailed, "talk to a designer" clicks.
 
 ## Inputs (Phase 1)

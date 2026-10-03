@@ -69,6 +69,136 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/Error' }
+  /swaps/{sku}:
+    get:
+      operationId: swaps
+      summary: Alternatives for one cabinet — same zone, same width.
+      parameters:
+        - name: sku
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: What may go in this cabinet's place without the wall moving.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sku: { type: string }
+                  options:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sku: { type: string, description: Empty for an open knee space. }
+                        name: { type: string }
+                        zone: { type: string }
+                        width: { type: number, format: double }
+                        height: { type: number, format: double }
+                        depth: { type: number, format: double }
+        '400':
+          description: Not a cabinet we carry.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+  /cart:
+    post:
+      operationId: cart
+      summary: The add-to-cart posts the storefront should make for this wall.
+      description: >
+        nopCommerce adds to cart by integer product id and the solver only knows SKUs, so the store
+        supplies a SKU-to-id map. If any SKU is unmapped, ready is false, requests is empty and
+        unmappedSkus names what is missing — we never add part of a wall.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [layout]
+              properties:
+                layout: { $ref: '#/components/schemas/Layout' }
+                configId: { type: string, nullable: true }
+      responses:
+        '200':
+          description: The hand-off, ready or not.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CartHandoff' }
+        '400':
+          description: The request could not be understood.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+  /lead:
+    post:
+      operationId: lead
+      summary: Email me this design, or have a designer pick it up.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [kind, email]
+              properties:
+                kind: { type: string, enum: [EmailMe, DesignerHelp] }
+                email: { type: string }
+                configId: { type: string, nullable: true }
+                name: { type: string, nullable: true }
+                message: { type: string, nullable: true }
+      responses:
+        '200':
+          description: Received.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  received: { type: boolean }
+        '400':
+          description: The request could not be understood.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+  /events:
+    post:
+      operationId: events
+      summary: Record one funnel step (SPEC.md) as an App Insights custom event.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                  enum:
+                    - wizard_started
+                    - wall_defined
+                    - layouts_returned
+                    - layout_viewed
+                    - layout_edited
+                    - cart_add_all
+                    - cart_add_item
+                    - share_created
+                    - lead_captured
+                configId: { type: string, nullable: true }
+                properties:
+                  type: object
+                  additionalProperties: { type: string }
+      responses:
+        '202':
+          description: Recorded.
+        '400':
+          description: The event had no name.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
   /design:
     post:
       operationId: saveDesign
@@ -229,6 +359,33 @@ components:
                   upright. ObstructionsWorthADesignerLook means the wall has a clearance rule on it and
                   the customer should be offered a designer.
               message: { type: string }
+    CartHandoff:
+      type: object
+      properties:
+        configId: { type: string, nullable: true }
+        ready:
+          type: boolean
+          description: False when any SKU has no product id. No requests are returned in that case.
+        unmappedSkus:
+          type: array
+          items: { type: string }
+        lines:
+          type: array
+          items:
+            type: object
+            properties:
+              sku: { type: string }
+              quantity: { type: integer }
+              productId: { type: integer }
+        requests:
+          type: array
+          description: Post these in order, same-origin, then send the customer to cartUrl.
+          items:
+            type: object
+            properties:
+              url: { type: string, example: /addproducttocart/catalog/101/1/2 }
+              method: { type: string, example: POST }
+        cartUrl: { type: string }
     LayoutOption:
       type: object
       description: >

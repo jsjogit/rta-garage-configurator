@@ -98,9 +98,8 @@ describe('Results', () => {
     expect(sheet).toHaveTextContent(/drawer banks/i)
   })
 
-  it('sends the cart button to the store cart', () => {
+  it('offers a cart button on every sheet', () => {
     show(vignette as SolveResponse)
-    const links = screen.getAllByRole('link', { name: /add this wall to cart/i })
-    expect(links[0]).toHaveAttribute('href', 'https://www.rtacabinetstore.com/cart')
+    expect(screen.getAllByRole('button', { name: /add this wall to cart/i })).toHaveLength(3)
   })
 })

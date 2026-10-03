@@ -21,6 +21,9 @@ export interface ElevationProps {
   /** Stable prefix for pattern ids so snapshots do not churn. */
   id: string
   datumHeight?: number
+  /** Index into layout.items, or null. Tapping a cabinet opens the side panel. */
+  selected?: number | null
+  onSelect?: (index: number | null) => void
 }
 
 export function Elevation({
@@ -30,12 +33,17 @@ export function Elevation({
   obstructions = [],
   id,
   datumHeight = 84,
+  selected = null,
+  onSelect,
 }: ElevationProps) {
   // SVG y runs down the page; the domain measures up from the floor.
   const toY = (up: number) => ceiling - up
 
   const floor = toY(0)
-  const ordered = [...layout.items].sort((a, b) => zOrder(a) - zOrder(b))
+  // Keep the original index so a tap maps back to the item the editor will change.
+  const ordered = layout.items
+    .map((item, index) => ({ item, index }))
+    .sort((a, b) => zOrder(a.item) - zOrder(b.item))
 
   return (
     <svg
@@ -79,8 +87,16 @@ export function Elevation({
         {datumHeight}&#8243; datum
       </text>
 
-      {ordered.map((item, i) => (
-        <Item key={`${item.sku}-${item.x}-${item.y}-${i}`} item={item} toY={toY} id={id} />
+      {ordered.map(({ item, index }) => (
+        <Item
+          key={`${item.sku}-${item.x}-${item.y}-${index}`}
+          item={item}
+          toY={toY}
+          id={id}
+          index={index}
+          selected={selected === index}
+          onSelect={onSelect}
+        />
       ))}
 
       <WidthDimension length={wallLength} y={floor + 14} />
@@ -95,7 +111,56 @@ function zOrder(item: PlacedItemDto): number {
   return 1
 }
 
-function Item({ item, toY, id }: { item: PlacedItemDto; toY: (up: number) => number; id: string }) {
+function Item({
+  item,
+  toY,
+  id,
+  index,
+  selected,
+  onSelect,
+}: {
+  item: PlacedItemDto
+  toY: (up: number) => number
+  id: string
+  index: number
+  selected: boolean
+  onSelect?: (index: number | null) => void
+}) {
+  const y = toY(item.y + item.height)
+  const body = <ItemBody item={item} toY={toY} id={id} />
+
+  if (!onSelect) return body
+
+  return (
+    <g
+      role="button"
+      tabIndex={0}
+      aria-label={`${item.zone === 'KneeSpace' ? 'Open knee space' : item.sku}, ${item.width} inches wide`}
+      aria-pressed={selected}
+      className="elev-hit"
+      onClick={() => onSelect(selected ? null : index)}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          onSelect(selected ? null : index)
+        }
+      }}
+    >
+      {body}
+      <rect
+        x={item.x}
+        y={y}
+        width={item.width}
+        height={item.height}
+        fill="transparent"
+        stroke={selected ? 'var(--ink)' : 'transparent'}
+        strokeWidth={selected ? 1.6 : 0}
+      />
+    </g>
+  )
+}
+
+function ItemBody({ item, toY, id }: { item: PlacedItemDto; toY: (up: number) => number; id: string }) {
   const y = toY(item.y + item.height)
 
   if (item.zone === 'KneeSpace') {
@@ -263,6 +328,11 @@ function WidthDimension({ length, y }: { length: number; y: number }) {
       </text>
     </g>
   )
+}
+
+/** Cabinets are quoted in inches in the trade: 34.5" reads better than 2' 10.5". */
+export function inches(value: number): string {
+  return `${Number.isInteger(value) ? value : Number(value.toFixed(2))}\u2033`
 }
 
 export function formatInches(value: number): string {

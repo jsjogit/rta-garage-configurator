@@ -26,6 +26,11 @@ The fixtures in `src/fixtures/` are generated from the real API by
 the committed fixtures drift from what the API returns, which is what keeps the web and the solver
 honest with each other.
 
+## Routes
+
+- `/` — the wizard
+- `/garage/design/{configId}` — a saved wall, opened from a share link
+
 ## Design notes
 
 The identity is a shop drawing, because that is what the product is. The palette comes off the

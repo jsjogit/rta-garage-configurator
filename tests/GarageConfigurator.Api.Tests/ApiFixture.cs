@@ -10,8 +10,14 @@ internal static class ApiFixture
 
     internal static Catalog Catalog() => CatalogLoader.FromJson(CatalogJson());
 
-    internal static GarageApi Api(IDesignStore? store = null, Random? random = null) =>
+    internal static GarageApi Api(
+        IDesignStore? store = null,
+        Random? random = null,
+        ProductIdMap? productIds = null,
+        ILeadStore? leads = null) =>
         new(Catalog(),
             new SeedPriceSource(CatalogJson()),
-            new DesignService(store ?? new InMemoryDesignStore(), random ?? new Random(1)));
+            new DesignService(store ?? new InMemoryDesignStore(), random ?? new Random(1)),
+            productIds,
+            leads);
 }

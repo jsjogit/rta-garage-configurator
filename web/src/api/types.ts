@@ -58,6 +58,49 @@ export interface LayoutOptionDto {
   premiere: PricedLayoutDto
 }
 
+export interface ViolationDto {
+  code: string
+  message: string
+  sku: string | null
+}
+
+export interface SwapOptionDto {
+  sku: string
+  name: string
+  zone: Zone
+  width: number
+  height: number
+  depth: number
+}
+
+export interface CartHandoff {
+  configId: string | null
+  lines: { sku: string; quantity: number; productId: number }[]
+  ready: boolean
+  unmappedSkus: string[]
+  requests: { url: string; method: string }[]
+  cartUrl: string
+}
+
+export interface DesignResponse {
+  configId: string
+  wall: WallDto
+  goal: Goal
+  design: PricedLayoutDto
+  savedAtUtc: string
+}
+
+export type FunnelEventName =
+  | 'wizard_started'
+  | 'wall_defined'
+  | 'layouts_returned'
+  | 'layout_viewed'
+  | 'layout_edited'
+  | 'cart_add_all'
+  | 'cart_add_item'
+  | 'share_created'
+  | 'lead_captured'
+
 export interface SolveResponse {
   options: LayoutOptionDto[]
   failure: { code: string; message: string } | null

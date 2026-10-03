@@ -33,6 +33,31 @@ public sealed record ValidateResponse(ViolationDto[] Violations);
 
 public sealed record PriceRequest(LayoutDto Layout);
 
+public sealed record SwapOptionDto(string Sku, string Name, string Zone, decimal Width, decimal Height, decimal Depth);
+
+public sealed record SwapsResponse(string Sku, SwapOptionDto[] Options);
+
+public sealed record LeadRequest(string Kind, string Email, string? ConfigId, string? Name, string? Message);
+
+public sealed record LeadResponse(bool Received);
+
+public sealed record FunnelEvent(string Name, string? ConfigId, Dictionary<string, string>? Properties);
+
+public sealed record CartRequestDto(LayoutDto Layout, string? ConfigId = null);
+
+public sealed record CartLineDto(string Sku, int Quantity, int ProductId);
+
+/// <summary>What the storefront should post, in order, to put this wall in the cart.</summary>
+public sealed record CartRequestStep(string Url, string Method);
+
+public sealed record CartHandoffDto(
+    string? ConfigId,
+    CartLineDto[] Lines,
+    bool Ready,
+    string[] UnmappedSkus,
+    CartRequestStep[] Requests,
+    string CartUrl);
+
 public sealed record SaveDesignRequest(WallDto Wall, string Goal, LayoutDto Layout);
 
 public sealed record SaveDesignResponse(string ConfigId);

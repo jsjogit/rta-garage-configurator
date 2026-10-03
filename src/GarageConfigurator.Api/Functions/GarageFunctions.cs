@@ -55,6 +55,48 @@ public sealed class GarageFunctions
                 : new OkObjectResult(design);
         });
 
+    [Function("swaps")]
+    public Task<IActionResult> Swaps(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "swaps/{sku}")] HttpRequest request,
+        string sku) =>
+        Handle(request, () => Task.FromResult<IActionResult>(new OkObjectResult(_api.Swaps(sku))));
+
+    [Function("cart")]
+    public Task<IActionResult> Cart(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "cart")] HttpRequest request) =>
+        Handle(request, async () => new OkObjectResult(_api.BuildCart(await Read<CartRequestDto>(request))));
+
+    [Function("lead")]
+    public Task<IActionResult> Lead(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "lead")] HttpRequest request) =>
+        Handle(request, async () => new OkObjectResult(
+            await _api.CaptureLeadAsync(await Read<LeadRequest>(request), request.HttpContext.RequestAborted)));
+
+    /// <summary>
+    /// The funnel in SPEC.md. The browser posts each step here and it lands in App Insights as a
+    /// custom event, so the funnel is queryable next to the API's own telemetry.
+    /// </summary>
+    [Function("events")]
+    public Task<IActionResult> Events(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "events")] HttpRequest request) =>
+        Handle(request, async () =>
+        {
+            var funnelEvent = await Read<FunnelEvent>(request);
+
+            if (string.IsNullOrWhiteSpace(funnelEvent.Name))
+            {
+                throw new BadRequestException("An event needs a name.");
+            }
+
+            _log.LogInformation(
+                "ai_funnel {EventName} config={ConfigId} props={Properties}",
+                funnelEvent.Name,
+                funnelEvent.ConfigId ?? "-",
+                funnelEvent.Properties is null ? "{}" : string.Join(";", funnelEvent.Properties.Select(p => $"{p.Key}={p.Value}")));
+
+            return new AcceptedResult();
+        });
+
     [Function("openapi")]
     public async Task<IActionResult> OpenApi(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "openapi.yaml")] HttpRequest request)

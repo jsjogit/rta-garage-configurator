@@ -27,6 +27,7 @@
     <None Update="host.json" CopyToOutputDirectory="PreserveNewest" />
     <None Update="openapi.yaml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../data/catalog.json" Link="data/catalog.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../data/nop-product-ids.json" Link="data/nop-product-ids.json" CopyToOutputDirectory="PreserveNewest" Condition="Exists('../../data/nop-product-ids.json')" />
   </ItemGroup>
 
 </Project>

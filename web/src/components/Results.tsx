@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { LayoutOptionDto, SolveResponse, Tier, WallDto } from '../api/types'
-import { CART_URL } from '../api/client'
+import { buildCart, track } from '../api/client'
 import { Elevation, formatInches } from './Elevation'
 import { Notices } from './Notices'
 import { money } from './Money'
+import { CabinetPanel } from './CabinetPanel'
+import { useWallEditor } from '../hooks/useWallEditor'
 
 const TIER_NOTES: Record<Tier, string> = {
   Standard: 'Full-height doors on the base cabinets.',
@@ -14,10 +16,12 @@ export function Results({
   response,
   wall,
   onStartOver,
+  configId,
 }: {
   response: SolveResponse
   wall: WallDto
   onStartOver: () => void
+  configId?: string | null
 }) {
   if (response.failure) {
     return (
@@ -51,7 +55,7 @@ export function Results({
 
       <div className="sheets">
         {response.options.map((option, rank) => (
-          <Sheet key={rank} option={option} rank={rank} wall={wall} />
+          <Sheet key={rank} option={option} rank={rank} wall={wall} configId={configId} />
         ))}
       </div>
 
@@ -62,10 +66,26 @@ export function Results({
   )
 }
 
-function Sheet({ option, rank, wall }: { option: LayoutOptionDto; rank: number; wall: WallDto }) {
+function Sheet({
+  option,
+  rank,
+  wall,
+  configId,
+}: {
+  option: LayoutOptionDto
+  rank: number
+  wall: WallDto
+  configId?: string | null
+}) {
   const [tier, setTier] = useState<Tier>('Standard')
-  const priced = tier === 'Standard' ? option.standard : option.premiere
+  const [selected, setSelected] = useState<number | null>(null)
+  const chosen = tier === 'Standard' ? option.standard : option.premiere
+  const editor = useWallEditor(chosen, wall, configId)
+  const priced = editor.priced
   const saving = priced.subtotalList - priced.subtotalPromo
+  const blocked = editor.violations.length > 0
+
+  useEffect(() => setSelected(null), [tier])
 
   return (
     <article className="sheet" data-rank={rank}>
@@ -76,11 +96,13 @@ function Sheet({ option, rank, wall }: { option: LayoutOptionDto; rank: number; 
 
       <div className="sheet-body">
         <Elevation
-          layout={priced.layout}
+          layout={editor.layout}
           wallLength={wall.length}
           ceiling={wall.ceiling}
           obstructions={wall.obstructions ?? []}
           id={`sheet-${rank}-${tier.toLowerCase()}`}
+          selected={selected}
+          onSelect={setSelected}
         />
 
         <div>
@@ -94,6 +116,23 @@ function Sheet({ option, rank, wall }: { option: LayoutOptionDto; rank: number; 
           {/* The names are the brand's; this line is what the customer is actually choosing between. */}
           <p className="tier-note">{TIER_NOTES[tier]}</p>
         </div>
+
+        {blocked && (
+          <ul className="violations">
+            {editor.violations.map((violation, i) => (
+              <li key={`${violation.code}-${i}`}>{violation.message}</li>
+            ))}
+          </ul>
+        )}
+
+        {editor.edited && (
+          <p className="edited-note">
+            Edited{editor.checking ? ' · checking…' : ''} ·{' '}
+            <button type="button" className="linklike" onClick={editor.reset}>
+              undo my changes
+            </button>
+          </p>
+        )}
 
         <ul className="lines">
           {priced.lineItems.map((line) => (
@@ -118,10 +157,88 @@ function Sheet({ option, rank, wall }: { option: LayoutOptionDto; rank: number; 
       </div>
 
       <div style={{ padding: '0 0.9rem 0.9rem' }}>
-        <a className="btn wood" href={CART_URL} style={{ display: 'block', textAlign: 'center' }}>
-          Add this wall to cart
-        </a>
+        <AddToCart layout={editor.layout} configId={configId} blocked={blocked} rank={rank} />
       </div>
+
+      {selected !== null && editor.layout.items[selected] && (
+        <CabinetPanel
+          item={editor.layout.items[selected]}
+          index={selected}
+          priced={priced}
+          onSwap={(index, sku, name) => {
+            editor.swap(index, sku, name)
+            setSelected(null)
+          }}
+          onRemove={(index) => {
+            editor.remove(index)
+            setSelected(null)
+          }}
+          onClose={() => setSelected(null)}
+        />
+      )}
     </article>
+  )
+}
+
+/**
+ * nopCommerce adds by product id, so the API tells us the exact posts to make. If it cannot — the
+ * SKU-to-id map is incomplete — we say so rather than adding part of a wall.
+ */
+function AddToCart({
+  layout,
+  configId,
+  blocked,
+  rank,
+}: {
+  layout: LayoutOptionDto['standard']['layout']
+  configId?: string | null
+  blocked: boolean
+  rank: number
+}) {
+  const [problem, setProblem] = useState<string | null>(null)
+  const [working, setWorking] = useState(false)
+
+  const add = async () => {
+    setWorking(true)
+    setProblem(null)
+
+    try {
+      const handoff = await buildCart(layout, configId ?? undefined)
+
+      if (!handoff.ready) {
+        setProblem(
+          'We can’t add this wall automatically yet. Save the design and a designer can place the order for you.',
+        )
+        return
+      }
+
+      track('cart_add_all', configId, { rank: String(rank), lines: String(handoff.lines.length) })
+
+      for (const step of handoff.requests) {
+        await fetch(step.url, { method: step.method })
+        track('cart_add_item', configId)
+      }
+
+      window.location.href = handoff.cartUrl
+    } catch {
+      setProblem('We couldn’t reach the cart. Try again in a moment.')
+    } finally {
+      setWorking(false)
+    }
+  }
+
+  return (
+    <>
+      <button
+        type="button"
+        className="btn wood"
+        style={{ display: 'block', width: '100%' }}
+        disabled={blocked || working}
+        onClick={add}
+      >
+        {blocked ? 'Fix the wall first' : working ? 'Adding…' : 'Add this wall to cart'}
+      </button>
+      {problem && <p className="edited-note" role="status">{problem}</p>}
+    </>
   )
 }

@@ -1,5 +1,6 @@
 using GarageConfigurator.Api;
 using GarageConfigurator.Api.Services;
+using Azure.Data.Tables;
 using GarageConfigurator.Core;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,29 @@ var host = new HostBuilder()
         services.AddSingleton<IDesignStore>(_ => DesignStoreFactory.Create(
             Environment.GetEnvironmentVariable("DesignStorageConnection"),
             Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT")));
+
+        // SKU -> nopCommerce product id. Empty until RTA supplies it; the cart hand-off refuses
+        // rather than adding part of a wall. See docs/DECISIONS.md.
+        var productIdsPath = Path.Combine(AppContext.BaseDirectory, "data", "nop-product-ids.json");
+
+        services.AddSingleton(File.Exists(productIdsPath)
+            ? ProductIdMap.FromJson(File.ReadAllText(productIdsPath))
+            : ProductIdMap.Empty);
+
+        services.AddSingleton<ILeadStore>(_ =>
+        {
+            var connection = Environment.GetEnvironmentVariable("DesignStorageConnection");
+
+            if (string.IsNullOrWhiteSpace(connection))
+            {
+                return new InMemoryLeadStore();
+            }
+
+            var table = new TableClient(connection, "leads");
+            table.CreateIfNotExists();
+
+            return new TableLeadStore(table);
+        });
 
         services.AddSingleton(provider => new DesignService(
             provider.GetRequiredService<IDesignStore>(),
