@@ -2,7 +2,9 @@
   "fixture": "two-car-panel",
   "goal": "Workbench",
   "failure": null,
-  "notices": [],
+  "notices": [
+    "ObstructionsWorthADesignerLook"
+  ],
   "options": [
     {
       "label": "Recommended",

@@ -37,8 +37,21 @@ public class CatalogConstantsTests
     {
         Constants.DefaultCeiling.ShouldBe(96m);
         Constants.MinCeiling.ShouldBe(36m);
-        Constants.MinCeilingForTallsAndWalls.ShouldBe(84m);
+        Constants.MinCeilingForWallCabinets.ShouldBe(84m);
+        Constants.MinCeilingForTalls.ShouldBe(87.4m);
         Constants.MinCeilingForStackedWall.ShouldBe(108m);
+    }
+
+    [Fact]
+    public void Talls_need_more_ceiling_than_wall_cabinets_because_they_ship_assembled()
+    {
+        // An 84" x 24" pantry sweeps sqrt(84^2 + 24^2) ~= 87.4" as it is tilted upright.
+        var tallest = TestCatalog.Load().Cabinets.Where(c => c.Zone == Zone.Tall).ToList();
+        var diagonal = (decimal)Math.Sqrt(Math.Pow((double)tallest.Max(c => c.Height), 2)
+            + Math.Pow((double)tallest.Max(c => c.Depth), 2));
+
+        Constants.MinCeilingForTalls.ShouldBeGreaterThan(Constants.MinCeilingForWallCabinets);
+        Constants.MinCeilingForTalls.ShouldBeGreaterThanOrEqualTo(decimal.Round(diagonal, 1));
     }
 
     [Fact]

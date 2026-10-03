@@ -512,17 +512,25 @@ public sealed class LayoutValidator
     /// </summary>
     private void ValidateCeilingBand(PlacedItem item, Wall wall, List<Violation> violations)
     {
-        if (wall.Ceiling >= Constants.MinCeilingForTallsAndWalls)
-        {
-            return;
-        }
-
-        if (item.Zone is Zone.Tall or Zone.Wall)
+        if (wall.Ceiling < Constants.MinCeilingForWallCabinets && item.Zone is Zone.Tall or Zone.Wall)
         {
             violations.Add(new Violation(
                 ViolationCode.CeilingTooLowForItem,
                 $"A {wall.Ceiling}\" ceiling is too low for tall and wall cabinets — " +
-                $"they need at least {Constants.MinCeilingForTallsAndWalls}\". Base cabinets and a countertop still fit.",
+                $"they need at least {Constants.MinCeilingForWallCabinets}\". Base cabinets and a countertop still fit.",
+                item.Sku));
+
+            return;
+        }
+
+        // A pantry ships assembled at 84" tall and 24" deep, so standing one up sweeps its diagonal.
+        // Below that there is no way to get it upright without taking it apart on the garage floor.
+        if (wall.Ceiling < Constants.MinCeilingForTalls && item.Zone == Zone.Tall)
+        {
+            violations.Add(new Violation(
+                ViolationCode.TallNeedsTipUpClearance,
+                $"A pantry cabinet needs about {Constants.MinCeilingForTalls}\" of ceiling to tilt upright; " +
+                $"this garage has {wall.Ceiling}\".",
                 item.Sku));
         }
     }

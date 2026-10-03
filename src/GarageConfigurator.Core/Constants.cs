@@ -21,7 +21,8 @@ public sealed record Constants(
     int MaxFillersPerEnd,
     int MaxFillersPerObstructionEdge,
     decimal MinCeiling,
-    decimal MinCeilingForTallsAndWalls,
+    decimal MinCeilingForWallCabinets,
+    decimal MinCeilingForTalls,
     decimal MinCeilingForStackedWall,
     IReadOnlyDictionary<ObstructionType, Clearance> ObstructionClearances)
 {

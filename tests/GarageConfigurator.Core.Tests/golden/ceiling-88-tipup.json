@@ -1,0 +1,153 @@
+{
+  "fixture": "ceiling-88-tipup",
+  "goal": "Storage",
+  "failure": null,
+  "notices": [],
+  "options": [
+    {
+      "label": "Recommended",
+      "standard": {
+        "listTotal": 11670.12,
+        "footprint": [
+          "MV-PC3084 @0-30 y0",
+          "MV-PC3084 @30-60 y0",
+          "MV-PC3084 @60-90 y0",
+          "MV-B30-F @90-120 y0",
+          "MV-W3030 @90-120 y54",
+          "MV-B30-F @120-150 y0",
+          "MV-W3030 @120-150 y54",
+          "MV-PC3084 @150-180 y0",
+          "MV-PC3084 @180-210 y0",
+          "MV-PC3084 @210-240 y0"
+        ],
+        "lineItems": [
+          "MV-PC3084 x6",
+          "MV-B30-F x2",
+          "MV-W3030 x2"
+        ]
+      },
+      "premiere": {
+        "listTotal": 12470.04,
+        "footprint": [
+          "MV-PC3084 @0-30 y0",
+          "MV-PC3084 @30-60 y0",
+          "MV-PC3084 @60-90 y0",
+          "MV-DB30-3 @90-120 y0",
+          "MV-W3030 @90-120 y54",
+          "MV-DB30-4 @120-150 y0",
+          "MV-W3030 @120-150 y54",
+          "MV-PC3084 @150-180 y0",
+          "MV-PC3084 @180-210 y0",
+          "MV-PC3084 @210-240 y0"
+        ],
+        "lineItems": [
+          "MV-PC3084 x6",
+          "MV-DB30-3 x1",
+          "MV-DB30-4 x1",
+          "MV-W3030 x2"
+        ]
+      }
+    },
+    {
+      "label": "Another option",
+      "standard": {
+        "listTotal": 11654.28,
+        "footprint": [
+          "MV-PC3084 @0-30 y0",
+          "MV-PC3084 @30-60 y0",
+          "MV-PC3084 @60-90 y0",
+          "MV-B24-F @90-114 y0",
+          "MV-W2430 @90-114 y54",
+          "MV-B24-F @114-138 y0",
+          "MV-W2430 @114-138 y54",
+          "MV-B24-F @138-162 y0",
+          "MV-W2430 @138-162 y54",
+          "MV-PC3084 @162-192 y0",
+          "MV-PC2484 @192-216 y0",
+          "MV-PC2484 @216-240 y0"
+        ],
+        "lineItems": [
+          "MV-PC3084 x4",
+          "MV-B24-F x3",
+          "MV-W2430 x3",
+          "MV-PC2484 x2"
+        ]
+      },
+      "premiere": {
+        "listTotal": 12808.62,
+        "footprint": [
+          "MV-PC3084 @0-30 y0",
+          "MV-PC3084 @30-60 y0",
+          "MV-PC3084 @60-90 y0",
+          "MV-DB24-3 @90-114 y0",
+          "MV-W2430 @90-114 y54",
+          "MV-DB24-4 @114-138 y0",
+          "MV-W2430 @114-138 y54",
+          "MV-DB24-4 @138-162 y0",
+          "MV-W2430 @138-162 y54",
+          "MV-PC3084 @162-192 y0",
+          "MV-PC2484 @192-216 y0",
+          "MV-PC2484 @216-240 y0"
+        ],
+        "lineItems": [
+          "MV-PC3084 x4",
+          "MV-DB24-3 x1",
+          "MV-DB24-4 x2",
+          "MV-W2430 x3",
+          "MV-PC2484 x2"
+        ]
+      }
+    },
+    {
+      "label": "Another option",
+      "standard": {
+        "listTotal": 12232.44,
+        "footprint": [
+          "MV-PC3084 @0-30 y0",
+          "MV-PC3084 @30-60 y0",
+          "MV-PC3084 @60-90 y0",
+          "MV-B30-F @90-120 y0",
+          "MV-W3030 @90-120 y54",
+          "MV-B15 @120-135 y0",
+          "MV-W1530 @120-135 y54",
+          "MV-B15 @135-150 y0",
+          "MV-W1530 @135-150 y54",
+          "MV-PC3084 @150-180 y0",
+          "MV-PC3084 @180-210 y0",
+          "MV-PC3084 @210-240 y0"
+        ],
+        "lineItems": [
+          "MV-PC3084 x6",
+          "MV-B30-F x1",
+          "MV-B15 x2",
+          "MV-W3030 x1",
+          "MV-W1530 x2"
+        ]
+      },
+      "premiere": {
+        "listTotal": 12588.84,
+        "footprint": [
+          "MV-PC3084 @0-30 y0",
+          "MV-PC3084 @30-60 y0",
+          "MV-PC3084 @60-90 y0",
+          "MV-DB30-3 @90-120 y0",
+          "MV-W3030 @90-120 y54",
+          "MV-B15 @120-135 y0",
+          "MV-W1530 @120-135 y54",
+          "MV-B15 @135-150 y0",
+          "MV-W1530 @135-150 y54",
+          "MV-PC3084 @150-180 y0",
+          "MV-PC3084 @180-210 y0",
+          "MV-PC3084 @210-240 y0"
+        ],
+        "lineItems": [
+          "MV-PC3084 x6",
+          "MV-DB30-3 x1",
+          "MV-B15 x2",
+          "MV-W3030 x1",
+          "MV-W1530 x2"
+        ]
+      }
+    }
+  ]
+}

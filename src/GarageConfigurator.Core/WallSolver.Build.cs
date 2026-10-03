@@ -32,7 +32,8 @@ public sealed partial class WallSolver
         Policy policy,
         Wall wall,
         IReadOnlyList<KeepOut> keepOuts,
-        bool tallsAllowed)
+        bool tallsAllowed,
+        bool wallCabinetsAllowed)
     {
         var widths = mix.Widths().ToList();
         var tallWidths = TakeTallWidths(widths, policy, tallsAllowed);
@@ -72,7 +73,7 @@ public sealed partial class WallSolver
                 PlaceCounter(items, runStart, x);
             }
 
-            if (tallsAllowed)
+            if (wallCabinetsAllowed)
             {
                 PlaceUppers(items, slots, wall, keepOuts, policy);
             }

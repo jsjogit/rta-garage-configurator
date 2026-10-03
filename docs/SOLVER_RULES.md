@@ -39,10 +39,15 @@ need confirmation from product/ops; implement them as configurable constants wit
 - Ceiling height is a **required customer input**, defaulting to 96 (8 ft). It gates what may be placed:
   - **ceiling ≥ 108** — a 15" wall may stack on a 30" wall (top at 99.0).
   - **84 ≤ ceiling < 108** — standard behaviour; datum top 84 fits.
+  - **84 ≤ ceiling < 87.4** — wall cabinets yes, **talls no**. A pantry ships fully assembled at 84" × 24",
+    so tilting one upright off the floor sweeps √(84² + 24²) ≈ 87.4". Below that it cannot be stood up
+    without being taken apart. Return a `TallsNeedTipUpRoom` notice explaining that, and offering a designer.
   - **ceiling < 84** — talls and all wall cabinets are excluded (the 84" datum does not fit). Bases and
     counters only; return a `TallsExcludedLowCeiling` notice so the UI can say why.
   - **ceiling < 36** — nothing fits above a counter run; return zero layouts with reason `CeilingTooLow`.
-  96 is a *default*, not a safe floor: assuming it when the real ceiling is 84 quotes talls that do not fit.
+  96 is a *default*, not a safe floor: assuming it when the real ceiling is 84 quotes talls that cannot be
+  installed. The two thresholds are separate constants — `minCeilingForWallCabinets` (84, the datum) and
+  `minCeilingForTalls` (87.4, the tip-up sweep) — because a 30" wall cabinet tilts up in any garage.
 
 ## Horizontal grammar
 - Cabinets butt together with 0" gap.
@@ -53,6 +58,10 @@ need confirmation from product/ops; implement them as configurable constants wit
   A gap of 6" or more is not a validation error — no filler can close it. It is an underfilled wall, which
   the solver scores down (soft penalty) rather than rejecting, unless it is adjacent to an obstruction.
 - Wall cabinets must sit entirely above base cabinets, counters, or empty floor; never above a tall.
+- Any wall carrying an obstruction with a clearance rule also returns an
+  `ObstructionsWorthADesignerLook` notice. We solve around it correctly, but clearance is the part a
+  customer is least able to judge from a wizard, so we offer a designer rather than ask them to fight
+  the UI (see docs/DECISIONS.md).
 - Every obstruction is expanded into a **keep-out rectangle** before packing; nothing may overlap it.
   Default keep-out = the obstruction rectangle itself. Per-type expansions live in catalog.json
   `constants.obstructionClearance`:

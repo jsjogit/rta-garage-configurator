@@ -51,6 +51,11 @@
 | 2026-10-02 | The solver no longer emits MV-BWB15-PS | Base SKUs are now a tier decision and the waste pullout is neither a door base nor a drawer base. It remains valid in a hand-edited layout; revisit as an add-on if customers want a shop bin. |
 | 2026-10-02 | `Layout.LineItems` is computed on access, not stored | Found by the tier work: it was an auto-property with an initializer, so a record `with { Items = ... }` copied the stale backing field. Every edited layout would have been quoted against the layout it used to be. |
 | 2026-10-02 | SKU aliases resolve at the catalogue and at the API edge | `MV-B24-SF` → `MV-B24-F`, `MV-B30-SF` → `MV-B30-F`. Aliases never become catalogue entries and the solver only ever emits canonical SKUs. |
+| 2026-10-02 | Talls need a 87.4" ceiling; wall cabinets still need only 84" | Joshua. A pantry ships assembled at 84" x 24", so tilting it upright sweeps √(84²+24²) ≈ 87.4". Split into two constants — `minCeilingForWallCabinets` (84, the datum) and `minCeilingForTalls` (87.4, the sweep) — because a 30" wall cabinet tilts up in any garage. |
+| 2026-10-02 | A tip-up-blocked wall returns `TallsNeedTipUpRoom` explaining why, and offers a designer | Silently dropping pantries looks like the solver forgot them. The copy says they ship assembled, that tilting one needs ~87.4", and that a designer can talk through options. |
+| 2026-10-02 | Walls with clearance-bearing obstructions return `ObstructionsWorthADesignerLook` | Joshua: rather than build an obstruction editor customers fight, route them to an in-house designer. The solver still models clearance exactly; the UI just stops trying to be the expert. |
+| 2026-10-02 | Phase 1 obstruction input is presets only — no fine positioning, no custom shapes | Follows from the same call. Recorded in SPEC so Session 5 does not build the complicated version. |
+| 2026-10-02 | Add-to-cart posts to https://www.rtacabinetstore.com/cart | Joshua supplied the URL. The remaining mechanics (bulk vs sequential lines, anti-forgery token, response shape for config_id attribution) are mine to determine from the nopCommerce fork in Session 6, not questions for Joshua. |
 
 ## Needs Joshua
 - **Is the 15" bridge width-matched to the knee space, or can a 30"-wide IC-MW-W3015 span a 24" knee
@@ -59,7 +64,11 @@
   walls where the widths do not line up.
 - Does Premiere really mean 3-drawer first then 4-drawer, or is the drawer count chosen some other way?
   The vendor vignette shows DB24-3 then DB24-4 and we inferred a rule from one example.
-- An 84" ceiling is the knife edge: an 84" pantry fits only if assembled upright in place (its tipping
-  diagonal is ~87"). Should `minCeilingForTallsAndWalls` be raised above 84?
 - Confirm the electrical-panel clearance numbers (30" wide, floor to 78") with ops/legal before launch.
-- Which nopCommerce endpoint should "add entire wall" call? (bulk add vs. sequential)
+  (Lower stakes now: walls with clearance obstructions route to a designer, so the numbers decide what
+  we show, not whether a customer is left alone with the problem.)
+
+## For me to work out (not Joshua)
+- Cart is https://www.rtacabinetstore.com/cart. Before Session 6, determine from the nopCommerce fork:
+  whether lines can be added in one request or must be posted one at a time, whether an anti-forgery
+  token or auth cookie is needed, and what comes back so `config_id` can be attributed to the order.

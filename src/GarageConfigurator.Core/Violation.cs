@@ -15,6 +15,7 @@ public enum ViolationCode
     ItemAboveTall,
     ItemExceedsCeiling,
     CeilingTooLowForItem,
+    TallNeedsTipUpClearance,
 
     // Horizontal grammar
     GapBetweenCabinets,

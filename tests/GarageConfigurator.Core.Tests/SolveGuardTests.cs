@@ -54,12 +54,50 @@ public class SolveGuardTests
     }
 
     [Fact]
-    public void A_ceiling_of_exactly_84_still_allows_tall_cabinets()
+    public void A_ceiling_of_exactly_84_takes_wall_cabinets_but_not_pantries()
     {
         var result = Solver.Solve(WallFixtures.Get("ceiling-exactly-84"), Goal.Storage, Prices);
 
-        result.Notices.ShouldBeEmpty();
+        var items = result.Options.SelectMany(o => o.Standard.Items).ToList();
+
+        items.ShouldContain(i => i.Zone == Zone.Wall);
+        items.ShouldNotContain(i => i.Zone == Zone.Tall);
+    }
+
+    [Fact]
+    public void A_ceiling_too_low_to_tilt_a_pantry_upright_says_so()
+    {
+        var result = Solver.Solve(WallFixtures.Get("ceiling-exactly-84"), Goal.Storage, Prices);
+
+        var notice = result.Notices.Single(n => n.Code == NoticeCode.TallsNeedTipUpRoom);
+
+        notice.Message.ShouldContain("assembled");
+        notice.Message.ShouldContain("designer");
+    }
+
+    [Fact]
+    public void Just_above_the_tip_up_clearance_pantries_come_back()
+    {
+        var result = Solver.Solve(WallFixtures.Get("ceiling-88-tipup"), Goal.Storage, Prices);
+
+        result.Notices.Select(n => n.Code).ShouldNotContain(NoticeCode.TallsNeedTipUpRoom);
         result.Options.SelectMany(o => o.Standard.Items).ShouldContain(i => i.Zone == Zone.Tall);
+    }
+
+    [Fact]
+    public void A_wall_with_a_clearance_obstruction_offers_a_designer()
+    {
+        var result = Solver.Solve(WallFixtures.Get("two-car-panel"), Goal.Workbench, Prices);
+
+        result.Notices.Select(n => n.Code).ShouldContain(NoticeCode.ObstructionsWorthADesignerLook);
+    }
+
+    [Fact]
+    public void A_clean_wall_is_not_nagged_about_designers()
+    {
+        var result = Solver.Solve(WallFixtures.Get("single-car-clean"), Goal.Balanced, Prices);
+
+        result.Notices.ShouldBeEmpty();
     }
 
     [Fact]

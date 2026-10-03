@@ -38,5 +38,7 @@ public sealed record Notice(NoticeCode Code, string Message);
 
 public enum NoticeCode
 {
-    TallsExcludedLowCeiling
+    TallsExcludedLowCeiling,
+    TallsNeedTipUpRoom,
+    ObstructionsWorthADesignerLook
 }

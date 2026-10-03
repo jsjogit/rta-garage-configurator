@@ -37,18 +37,11 @@ public sealed partial class WallSolver
                 "This ceiling is too low for garage cabinets.");
         }
 
-        var tallsAllowed = wall.Ceiling >= Constants.MinCeilingForTallsAndWalls;
-        var notices = new List<Notice>();
+        var wallCabinetsAllowed = wall.Ceiling >= Constants.MinCeilingForWallCabinets;
+        var tallsAllowed = wall.Ceiling >= Constants.MinCeilingForTalls;
+        var notices = NoticesFor(wall, wallCabinetsAllowed, tallsAllowed);
 
-        if (!tallsAllowed)
-        {
-            notices.Add(new Notice(
-                NoticeCode.TallsExcludedLowCeiling,
-                $"A {wall.Ceiling}\" ceiling is too low for tall cabinets and wall cabinets, " +
-                "so these layouts use base cabinets and a countertop."));
-        }
-
-        var scored = Search(wall, goal, prices, tallsAllowed);
+        var scored = Search(wall, goal, prices, tallsAllowed, wallCabinetsAllowed);
 
         if (scored.Count == 0)
         {
@@ -62,7 +55,43 @@ public sealed partial class WallSolver
 
     // ---- search -----------------------------------------------------------------------------
 
-    private List<ScoredLayout> Search(Wall wall, Goal goal, PriceMap prices, bool tallsAllowed)
+    /// <summary>What the customer should be told about a wall we could still solve.</summary>
+    private List<Notice> NoticesFor(Wall wall, bool wallCabinetsAllowed, bool tallsAllowed)
+    {
+        var notices = new List<Notice>();
+
+        if (!wallCabinetsAllowed)
+        {
+            notices.Add(new Notice(
+                NoticeCode.TallsExcludedLowCeiling,
+                $"At {wall.Ceiling}\" there isn't room for tall pantries or wall cabinets — both need the " +
+                $"run to reach {Constants.DatumTop}\". These layouts use base cabinets and a countertop, which " +
+                "fit comfortably. A designer can suggest other ways to get storage up off the floor."));
+        }
+        else if (!tallsAllowed)
+        {
+            notices.Add(new Notice(
+                NoticeCode.TallsNeedTipUpRoom,
+                $"We've left pantry cabinets out of these layouts. They arrive fully assembled and stand " +
+                $"{Constants.DatumTop}\" tall, so tilting one upright off the floor sweeps about " +
+                $"{Constants.MinCeilingForTalls}\" — more than the {wall.Ceiling}\" you have. Rather than ask you " +
+                "to take one apart in the garage, we've used base and wall cabinets instead. If you want pantry " +
+                "storage here, one of our designers can talk through the options."));
+        }
+
+        if (wall.Obstructions.Any(o => Constants.ClearanceFor(o.Type) != Clearance.None))
+        {
+            notices.Add(new Notice(
+                NoticeCode.ObstructionsWorthADesignerLook,
+                "This wall has something on it we have to keep clear, so these layouts leave the required space " +
+                "around it. That space is often the part worth a second opinion — if the result doesn't suit your " +
+                "garage, one of our designers can work around it with you."));
+        }
+
+        return notices;
+    }
+
+    private List<ScoredLayout> Search(Wall wall, Goal goal, PriceMap prices, bool tallsAllowed, bool wallCabinetsAllowed)
     {
         var keepOuts = wall.Obstructions
             .Select(o => o.KeepOutWith(Constants.ClearanceFor(o.Type)))
@@ -75,7 +104,7 @@ public sealed partial class WallSolver
 
         var scored = new List<ScoredLayout>();
 
-        foreach (var policy in Policies.For(goal, tallsAllowed))
+        foreach (var policy in Policies.For(goal, tallsAllowed, wallCabinetsAllowed))
         {
             for (var variant = 0; variant < CompositionsPerSegment; variant++)
             {
@@ -89,7 +118,7 @@ public sealed partial class WallSolver
                     }
 
                     var mix = compositions[s][variant % compositions[s].Count];
-                    items.AddRange(BuildSegment(segments[s], mix, policy, wall, keepOuts, tallsAllowed));
+                    items.AddRange(BuildSegment(segments[s], mix, policy, wall, keepOuts, tallsAllowed, wallCabinetsAllowed));
                 }
 
                 if (items.Count == 0)

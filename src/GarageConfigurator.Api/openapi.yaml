@@ -223,7 +223,11 @@ components:
             properties:
               code:
                 type: string
-                enum: [TallsExcludedLowCeiling]
+                enum: [TallsExcludedLowCeiling, TallsNeedTipUpRoom, ObstructionsWorthADesignerLook]
+                description: >
+                  TallsNeedTipUpRoom means the ceiling clears an 84" pantry standing but not tilting it
+                  upright. ObstructionsWorthADesignerLook means the wall has a clearance rule on it and
+                  the customer should be offered a designer.
               message: { type: string }
     LayoutOption:
       type: object

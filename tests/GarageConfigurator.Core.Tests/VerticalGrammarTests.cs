@@ -125,6 +125,33 @@ public class VerticalGrammarTests
     }
 
     [Fact]
+    public void A_pantry_needs_room_to_tilt_upright_even_when_it_fits_standing()
+    {
+        // 85" clears the 84" pantry standing, but you cannot get it upright: tilting sweeps ~87.4".
+        var layout = Layout(Tall("MV-PC2484", 0m, 24m));
+
+        Validator.Validate(layout, new Wall(24m, 85m)).Codes()
+            .ShouldContain(ViolationCode.TallNeedsTipUpClearance);
+    }
+
+    [Fact]
+    public void A_pantry_under_a_96_inch_ceiling_has_room_to_tilt_upright()
+    {
+        Validator.Validate(Layout(Tall("MV-PC2484", 0m, 24m)), new Wall(24m, 96m)).Codes()
+            .ShouldNotContain(ViolationCode.TallNeedsTipUpClearance);
+    }
+
+    [Fact]
+    public void Wall_cabinets_do_not_need_tip_up_room_the_way_pantries_do()
+    {
+        var layout = Layout(
+            Base("MV-B30-F", 0m, 30m),
+            WallCab("MV-W3030", 0m, 30m, 30m, y: 54m));
+
+        Validator.Validate(layout, new Wall(30m, 85m)).ShouldBeEmpty();
+    }
+
+    [Fact]
     public void Ceiling_below_84_excludes_tall_cabinets()
     {
         var layout = Layout(Tall("MV-PC2484", 0m, 24m));

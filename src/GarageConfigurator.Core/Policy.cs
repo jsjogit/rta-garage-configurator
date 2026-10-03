@@ -13,7 +13,7 @@ internal sealed record Policy(
 
 internal static class Policies
 {
-    internal static IReadOnlyList<Policy> For(Goal goal, bool tallsAllowed)
+    internal static IReadOnlyList<Policy> For(Goal goal, bool tallsAllowed, bool wallCabinetsAllowed)
     {
         var policies = goal switch
         {
@@ -44,8 +44,12 @@ internal static class Policies
             }
         };
 
-        return tallsAllowed
-            ? policies
-            : policies.Select(p => p with { MaxTalls = 0, StackWallCabinets = false }).ToList();
+        return policies
+            .Select(p => p with
+            {
+                MaxTalls = tallsAllowed ? p.MaxTalls : 0,
+                StackWallCabinets = p.StackWallCabinets && wallCabinetsAllowed
+            })
+            .ToList();
     }
 }

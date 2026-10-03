@@ -147,7 +147,8 @@ public static class CatalogLoader
         element.GetProperty("maxFillersPerEnd").GetInt32(),
         element.GetProperty("maxFillersPerObstructionEdge").GetInt32(),
         element.GetProperty("minCeiling").GetDecimal(),
-        element.GetProperty("minCeilingForTallsAndWalls").GetDecimal(),
+        element.GetProperty("minCeilingForWallCabinets").GetDecimal(),
+        element.GetProperty("minCeilingForTalls").GetDecimal(),
         element.GetProperty("minCeilingForStackedWall").GetDecimal(),
         ReadClearances(element.GetProperty("obstructionClearance")));
 

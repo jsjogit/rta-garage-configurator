@@ -24,8 +24,12 @@ Secondary: share-link created, design emailed, "talk to a designer" clicks.
    - 8 ft (96") · 9 ft (108") · 10 ft (120") · free input
    Required, because the line's talls and the 84" datum do not fit under an older 7-ft garage ceiling.
    Not a free-text measurement — it is the one dimension a customer can answer by looking up.
-2. **Obstructions** — optional list of blocks on the wall: `{type, startX, width, height, bottomY}`.
-   Presets: electrical panel, water heater, window, side door, garage-door track zone, outlet.
+2. **Obstructions** — optional, and deliberately coarse. Presets only (electrical panel, water heater,
+   window, side door, garage-door track zone, outlet) dropped onto a wall strip; no fine positioning,
+   no custom shapes. The solver models them fully as `{type, startX, width, height, bottomY}`, but the
+   UI never asks a customer to draw geometry. When a wall carries a clearance-bearing obstruction the
+   results show a "have a designer check this" path alongside the layouts — a designer is a better
+   answer than a complicated editor.
 3. **Goal** — one of: `Workbench`, `Storage`, `HideTheMess`, `Balanced`.
    (No `budgetMax` in V1 — deferred to a later phase.)
 

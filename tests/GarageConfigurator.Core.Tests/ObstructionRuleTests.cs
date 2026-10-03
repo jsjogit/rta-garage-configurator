@@ -133,7 +133,7 @@ public class ObstructionRuleTests
     [Fact]
     public void Every_fixture_wall_loads_with_a_length_and_a_ceiling()
     {
-        WallFixtures.All.Count.ShouldBe(12);
+        WallFixtures.All.Count.ShouldBe(13);
         WallFixtures.All.Values.ShouldAllBe(w => w.Length > 0m && w.Ceiling > 0m);
     }
 }
