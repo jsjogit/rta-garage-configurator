@@ -1,0 +1,249 @@
+/*
+  Shop-drawing identity. The palette is taken off the product itself: the whole Signature Gray line
+  is grayscale, so the interface is too, and the one warm note — butcher-block amber — appears only
+  where wood actually appears. Everything else is concrete, graphite and matte black.
+*/
+:root {
+  --concrete: #e6e4e0;
+  --concrete-deep: #d6d3ce;
+  --sheet: #f7f7f6;
+  --graphite: #3c4147;
+  --ink: #15171a;
+  --slab: #b9bdc0;
+  --slab-edge: #9aa0a6;
+  --wood: #b5793a;
+  --wood-deep: #8a5a28;
+  --rule: #b3b0ab;
+
+  --display: 'Archivo Narrow', 'Helvetica Neue', sans-serif;
+  --body: 'IBM Plex Sans', system-ui, sans-serif;
+  --data: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --step: clamp(0.5rem, 1.6vw, 0.9rem);
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--concrete);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.5;
+  /* Faint grid, the way a drawing sheet is gridded. Never loud enough to read as decoration. */
+  background-image:
+    linear-gradient(to right, rgba(60, 65, 71, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(60, 65, 71, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+h1, h2, h3, .eyebrow, .sheet-label {
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+h1 { font-size: clamp(1.6rem, 6vw, 2.6rem); letter-spacing: 0.04em; line-height: 1.05; }
+h2 { font-size: clamp(1.1rem, 3.4vw, 1.4rem); }
+h3 { font-size: 0.95rem; }
+
+.eyebrow {
+  font-size: 0.7rem;
+  color: var(--graphite);
+  letter-spacing: 0.18em;
+}
+
+.data { font-family: var(--data); font-variant-numeric: tabular-nums; }
+
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--gutter);
+}
+
+/* ---- masthead ---------------------------------------------------------- */
+.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 0.75rem; margin-bottom: 1.75rem; }
+.masthead p { margin: 0.45rem 0 0; max-width: 54ch; color: var(--graphite); font-size: 0.95rem; }
+
+/* ---- step rail --------------------------------------------------------- */
+.rail { display: flex; gap: 0; list-style: none; margin: 0 0 1.5rem; padding: 0; flex-wrap: wrap; }
+.rail li {
+  font-family: var(--data);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rule);
+  padding: 0.35rem 0.9rem 0.35rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.rail li[data-state='done'] { color: var(--graphite); }
+.rail li[data-state='current'] { color: var(--ink); }
+.rail li[data-state='current'] .tick { background: var(--ink); }
+.rail li[data-state='done'] .tick { background: var(--graphite); }
+.tick { width: 10px; height: 10px; border: 1px solid currentColor; display: inline-block; }
+
+/* ---- panels ------------------------------------------------------------ */
+.panel {
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  padding: clamp(1rem, 3vw, 1.6rem);
+}
+.panel + .panel { margin-top: 1rem; }
+.panel > h2 { margin-bottom: 0.35rem; }
+.panel .hint { color: var(--graphite); font-size: 0.88rem; margin: 0 0 1.1rem; max-width: 56ch; }
+
+.field-label {
+  display: block;
+  font-family: var(--data);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--graphite);
+  margin-bottom: 0.5rem;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+
+.chip {
+  font-family: var(--data);
+  font-size: 0.82rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--graphite);
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+  min-height: 44px;
+}
+.chip:hover { border-color: var(--graphite); color: var(--ink); }
+.chip[aria-pressed='true'] { background: var(--ink); border-color: var(--ink); color: var(--sheet); }
+
+.measure { display: flex; align-items: baseline; gap: 0.5rem; }
+.measure input {
+  font-family: var(--data);
+  font-size: 1.05rem;
+  width: 7.5rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--rule);
+  background: #fff;
+  color: var(--ink);
+  min-height: 44px;
+}
+.measure input:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.measure .unit { font-family: var(--data); font-size: 0.85rem; color: var(--graphite); }
+.measure .feet { font-family: var(--data); font-size: 0.85rem; color: var(--graphite); margin-left: 0.25rem; }
+
+.goal-grid { display: grid; gap: 0.6rem; grid-template-columns: 1fr; }
+@media (min-width: 620px) { .goal-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.goal {
+  text-align: left;
+  border: 1px solid var(--rule);
+  background: transparent;
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  display: grid;
+  gap: 0.2rem;
+}
+.goal:hover { border-color: var(--graphite); }
+.goal[aria-pressed='true'] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.goal strong { font-family: var(--display); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.9rem; }
+.goal span { font-size: 0.85rem; color: var(--graphite); }
+
+.actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; flex-wrap: wrap; }
+
+.btn {
+  font-family: var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.82rem;
+  padding: 0.85rem 1.4rem;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--sheet);
+  cursor: pointer;
+  min-height: 44px;
+}
+.btn:hover { background: var(--graphite); border-color: var(--graphite); }
+.btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.ghost:hover { background: var(--concrete-deep); }
+.btn.wood { background: var(--wood); border-color: var(--wood); color: #fff; }
+.btn.wood:hover { background: var(--wood-deep); border-color: var(--wood-deep); }
+
+:where(button, a, input, [tabindex]):focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ---- results ----------------------------------------------------------- */
+.results-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+
+.sheets { display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .sheets { grid-template-columns: repeat(3, 1fr); } }
+
+.sheet { background: var(--sheet); border: 1px solid var(--rule); display: flex; flex-direction: column; }
+.sheet[data-rank='0'] { border-color: var(--ink); }
+
+.sheet-head { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--rule); }
+.sheet-label { font-size: 0.75rem; }
+.sheet[data-rank='0'] .sheet-label { color: var(--ink); }
+.sheet-no { font-family: var(--data); font-size: 0.7rem; color: var(--rule); }
+
+.sheet-body { padding: 0.9rem; display: grid; gap: 0.9rem; align-content: start; flex: 1; }
+
+/* The title block: a drawing's metadata strip, doing real work as the price summary. */
+.title-block { border-top: 1px solid var(--ink); display: grid; grid-template-columns: 1fr auto; gap: 0.3rem 0.9rem; padding: 0.7rem 0.9rem; align-items: baseline; }
+.title-block .k { font-family: var(--data); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--graphite); }
+.title-block .v { font-family: var(--data); font-size: 1.15rem; text-align: right; }
+.title-block .was { font-family: var(--data); font-size: 0.8rem; color: var(--graphite); text-decoration: line-through; text-align: right; }
+
+.tier-switch { display: flex; border: 1px solid var(--rule); }
+.tier-switch button {
+  flex: 1;
+  font-family: var(--data);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.55rem 0.4rem;
+  background: transparent;
+  border: 0;
+  color: var(--graphite);
+  cursor: pointer;
+  min-height: 40px;
+}
+.tier-switch button[aria-pressed='true'] { background: var(--graphite); color: var(--sheet); }
+
+.lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.2rem; }
+.lines li { display: grid; grid-template-columns: auto 1fr auto; gap: 0.5rem; font-family: var(--data); font-size: 0.78rem; align-items: baseline; }
+.lines .qty { color: var(--graphite); }
+.lines .dots { border-bottom: 1px dotted var(--rule); transform: translateY(-0.25em); }
+
+/* ---- notices ----------------------------------------------------------- */
+.notice { border-left: 3px solid var(--wood); background: var(--sheet); padding: 0.9rem 1rem; margin-bottom: 1rem; }
+.notice h3 { font-size: 0.78rem; letter-spacing: 0.12em; margin-bottom: 0.35rem; }
+.notice p { margin: 0; font-size: 0.9rem; color: var(--graphite); max-width: 70ch; }
+.notice a { color: var(--ink); }
+
+.failure { border: 1px solid var(--ink); background: var(--sheet); padding: 1.5rem; }
+.failure p { margin: 0.5rem 0 0; color: var(--graphite); }
+
+.footnote { font-size: 0.78rem; color: var(--graphite); margin-top: 1.5rem; font-family: var(--data); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .sheet { animation: rise 420ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards; }
+  .sheet[data-rank='1'] { animation-delay: 70ms; }
+  .sheet[data-rank='2'] { animation-delay: 140ms; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+}
+
+/* ---- elevation --------------------------------------------------------- */
+.elevation { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--rule); }
+.elev-datum { font-family: var(--data); font-size: 5px; fill: var(--graphite); letter-spacing: 0.08em; text-transform: uppercase; }
+.elev-knee { font-family: var(--data); font-size: 3px; fill: var(--graphite); letter-spacing: 0.04em; }
+.elev-note { font-family: var(--data); font-size: 5px; fill: var(--graphite); letter-spacing: 0.06em; }
+.elev-dim-text { font-family: var(--data); font-size: 6px; fill: var(--graphite); }

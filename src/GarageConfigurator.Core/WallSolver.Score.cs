@@ -183,9 +183,11 @@ public sealed partial class WallSolver
             }
         }
 
+        var used = new HashSet<string>(StringComparer.Ordinal) { "Recommended" };
+
         return chosen.Select((candidate, rank) =>
         {
-            var label = rank == 0 ? "Recommended" : LabelAgainst(candidate, chosen[0]);
+            var label = rank == 0 ? "Recommended" : PickLabel(candidate, chosen[0], used);
             var footprint = candidate.Layout with { Label = label };
 
             return new LayoutOption(
@@ -210,8 +212,33 @@ public sealed partial class WallSolver
         return string.Join("|", skus) + "//" + string.Join("|", counters);
     }
 
-    /// <summary>Name a layout by whatever it does most differently from the recommended one.</summary>
-    private static string LabelAgainst(ScoredLayout candidate, ScoredLayout best)
+    /// <summary>
+    /// Name a layout by whatever it does most differently from the recommended one, and never reuse a
+    /// name — three cards all reading "Another option" tells the customer nothing.
+    /// </summary>
+    private static string PickLabel(ScoredLayout candidate, ScoredLayout best, ISet<string> used)
+    {
+        foreach (var label in LabelCandidates(candidate, best))
+        {
+            if (used.Add(label))
+            {
+                return label;
+            }
+        }
+
+        foreach (var fallback in new[] { "Another option", "A different mix", "One more take" })
+        {
+            if (used.Add(fallback))
+            {
+                return fallback;
+            }
+        }
+
+        return $"Option {used.Count}";
+    }
+
+    /// <summary>Differences worth naming, biggest first. A difference under 2% is not worth claiming.</summary>
+    private static IEnumerable<string> LabelCandidates(ScoredLayout candidate, ScoredLayout best)
     {
         var cheaper = best.Price == 0m ? 0m : (best.Price - candidate.Price) / best.Price;
         var roomier = best.CubicFeet == 0m ? 0m : (candidate.CubicFeet - best.CubicFeet) / best.CubicFeet;
@@ -219,15 +246,14 @@ public sealed partial class WallSolver
             ? (candidate.CounterLength > 0m ? 1m : 0m)
             : (candidate.CounterLength - best.CounterLength) / best.CounterLength;
 
-        var biggest = Math.Max(cheaper, Math.Max(roomier, benchier));
-
-        if (biggest <= 0.02m)
-        {
-            return "Another option";
-        }
-
-        return biggest == roomier ? "More storage"
-            : biggest == benchier ? "Bigger workbench"
-            : "Lower cost";
+        return new[]
+            {
+                (Size: roomier, Label: "More storage"),
+                (Size: benchier, Label: "Bigger workbench"),
+                (Size: cheaper, Label: "Lower cost")
+            }
+            .Where(option => option.Size > 0.02m)
+            .OrderByDescending(option => option.Size)
+            .Select(option => option.Label);
     }
 }

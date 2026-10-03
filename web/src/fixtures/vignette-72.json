@@ -1,0 +1,823 @@
+{
+  "options": [
+    {
+      "label": "Recommended",
+      "standard": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-B24-F",
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "",
+              "x": 24,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "KneeSpace"
+            },
+            {
+              "sku": "MV-B24-F",
+              "x": 48,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-CTHW7425",
+              "x": 0,
+              "y": 34.5,
+              "width": 72,
+              "height": 1.5,
+              "depth": 25,
+              "zone": "Counter"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 0,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2415",
+              "x": 24,
+              "y": 69,
+              "width": 24,
+              "height": 15,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 48,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            }
+          ],
+          "label": "Recommended",
+          "configId": null,
+          "tier": "Standard"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-B24-F",
+            "quantity": 2,
+            "unitList": 683.10,
+            "unitPromo": 512.32,
+            "extendedList": 1366.20,
+            "extendedPromo": 1024.64
+          },
+          {
+            "sku": "MV-CTHW7425",
+            "quantity": 1,
+            "unitList": 527.20,
+            "unitPromo": 395.40,
+            "extendedList": 527.20,
+            "extendedPromo": 395.40
+          },
+          {
+            "sku": "MV-W2430",
+            "quantity": 2,
+            "unitList": 310.86,
+            "unitPromo": 233.14,
+            "extendedList": 621.72,
+            "extendedPromo": 466.28
+          },
+          {
+            "sku": "MV-W2415",
+            "quantity": 1,
+            "unitList": 205.92,
+            "unitPromo": 154.44,
+            "extendedList": 205.92,
+            "extendedPromo": 154.44
+          }
+        ],
+        "subtotalList": 2721.04,
+        "subtotalPromo": 2040.76
+      },
+      "premiere": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-DB24-3",
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "",
+              "x": 24,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "KneeSpace"
+            },
+            {
+              "sku": "MV-DB24-4",
+              "x": 48,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-CTHW7425",
+              "x": 0,
+              "y": 34.5,
+              "width": 72,
+              "height": 1.5,
+              "depth": 25,
+              "zone": "Counter"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 0,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2415",
+              "x": 24,
+              "y": 69,
+              "width": 24,
+              "height": 15,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 48,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            }
+          ],
+          "label": "Recommended",
+          "configId": null,
+          "tier": "Premiere"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-DB24-3",
+            "quantity": 1,
+            "unitList": 1017.72,
+            "unitPromo": 763.29,
+            "extendedList": 1017.72,
+            "extendedPromo": 763.29
+          },
+          {
+            "sku": "MV-DB24-4",
+            "quantity": 1,
+            "unitList": 1092.96,
+            "unitPromo": 819.72,
+            "extendedList": 1092.96,
+            "extendedPromo": 819.72
+          },
+          {
+            "sku": "MV-CTHW7425",
+            "quantity": 1,
+            "unitList": 527.20,
+            "unitPromo": 395.40,
+            "extendedList": 527.20,
+            "extendedPromo": 395.40
+          },
+          {
+            "sku": "MV-W2430",
+            "quantity": 2,
+            "unitList": 310.86,
+            "unitPromo": 233.14,
+            "extendedList": 621.72,
+            "extendedPromo": 466.28
+          },
+          {
+            "sku": "MV-W2415",
+            "quantity": 1,
+            "unitList": 205.92,
+            "unitPromo": 154.44,
+            "extendedList": 205.92,
+            "extendedPromo": 154.44
+          }
+        ],
+        "subtotalList": 3465.52,
+        "subtotalPromo": 2599.13
+      }
+    },
+    {
+      "label": "Another option",
+      "standard": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-B30-F",
+              "x": 0,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "",
+              "x": 30,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "KneeSpace"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 54,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-CTHW7425",
+              "x": 0,
+              "y": 34.5,
+              "width": 69,
+              "height": 1.5,
+              "depth": 25,
+              "zone": "Counter"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 0,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2415",
+              "x": 30,
+              "y": 69,
+              "width": 24,
+              "height": 15,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 54,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-F384",
+              "x": 69,
+              "y": 0,
+              "width": 3,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Filler"
+            }
+          ],
+          "label": "Another option",
+          "configId": null,
+          "tier": "Standard"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-B30-F",
+            "quantity": 1,
+            "unitList": 883.08,
+            "unitPromo": 662.31,
+            "extendedList": 883.08,
+            "extendedPromo": 662.31
+          },
+          {
+            "sku": "MV-B15",
+            "quantity": 1,
+            "unitList": 685.08,
+            "unitPromo": 513.81,
+            "extendedList": 685.08,
+            "extendedPromo": 513.81
+          },
+          {
+            "sku": "MV-CTHW7425",
+            "quantity": 1,
+            "unitList": 527.20,
+            "unitPromo": 395.40,
+            "extendedList": 527.20,
+            "extendedPromo": 395.40
+          },
+          {
+            "sku": "MV-W3030",
+            "quantity": 1,
+            "unitList": 348.48,
+            "unitPromo": 261.36,
+            "extendedList": 348.48,
+            "extendedPromo": 261.36
+          },
+          {
+            "sku": "MV-W2415",
+            "quantity": 1,
+            "unitList": 205.92,
+            "unitPromo": 154.44,
+            "extendedList": 205.92,
+            "extendedPromo": 154.44
+          },
+          {
+            "sku": "MV-W1530",
+            "quantity": 1,
+            "unitList": 211.86,
+            "unitPromo": 158.90,
+            "extendedList": 211.86,
+            "extendedPromo": 158.90
+          },
+          {
+            "sku": "MV-F384",
+            "quantity": 1,
+            "unitList": 93.06,
+            "unitPromo": 69.80,
+            "extendedList": 93.06,
+            "extendedPromo": 69.80
+          }
+        ],
+        "subtotalList": 2954.68,
+        "subtotalPromo": 2216.02
+      },
+      "premiere": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-DB30-3",
+              "x": 0,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "",
+              "x": 30,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "KneeSpace"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 54,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-CTHW7425",
+              "x": 0,
+              "y": 34.5,
+              "width": 69,
+              "height": 1.5,
+              "depth": 25,
+              "zone": "Counter"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 0,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2415",
+              "x": 30,
+              "y": 69,
+              "width": 24,
+              "height": 15,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 54,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-F384",
+              "x": 69,
+              "y": 0,
+              "width": 3,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Filler"
+            }
+          ],
+          "label": "Another option",
+          "configId": null,
+          "tier": "Premiere"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-DB30-3",
+            "quantity": 1,
+            "unitList": 1239.48,
+            "unitPromo": 929.61,
+            "extendedList": 1239.48,
+            "extendedPromo": 929.61
+          },
+          {
+            "sku": "MV-B15",
+            "quantity": 1,
+            "unitList": 685.08,
+            "unitPromo": 513.81,
+            "extendedList": 685.08,
+            "extendedPromo": 513.81
+          },
+          {
+            "sku": "MV-CTHW7425",
+            "quantity": 1,
+            "unitList": 527.20,
+            "unitPromo": 395.40,
+            "extendedList": 527.20,
+            "extendedPromo": 395.40
+          },
+          {
+            "sku": "MV-W3030",
+            "quantity": 1,
+            "unitList": 348.48,
+            "unitPromo": 261.36,
+            "extendedList": 348.48,
+            "extendedPromo": 261.36
+          },
+          {
+            "sku": "MV-W2415",
+            "quantity": 1,
+            "unitList": 205.92,
+            "unitPromo": 154.44,
+            "extendedList": 205.92,
+            "extendedPromo": 154.44
+          },
+          {
+            "sku": "MV-W1530",
+            "quantity": 1,
+            "unitList": 211.86,
+            "unitPromo": 158.90,
+            "extendedList": 211.86,
+            "extendedPromo": 158.90
+          },
+          {
+            "sku": "MV-F384",
+            "quantity": 1,
+            "unitList": 93.06,
+            "unitPromo": 69.80,
+            "extendedList": 93.06,
+            "extendedPromo": 69.80
+          }
+        ],
+        "subtotalList": 3311.08,
+        "subtotalPromo": 2483.32
+      }
+    },
+    {
+      "label": "More storage",
+      "standard": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-B24-F",
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 24,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 39,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 54,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-CTHW7425",
+              "x": 0,
+              "y": 34.5,
+              "width": 69,
+              "height": 1.5,
+              "depth": 25,
+              "zone": "Counter"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 0,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 24,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 39,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 54,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-F384",
+              "x": 69,
+              "y": 0,
+              "width": 3,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Filler"
+            }
+          ],
+          "label": "More storage",
+          "configId": null,
+          "tier": "Standard"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-B24-F",
+            "quantity": 1,
+            "unitList": 683.10,
+            "unitPromo": 512.32,
+            "extendedList": 683.10,
+            "extendedPromo": 512.32
+          },
+          {
+            "sku": "MV-B15",
+            "quantity": 3,
+            "unitList": 685.08,
+            "unitPromo": 513.81,
+            "extendedList": 2055.24,
+            "extendedPromo": 1541.43
+          },
+          {
+            "sku": "MV-CTHW7425",
+            "quantity": 1,
+            "unitList": 527.20,
+            "unitPromo": 395.40,
+            "extendedList": 527.20,
+            "extendedPromo": 395.40
+          },
+          {
+            "sku": "MV-W2430",
+            "quantity": 1,
+            "unitList": 310.86,
+            "unitPromo": 233.14,
+            "extendedList": 310.86,
+            "extendedPromo": 233.14
+          },
+          {
+            "sku": "MV-W1530",
+            "quantity": 3,
+            "unitList": 211.86,
+            "unitPromo": 158.90,
+            "extendedList": 635.58,
+            "extendedPromo": 476.70
+          },
+          {
+            "sku": "MV-F384",
+            "quantity": 1,
+            "unitList": 93.06,
+            "unitPromo": 69.80,
+            "extendedList": 93.06,
+            "extendedPromo": 69.80
+          }
+        ],
+        "subtotalList": 4305.04,
+        "subtotalPromo": 3228.79
+      },
+      "premiere": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-DB24-3",
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 24,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 39,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 54,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-CTHW7425",
+              "x": 0,
+              "y": 34.5,
+              "width": 69,
+              "height": 1.5,
+              "depth": 25,
+              "zone": "Counter"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 0,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 24,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 39,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 54,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-F384",
+              "x": 69,
+              "y": 0,
+              "width": 3,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Filler"
+            }
+          ],
+          "label": "More storage",
+          "configId": null,
+          "tier": "Premiere"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-DB24-3",
+            "quantity": 1,
+            "unitList": 1017.72,
+            "unitPromo": 763.29,
+            "extendedList": 1017.72,
+            "extendedPromo": 763.29
+          },
+          {
+            "sku": "MV-B15",
+            "quantity": 3,
+            "unitList": 685.08,
+            "unitPromo": 513.81,
+            "extendedList": 2055.24,
+            "extendedPromo": 1541.43
+          },
+          {
+            "sku": "MV-CTHW7425",
+            "quantity": 1,
+            "unitList": 527.20,
+            "unitPromo": 395.40,
+            "extendedList": 527.20,
+            "extendedPromo": 395.40
+          },
+          {
+            "sku": "MV-W2430",
+            "quantity": 1,
+            "unitList": 310.86,
+            "unitPromo": 233.14,
+            "extendedList": 310.86,
+            "extendedPromo": 233.14
+          },
+          {
+            "sku": "MV-W1530",
+            "quantity": 3,
+            "unitList": 211.86,
+            "unitPromo": 158.90,
+            "extendedList": 635.58,
+            "extendedPromo": 476.70
+          },
+          {
+            "sku": "MV-F384",
+            "quantity": 1,
+            "unitList": 93.06,
+            "unitPromo": 69.80,
+            "extendedList": 93.06,
+            "extendedPromo": 69.80
+          }
+        ],
+        "subtotalList": 4639.66,
+        "subtotalPromo": 3479.76
+      }
+    }
+  ],
+  "failure": null,
+  "notices": []
+}

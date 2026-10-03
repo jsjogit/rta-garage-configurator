@@ -1,0 +1,8 @@
+{
+  "options": [],
+  "failure": {
+    "code": "WallTooShort",
+    "message": "This wall is too short for our smallest cabinet."
+  },
+  "notices": []
+}

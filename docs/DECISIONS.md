@@ -56,8 +56,18 @@
 | 2026-10-02 | Walls with clearance-bearing obstructions return `ObstructionsWorthADesignerLook` | Joshua: rather than build an obstruction editor customers fight, route them to an in-house designer. The solver still models clearance exactly; the UI just stops trying to be the expert. |
 | 2026-10-02 | Phase 1 obstruction input is presets only — no fine positioning, no custom shapes | Follows from the same call. Recorded in SPEC so Session 5 does not build the complicated version. |
 | 2026-10-02 | Add-to-cart posts to https://www.rtacabinetstore.com/cart | Joshua supplied the URL. The remaining mechanics (bulk vs sequential lines, anti-forgery token, response shape for config_id attribution) are mine to determine from the nopCommerce fork in Session 6, not questions for Joshua. |
+| 2026-10-02 | The web identity is a shop drawing, not a configurator UI | The product *is* an elevation, so the page borrows the vernacular: dimension lines, a title block, and the 84" datum drawn where the solver enforces it. Palette comes off the cabinets — the line is entirely grayscale, so the UI is too, and butcher-block amber appears only where wood appears. |
+| 2026-10-02 | The elevation is drawn in inches; the SVG viewBox does the scaling | True proportion for free, one coordinate system shared with the domain, and it resizes to any card width without a layout pass. |
+| 2026-10-02 | An obstruction label is dropped when it would not fit its ghost | "electrical panel" is 48" of text over a 16" panel. Short names plus a width check; the dashed ghost and the SVG aria-label still say what is there. |
+| 2026-10-02 | Web fixtures are exported from the API by a test that also guards them | `WebFixtureExportTests` writes real /solve payloads into web/src/fixtures and fails when they drift. The web renders exactly what the API returns rather than a hand-written guess. |
+| 2026-10-02 | Dev-only `?demo=<fixture>` renders a stored payload | `func` is not installed here, so the UI would otherwise be undevelopable and unscreenshottable. Guarded by `import.meta.env.DEV`, so it never ships. |
+| 2026-10-02 | Result labels are now guaranteed unique | Found in the browser: 28 of 52 fixture/goal pairs produced two cards both reading "Another option", and React warned on the duplicate key. Labels are picked from the biggest real difference, never reused. |
+| 2026-10-02 | The tier switch says "Doors" and "Drawers", not "Standard" and "Premiere" | The customer is choosing between fronts, not tiers. The API keeps the tier names — see "Needs Joshua" if merchandising wants the brand names on screen. |
 
 ## Needs Joshua
+- Should the tier switch show the brand names ("Standard" / "Premiere") or what the customer is
+  actually choosing between ("Doors" / "Drawers")? The UI currently says Doors/Drawers; the API keeps
+  Standard/Premiere either way. This is a merchandising call, not a technical one.
 - **Is the 15" bridge width-matched to the knee space, or can a 30"-wide IC-MW-W3015 span a 24" knee
   space?** We currently require a width match (W2415 over a 24" knee, IC-MW-W3015 over a 30" knee),
   which is what the vendor vignette shows. If a wider bridge is allowed the solver gains layouts on

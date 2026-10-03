@@ -75,6 +75,17 @@ public class SolveRankingTests
             .Options[0].Label.ShouldBe("Recommended");
     }
 
+    [Theory]
+    [MemberData(nameof(EveryFixtureAndGoal))]
+    public void No_two_results_carry_the_same_label(string fixtureId, Goal goal)
+    {
+        var labels = Solver.Solve(WallFixtures.Get(fixtureId), goal, Prices)
+            .Options.Select(o => o.Label)
+            .ToList();
+
+        labels.ShouldBeUnique();
+    }
+
     [Fact]
     public void Every_layout_is_labelled_for_the_results_card()
     {

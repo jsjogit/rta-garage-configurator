@@ -1,0 +1,1218 @@
+{
+  "options": [
+    {
+      "label": "Recommended",
+      "standard": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-B30-F",
+              "x": 0,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 30,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 60,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 90,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 120,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 150,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 180,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 210,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 0,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 30,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 60,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 90,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 120,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 150,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 180,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 210,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            }
+          ],
+          "label": "Recommended",
+          "configId": null,
+          "tier": "Standard"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-B30-F",
+            "quantity": 8,
+            "unitList": 883.08,
+            "unitPromo": 662.31,
+            "extendedList": 7064.64,
+            "extendedPromo": 5298.48
+          },
+          {
+            "sku": "MV-W3030",
+            "quantity": 8,
+            "unitList": 348.48,
+            "unitPromo": 261.36,
+            "extendedList": 2787.84,
+            "extendedPromo": 2090.88
+          }
+        ],
+        "subtotalList": 9852.48,
+        "subtotalPromo": 7389.36
+      },
+      "premiere": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-DB30-3",
+              "x": 0,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 30,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 60,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 90,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 120,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 150,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 180,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 210,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 0,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 30,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 60,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 90,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 120,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 150,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 180,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 210,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            }
+          ],
+          "label": "Recommended",
+          "configId": null,
+          "tier": "Premiere"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-DB30-3",
+            "quantity": 1,
+            "unitList": 1239.48,
+            "unitPromo": 929.61,
+            "extendedList": 1239.48,
+            "extendedPromo": 929.61
+          },
+          {
+            "sku": "MV-DB30-4",
+            "quantity": 7,
+            "unitList": 1326.60,
+            "unitPromo": 994.95,
+            "extendedList": 9286.20,
+            "extendedPromo": 6964.65
+          },
+          {
+            "sku": "MV-W3030",
+            "quantity": 8,
+            "unitList": 348.48,
+            "unitPromo": 261.36,
+            "extendedList": 2787.84,
+            "extendedPromo": 2090.88
+          }
+        ],
+        "subtotalList": 13313.52,
+        "subtotalPromo": 9985.14
+      }
+    },
+    {
+      "label": "Another option",
+      "standard": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-B30-F",
+              "x": 0,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 30,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 60,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 90,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 120,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 150,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 180,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 210,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 225,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 0,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 30,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 60,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 90,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 120,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 150,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 180,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 210,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 225,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            }
+          ],
+          "label": "Another option",
+          "configId": null,
+          "tier": "Standard"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-B30-F",
+            "quantity": 7,
+            "unitList": 883.08,
+            "unitPromo": 662.31,
+            "extendedList": 6181.56,
+            "extendedPromo": 4636.17
+          },
+          {
+            "sku": "MV-B15",
+            "quantity": 2,
+            "unitList": 685.08,
+            "unitPromo": 513.81,
+            "extendedList": 1370.16,
+            "extendedPromo": 1027.62
+          },
+          {
+            "sku": "MV-W3030",
+            "quantity": 7,
+            "unitList": 348.48,
+            "unitPromo": 261.36,
+            "extendedList": 2439.36,
+            "extendedPromo": 1829.52
+          },
+          {
+            "sku": "MV-W1530",
+            "quantity": 2,
+            "unitList": 211.86,
+            "unitPromo": 158.90,
+            "extendedList": 423.72,
+            "extendedPromo": 317.80
+          }
+        ],
+        "subtotalList": 10414.80,
+        "subtotalPromo": 7811.11
+      },
+      "premiere": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-DB30-3",
+              "x": 0,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 30,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 60,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 90,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 120,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 150,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 180,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 210,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 225,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 0,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 30,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 60,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 90,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 120,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 150,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 180,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 210,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 225,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            }
+          ],
+          "label": "Another option",
+          "configId": null,
+          "tier": "Premiere"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-DB30-3",
+            "quantity": 1,
+            "unitList": 1239.48,
+            "unitPromo": 929.61,
+            "extendedList": 1239.48,
+            "extendedPromo": 929.61
+          },
+          {
+            "sku": "MV-DB30-4",
+            "quantity": 6,
+            "unitList": 1326.60,
+            "unitPromo": 994.95,
+            "extendedList": 7959.60,
+            "extendedPromo": 5969.70
+          },
+          {
+            "sku": "MV-B15",
+            "quantity": 2,
+            "unitList": 685.08,
+            "unitPromo": 513.81,
+            "extendedList": 1370.16,
+            "extendedPromo": 1027.62
+          },
+          {
+            "sku": "MV-W3030",
+            "quantity": 7,
+            "unitList": 348.48,
+            "unitPromo": 261.36,
+            "extendedList": 2439.36,
+            "extendedPromo": 1829.52
+          },
+          {
+            "sku": "MV-W1530",
+            "quantity": 2,
+            "unitList": 211.86,
+            "unitPromo": 158.90,
+            "extendedList": 423.72,
+            "extendedPromo": 317.80
+          }
+        ],
+        "subtotalList": 13432.32,
+        "subtotalPromo": 10074.25
+      }
+    },
+    {
+      "label": "A different mix",
+      "standard": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-B30-F",
+              "x": 0,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 30,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 60,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B30-F",
+              "x": 90,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B24-F",
+              "x": 120,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B24-F",
+              "x": 144,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B24-F",
+              "x": 168,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B24-F",
+              "x": 192,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B24-F",
+              "x": 216,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 0,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 30,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 60,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 90,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 120,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 144,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 168,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 192,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 216,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            }
+          ],
+          "label": "A different mix",
+          "configId": null,
+          "tier": "Standard"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-B30-F",
+            "quantity": 4,
+            "unitList": 883.08,
+            "unitPromo": 662.31,
+            "extendedList": 3532.32,
+            "extendedPromo": 2649.24
+          },
+          {
+            "sku": "MV-B24-F",
+            "quantity": 5,
+            "unitList": 683.10,
+            "unitPromo": 512.32,
+            "extendedList": 3415.50,
+            "extendedPromo": 2561.60
+          },
+          {
+            "sku": "MV-W3030",
+            "quantity": 4,
+            "unitList": 348.48,
+            "unitPromo": 261.36,
+            "extendedList": 1393.92,
+            "extendedPromo": 1045.44
+          },
+          {
+            "sku": "MV-W2430",
+            "quantity": 5,
+            "unitList": 310.86,
+            "unitPromo": 233.14,
+            "extendedList": 1554.30,
+            "extendedPromo": 1165.70
+          }
+        ],
+        "subtotalList": 9896.04,
+        "subtotalPromo": 7421.98
+      },
+      "premiere": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-DB30-3",
+              "x": 0,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 30,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 60,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB30-4",
+              "x": 90,
+              "y": 0,
+              "width": 30,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB24-4",
+              "x": 120,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB24-4",
+              "x": 144,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB24-4",
+              "x": 168,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB24-4",
+              "x": 192,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-DB24-4",
+              "x": 216,
+              "y": 0,
+              "width": 24,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 0,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 30,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 60,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W3030",
+              "x": 90,
+              "y": 54,
+              "width": 30,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 120,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 144,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 168,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 192,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W2430",
+              "x": 216,
+              "y": 54,
+              "width": 24,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            }
+          ],
+          "label": "A different mix",
+          "configId": null,
+          "tier": "Premiere"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-DB30-3",
+            "quantity": 1,
+            "unitList": 1239.48,
+            "unitPromo": 929.61,
+            "extendedList": 1239.48,
+            "extendedPromo": 929.61
+          },
+          {
+            "sku": "MV-DB30-4",
+            "quantity": 3,
+            "unitList": 1326.60,
+            "unitPromo": 994.95,
+            "extendedList": 3979.80,
+            "extendedPromo": 2984.85
+          },
+          {
+            "sku": "MV-DB24-4",
+            "quantity": 5,
+            "unitList": 1092.96,
+            "unitPromo": 819.72,
+            "extendedList": 5464.80,
+            "extendedPromo": 4098.60
+          },
+          {
+            "sku": "MV-W3030",
+            "quantity": 4,
+            "unitList": 348.48,
+            "unitPromo": 261.36,
+            "extendedList": 1393.92,
+            "extendedPromo": 1045.44
+          },
+          {
+            "sku": "MV-W2430",
+            "quantity": 5,
+            "unitList": 310.86,
+            "unitPromo": 233.14,
+            "extendedList": 1554.30,
+            "extendedPromo": 1165.70
+          }
+        ],
+        "subtotalList": 13632.30,
+        "subtotalPromo": 10224.20
+      }
+    }
+  ],
+  "failure": null,
+  "notices": [
+    {
+      "code": "TallsNeedTipUpRoom",
+      "message": "We\u0027ve left pantry cabinets out of these layouts. They arrive fully assembled and stand 84\u0022 tall, so tilting one upright off the floor sweeps about 87.4\u0022 \u2014 more than the 84\u0022 you have. Rather than ask you to take one apart in the garage, we\u0027ve used base and wall cabinets instead. If you want pantry storage here, one of our designers can talk through the options."
+    }
+  ]
+}
