@@ -10,6 +10,10 @@ const PAD_X = 10
 const PAD_TOP = 14
 const PAD_BOTTOM = 30
 
+/* Pinned to the top of a phone the drawing only gets ~92px, so the margins have to give way or the
+   wall ends up a thumbnail inside a mostly empty box. Proportions stay true either way. */
+const COMPACT_PAD = { x: 4, top: 4, bottom: 14 }
+
 const REVEAL = 0.75 // gap drawn between adjacent fronts
 const PULL = { length: 0.45, thickness: 1.1 } // bar pull: fraction of face, inches thick
 
@@ -21,6 +25,8 @@ export interface ElevationProps {
   /** Stable prefix for pattern ids so snapshots do not churn. */
   id: string
   datumHeight?: number
+  /** Trims the drawing margins for the pinned mobile strip. */
+  compact?: boolean
   /** Index into layout.items, or null. Tapping a cabinet opens the side panel. */
   selected?: number | null
   onSelect?: (index: number | null) => void
@@ -33,9 +39,13 @@ export function Elevation({
   obstructions = [],
   id,
   datumHeight = 84,
+  compact = false,
   selected = null,
   onSelect,
 }: ElevationProps) {
+  const padX = compact ? COMPACT_PAD.x : PAD_X
+  const padTop = compact ? COMPACT_PAD.top : PAD_TOP
+  const padBottom = compact ? COMPACT_PAD.bottom : PAD_BOTTOM
   // SVG y runs down the page; the domain measures up from the floor.
   const toY = (up: number) => ceiling - up
 
@@ -48,7 +58,7 @@ export function Elevation({
   return (
     <svg
       className="elevation"
-      viewBox={`${-PAD_X} ${-PAD_TOP} ${wallLength + PAD_X * 2} ${ceiling + PAD_TOP + PAD_BOTTOM}`}
+      viewBox={`${-padX} ${-padTop} ${wallLength + padX * 2} ${ceiling + padTop + padBottom}`}
       role="img"
       aria-label={describe(layout, wallLength, ceiling)}
       preserveAspectRatio="xMidYMid meet"
@@ -65,27 +75,31 @@ export function Elevation({
       </defs>
 
       {/* Garage shell: ceiling above, slab below. */}
-      <line x1={0} y1={toY(ceiling)} x2={wallLength} y2={toY(ceiling)} stroke="var(--rule)" strokeWidth="0.8" />
-      <line x1={-PAD_X / 2} y1={floor} x2={wallLength + PAD_X / 2} y2={floor} stroke="var(--ink)" strokeWidth="1.6" />
+      <line x1={0} y1={toY(ceiling)} x2={wallLength} y2={toY(ceiling)} stroke="var(--color-rule)" strokeWidth="0.8" />
+      <line x1={-padX / 2} y1={floor} x2={wallLength + padX / 2} y2={floor} stroke="var(--ink)" strokeWidth="1.6" />
 
       {obstructions.map((o, i) => (
         <Ghost key={`o${i}`} obstruction={o} toY={toY} />
       ))}
 
-      {/* The datum: wall-cabinet tops and pantry tops both land here. */}
+      {/* The datum: wall-cabinet tops and pantry tops both land here. Pointless on an empty wall. */}
+      {layout.items.length > 0 && (
+      <>
       <line
-        x1={-PAD_X / 2}
+        x1={-padX / 2}
         y1={toY(datumHeight)}
-        x2={wallLength + PAD_X / 2}
+        x2={wallLength + padX / 2}
         y2={toY(datumHeight)}
-        stroke="var(--graphite)"
+        stroke="var(--color-muted)"
         strokeWidth="0.5"
         strokeDasharray="6 3 1 3"
         opacity="0.75"
       />
-      <text x={wallLength + PAD_X / 2} y={toY(datumHeight) - 2.5} textAnchor="end" className="elev-datum">
+      <text x={wallLength + padX / 2} y={toY(datumHeight) - 2.5} textAnchor="end" className="elev-datum">
         {datumHeight}&#8243; datum
       </text>
+      </>
+      )}
 
       {ordered.map(({ item, index }) => (
         <Item
@@ -99,7 +113,7 @@ export function Elevation({
         />
       ))}
 
-      <WidthDimension length={wallLength} y={floor + 14} />
+      <WidthDimension length={wallLength} y={floor + (compact ? 7 : 14)} />
     </svg>
   )
 }
@@ -166,7 +180,7 @@ function ItemBody({ item, toY, id }: { item: PlacedItemDto; toY: (up: number) =>
   if (item.zone === 'KneeSpace') {
     return (
       <g>
-        <rect x={item.x} y={y} width={item.width} height={item.height} fill="var(--concrete)" opacity="0.5" />
+        <rect x={item.x} y={y} width={item.width} height={item.height} fill="#f4f6f8" />
         <line x1={item.x} y1={y} x2={item.x} y2={y + item.height} stroke="var(--slab-edge)" strokeWidth="0.4" strokeDasharray="3 3" />
         <line x1={item.x + item.width} y1={y} x2={item.x + item.width} y2={y + item.height} stroke="var(--slab-edge)" strokeWidth="0.4" strokeDasharray="3 3" />
         <text x={item.x + item.width / 2} y={y + item.height / 2} textAnchor="middle" className="elev-knee">
@@ -302,7 +316,7 @@ function Ghost({ obstruction, toY }: { obstruction: ObstructionDto; toY: (up: nu
         width={obstruction.width}
         height={obstruction.height}
         fill="none"
-        stroke="var(--graphite)"
+        stroke="var(--color-muted)"
         strokeWidth="0.6"
         strokeDasharray="4 3"
       />
@@ -320,9 +334,9 @@ function Ghost({ obstruction, toY }: { obstruction: ObstructionDto; toY: (up: nu
 function WidthDimension({ length, y }: { length: number; y: number }) {
   return (
     <g className="elev-dim">
-      <line x1={0} y1={y} x2={length} y2={y} stroke="var(--graphite)" strokeWidth="0.5" />
-      <line x1={0} y1={y - 3} x2={0} y2={y + 3} stroke="var(--graphite)" strokeWidth="0.8" />
-      <line x1={length} y1={y - 3} x2={length} y2={y + 3} stroke="var(--graphite)" strokeWidth="0.8" />
+      <line x1={0} y1={y} x2={length} y2={y} stroke="var(--color-muted)" strokeWidth="0.5" />
+      <line x1={0} y1={y - 3} x2={0} y2={y + 3} stroke="var(--color-muted)" strokeWidth="0.8" />
+      <line x1={length} y1={y - 3} x2={length} y2={y + 3} stroke="var(--color-muted)" strokeWidth="0.8" />
       <text x={length / 2} y={y - 3} textAnchor="middle" className="elev-dim-text">
         {formatInches(length)}
       </text>
@@ -349,6 +363,10 @@ function spaceOut(type: string): string {
 }
 
 function describe(layout: LayoutDto, wallLength: number, ceiling: number): string {
+  if (layout.items.length === 0) {
+    return `Front elevation of an empty ${formatInches(wallLength)} wall with a ${formatInches(ceiling)} ceiling.`
+  }
+
   const counted = new Map<string, number>()
 
   for (const item of layout.items) {

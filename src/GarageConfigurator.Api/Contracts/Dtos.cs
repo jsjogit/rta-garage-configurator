@@ -11,7 +11,8 @@ public sealed record PlacedItemDto(string Sku, decimal X, decimal Y, decimal Wid
 
 public sealed record LayoutDto(PlacedItemDto[] Items, string? Label = null, string? ConfigId = null, string? Tier = null);
 
-public sealed record LineItemDto(string Sku, int Quantity, decimal UnitList, decimal UnitPromo, decimal ExtendedList, decimal ExtendedPromo);
+/// <summary>Name comes from the catalogue so the parts table can show a description, not just a SKU.</summary>
+public sealed record LineItemDto(string Sku, string Name, int Quantity, decimal UnitList, decimal UnitPromo, decimal ExtendedList, decimal ExtendedPromo);
 
 public sealed record PricedLayoutDto(LayoutDto Layout, LineItemDto[] LineItems, decimal SubtotalList, decimal SubtotalPromo);
 

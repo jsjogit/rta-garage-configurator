@@ -103,6 +103,7 @@
         "lineItems": [
           {
             "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 6,
             "unitList": 1534.50,
             "unitPromo": 1150.88,
@@ -111,6 +112,7 @@
           },
           {
             "sku": "MV-B30-F",
+            "name": "Full Height Door Base Cabinet",
             "quantity": 2,
             "unitList": 883.08,
             "unitPromo": 662.31,
@@ -119,6 +121,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 2,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -230,6 +233,7 @@
         "lineItems": [
           {
             "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 6,
             "unitList": 1534.50,
             "unitPromo": 1150.88,
@@ -238,6 +242,7 @@
           },
           {
             "sku": "MV-DB30-3",
+            "name": "3-Drawer Base Cabinet",
             "quantity": 1,
             "unitList": 1239.48,
             "unitPromo": 929.61,
@@ -246,6 +251,7 @@
           },
           {
             "sku": "MV-DB30-4",
+            "name": "4-Drawer Base Cabinet",
             "quantity": 1,
             "unitList": 1326.60,
             "unitPromo": 994.95,
@@ -254,6 +260,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 2,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -386,6 +393,7 @@
         "lineItems": [
           {
             "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 4,
             "unitList": 1534.50,
             "unitPromo": 1150.88,
@@ -394,6 +402,7 @@
           },
           {
             "sku": "MV-B24-F",
+            "name": "Full Height Door Base Cabinet",
             "quantity": 3,
             "unitList": 683.10,
             "unitPromo": 512.32,
@@ -402,6 +411,7 @@
           },
           {
             "sku": "MV-W2430",
+            "name": "Double Door Wall Cabinet",
             "quantity": 3,
             "unitList": 310.86,
             "unitPromo": 233.14,
@@ -410,6 +420,7 @@
           },
           {
             "sku": "MV-PC2484",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 2,
             "unitList": 1267.20,
             "unitPromo": 950.40,
@@ -539,6 +550,7 @@
         "lineItems": [
           {
             "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 4,
             "unitList": 1534.50,
             "unitPromo": 1150.88,
@@ -547,6 +559,7 @@
           },
           {
             "sku": "MV-DB24-3",
+            "name": "3-Drawer Base Cabinet",
             "quantity": 1,
             "unitList": 1017.72,
             "unitPromo": 763.29,
@@ -555,6 +568,7 @@
           },
           {
             "sku": "MV-DB24-4",
+            "name": "4-Drawer Base Cabinet",
             "quantity": 2,
             "unitList": 1092.96,
             "unitPromo": 819.72,
@@ -563,6 +577,7 @@
           },
           {
             "sku": "MV-W2430",
+            "name": "Double Door Wall Cabinet",
             "quantity": 3,
             "unitList": 310.86,
             "unitPromo": 233.14,
@@ -571,6 +586,7 @@
           },
           {
             "sku": "MV-PC2484",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 2,
             "unitList": 1267.20,
             "unitPromo": 950.40,
@@ -703,6 +719,7 @@
         "lineItems": [
           {
             "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 6,
             "unitList": 1534.50,
             "unitPromo": 1150.88,
@@ -711,6 +728,7 @@
           },
           {
             "sku": "MV-B30-F",
+            "name": "Full Height Door Base Cabinet",
             "quantity": 1,
             "unitList": 883.08,
             "unitPromo": 662.31,
@@ -719,6 +737,7 @@
           },
           {
             "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
             "quantity": 2,
             "unitList": 685.08,
             "unitPromo": 513.81,
@@ -727,6 +746,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 1,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -735,6 +755,7 @@
           },
           {
             "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
             "quantity": 2,
             "unitList": 211.86,
             "unitPromo": 158.90,
@@ -864,6 +885,7 @@
         "lineItems": [
           {
             "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 6,
             "unitList": 1534.50,
             "unitPromo": 1150.88,
@@ -872,6 +894,7 @@
           },
           {
             "sku": "MV-DB30-3",
+            "name": "3-Drawer Base Cabinet",
             "quantity": 1,
             "unitList": 1239.48,
             "unitPromo": 929.61,
@@ -880,6 +903,7 @@
           },
           {
             "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
             "quantity": 2,
             "unitList": 685.08,
             "unitPromo": 513.81,
@@ -888,6 +912,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 1,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -896,6 +921,7 @@
           },
           {
             "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
             "quantity": 2,
             "unitList": 211.86,
             "unitPromo": 158.90,

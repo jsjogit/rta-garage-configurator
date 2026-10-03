@@ -308,6 +308,7 @@ components:
       type: object
       properties:
         sku: { type: string }
+        name: { type: string, description: Catalogue description, for the parts table. }
         quantity: { type: integer }
         unitList: { type: number, format: double }
         unitPromo: { type: number, format: double }

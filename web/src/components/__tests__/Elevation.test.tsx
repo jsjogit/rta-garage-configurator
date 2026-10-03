@@ -129,3 +129,33 @@ describe('formatInches', () => {
     expect(formatInches(value)).toBe(expected)
   })
 })
+
+describe('compact mode', () => {
+  it('trims the drawing margins so a pinned strip is not mostly empty box', () => {
+    const layout = { items: [] }
+    const render1 = render(<Elevation layout={layout} wallLength={240} ceiling={96} id="full" />)
+    const full = render1.container.querySelector('svg')!.getAttribute('viewBox')!
+
+    const render2 = render(<Elevation layout={layout} wallLength={240} ceiling={96} id="small" compact />)
+    const compact = render2.container.querySelector('svg')!.getAttribute('viewBox')!
+
+    expect(full).toBe('-10 -14 260 140')
+    expect(compact).toBe('-4 -4 248 114')
+  })
+
+  it('keeps true proportions — only the margins change', () => {
+    const { container } = render(
+      <Elevation layout={{ items: [] }} wallLength={240} ceiling={96} id="c" compact />,
+    )
+    const [, , width, height] = container.querySelector('svg')!.getAttribute('viewBox')!.split(' ').map(Number)
+
+    // The wall itself is still 240 x 96 inside the box.
+    expect(width).toBeGreaterThanOrEqual(240)
+    expect(height).toBeGreaterThanOrEqual(96)
+  })
+
+  it('leaves the datum off an empty wall', () => {
+    const { container } = render(<Elevation layout={{ items: [] }} wallLength={240} ceiling={96} id="e" />)
+    expect(container.textContent).not.toContain('datum')
+  })
+})

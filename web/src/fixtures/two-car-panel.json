@@ -229,6 +229,7 @@
         "lineItems": [
           {
             "sku": "MV-B24-F",
+            "name": "Full Height Door Base Cabinet",
             "quantity": 3,
             "unitList": 683.10,
             "unitPromo": 512.32,
@@ -237,6 +238,7 @@
           },
           {
             "sku": "MV-CTHW9825",
+            "name": "Wood Butcher Block Countertop 98in",
             "quantity": 1,
             "unitList": 791.13,
             "unitPromo": 593.35,
@@ -245,6 +247,7 @@
           },
           {
             "sku": "MV-W2430",
+            "name": "Double Door Wall Cabinet",
             "quantity": 3,
             "unitList": 310.86,
             "unitPromo": 233.14,
@@ -253,6 +256,7 @@
           },
           {
             "sku": "MV-W2415",
+            "name": "Double Door Wall Cabinet",
             "quantity": 1,
             "unitList": 205.92,
             "unitPromo": 154.44,
@@ -261,6 +265,7 @@
           },
           {
             "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 1,
             "unitList": 1534.50,
             "unitPromo": 1150.88,
@@ -269,6 +274,7 @@
           },
           {
             "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
             "quantity": 5,
             "unitList": 685.08,
             "unitPromo": 513.81,
@@ -277,6 +283,7 @@
           },
           {
             "sku": "MV-CTHW5025",
+            "name": "Wood Butcher Block Countertop 50in",
             "quantity": 2,
             "unitList": 350.69,
             "unitPromo": 263.02,
@@ -285,6 +292,7 @@
           },
           {
             "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
             "quantity": 5,
             "unitList": 211.86,
             "unitPromo": 158.90,
@@ -293,6 +301,7 @@
           },
           {
             "sku": "MV-F384",
+            "name": "Wall Filler",
             "quantity": 2,
             "unitList": 93.06,
             "unitPromo": 69.80,
@@ -530,6 +539,7 @@
         "lineItems": [
           {
             "sku": "MV-DB24-3",
+            "name": "3-Drawer Base Cabinet",
             "quantity": 1,
             "unitList": 1017.72,
             "unitPromo": 763.29,
@@ -538,6 +548,7 @@
           },
           {
             "sku": "MV-DB24-4",
+            "name": "4-Drawer Base Cabinet",
             "quantity": 2,
             "unitList": 1092.96,
             "unitPromo": 819.72,
@@ -546,6 +557,7 @@
           },
           {
             "sku": "MV-CTHW9825",
+            "name": "Wood Butcher Block Countertop 98in",
             "quantity": 1,
             "unitList": 791.13,
             "unitPromo": 593.35,
@@ -554,6 +566,7 @@
           },
           {
             "sku": "MV-W2430",
+            "name": "Double Door Wall Cabinet",
             "quantity": 3,
             "unitList": 310.86,
             "unitPromo": 233.14,
@@ -562,6 +575,7 @@
           },
           {
             "sku": "MV-W2415",
+            "name": "Double Door Wall Cabinet",
             "quantity": 1,
             "unitList": 205.92,
             "unitPromo": 154.44,
@@ -570,6 +584,7 @@
           },
           {
             "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 1,
             "unitList": 1534.50,
             "unitPromo": 1150.88,
@@ -578,6 +593,7 @@
           },
           {
             "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
             "quantity": 5,
             "unitList": 685.08,
             "unitPromo": 513.81,
@@ -586,6 +602,7 @@
           },
           {
             "sku": "MV-CTHW5025",
+            "name": "Wood Butcher Block Countertop 50in",
             "quantity": 2,
             "unitList": 350.69,
             "unitPromo": 263.02,
@@ -594,6 +611,7 @@
           },
           {
             "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
             "quantity": 5,
             "unitList": 211.86,
             "unitPromo": 158.90,
@@ -602,6 +620,7 @@
           },
           {
             "sku": "MV-F384",
+            "name": "Wall Filler",
             "quantity": 2,
             "unitList": 93.06,
             "unitPromo": 69.80,
@@ -833,6 +852,7 @@
         "lineItems": [
           {
             "sku": "MV-B30-F",
+            "name": "Full Height Door Base Cabinet",
             "quantity": 1,
             "unitList": 883.08,
             "unitPromo": 662.31,
@@ -841,6 +861,7 @@
           },
           {
             "sku": "MV-B24-F",
+            "name": "Full Height Door Base Cabinet",
             "quantity": 2,
             "unitList": 683.10,
             "unitPromo": 512.32,
@@ -849,6 +870,7 @@
           },
           {
             "sku": "MV-CTHW9825",
+            "name": "Wood Butcher Block Countertop 98in",
             "quantity": 1,
             "unitList": 791.13,
             "unitPromo": 593.35,
@@ -857,6 +879,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 1,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -865,6 +888,7 @@
           },
           {
             "sku": "IC-MW-W3015",
+            "name": "Double Door Wall Cabinet",
             "quantity": 1,
             "unitList": 256.42,
             "unitPromo": 192.32,
@@ -873,6 +897,7 @@
           },
           {
             "sku": "MV-W2430",
+            "name": "Double Door Wall Cabinet",
             "quantity": 2,
             "unitList": 310.86,
             "unitPromo": 233.14,
@@ -881,6 +906,7 @@
           },
           {
             "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 1,
             "unitList": 1534.50,
             "unitPromo": 1150.88,
@@ -889,6 +915,7 @@
           },
           {
             "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
             "quantity": 4,
             "unitList": 685.08,
             "unitPromo": 513.81,
@@ -897,6 +924,7 @@
           },
           {
             "sku": "MV-CTHW7425",
+            "name": "Wood Butcher Block Countertop 74in",
             "quantity": 1,
             "unitList": 527.20,
             "unitPromo": 395.40,
@@ -905,6 +933,7 @@
           },
           {
             "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
             "quantity": 4,
             "unitList": 211.86,
             "unitPromo": 158.90,
@@ -913,6 +942,7 @@
           },
           {
             "sku": "MV-F384",
+            "name": "Wall Filler",
             "quantity": 3,
             "unitList": 93.06,
             "unitPromo": 69.80,
@@ -921,6 +951,7 @@
           },
           {
             "sku": "MV-CTHW5025",
+            "name": "Wood Butcher Block Countertop 50in",
             "quantity": 1,
             "unitList": 350.69,
             "unitPromo": 263.02,
@@ -1149,6 +1180,7 @@
         "lineItems": [
           {
             "sku": "MV-DB30-3",
+            "name": "3-Drawer Base Cabinet",
             "quantity": 1,
             "unitList": 1239.48,
             "unitPromo": 929.61,
@@ -1157,6 +1189,7 @@
           },
           {
             "sku": "MV-DB24-4",
+            "name": "4-Drawer Base Cabinet",
             "quantity": 1,
             "unitList": 1092.96,
             "unitPromo": 819.72,
@@ -1165,6 +1198,7 @@
           },
           {
             "sku": "MV-CTHW9825",
+            "name": "Wood Butcher Block Countertop 98in",
             "quantity": 1,
             "unitList": 791.13,
             "unitPromo": 593.35,
@@ -1173,6 +1207,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 1,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -1181,6 +1216,7 @@
           },
           {
             "sku": "IC-MW-W3015",
+            "name": "Double Door Wall Cabinet",
             "quantity": 1,
             "unitList": 256.42,
             "unitPromo": 192.32,
@@ -1189,6 +1225,7 @@
           },
           {
             "sku": "MV-W2430",
+            "name": "Double Door Wall Cabinet",
             "quantity": 2,
             "unitList": 310.86,
             "unitPromo": 233.14,
@@ -1197,6 +1234,7 @@
           },
           {
             "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 1,
             "unitList": 1534.50,
             "unitPromo": 1150.88,
@@ -1205,6 +1243,7 @@
           },
           {
             "sku": "MV-DB24-3",
+            "name": "3-Drawer Base Cabinet",
             "quantity": 1,
             "unitList": 1017.72,
             "unitPromo": 763.29,
@@ -1213,6 +1252,7 @@
           },
           {
             "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
             "quantity": 4,
             "unitList": 685.08,
             "unitPromo": 513.81,
@@ -1221,6 +1261,7 @@
           },
           {
             "sku": "MV-CTHW7425",
+            "name": "Wood Butcher Block Countertop 74in",
             "quantity": 1,
             "unitList": 527.20,
             "unitPromo": 395.40,
@@ -1229,6 +1270,7 @@
           },
           {
             "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
             "quantity": 4,
             "unitList": 211.86,
             "unitPromo": 158.90,
@@ -1237,6 +1279,7 @@
           },
           {
             "sku": "MV-F384",
+            "name": "Wall Filler",
             "quantity": 3,
             "unitList": 93.06,
             "unitPromo": 69.80,
@@ -1245,6 +1288,7 @@
           },
           {
             "sku": "MV-CTHW5025",
+            "name": "Wood Butcher Block Countertop 50in",
             "quantity": 1,
             "unitList": 350.69,
             "unitPromo": 263.02,
@@ -1503,6 +1547,7 @@
         "lineItems": [
           {
             "sku": "MV-F384",
+            "name": "Wall Filler",
             "quantity": 4,
             "unitList": 93.06,
             "unitPromo": 69.80,
@@ -1511,6 +1556,7 @@
           },
           {
             "sku": "MV-B30-F",
+            "name": "Full Height Door Base Cabinet",
             "quantity": 1,
             "unitList": 883.08,
             "unitPromo": 662.31,
@@ -1519,6 +1565,7 @@
           },
           {
             "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
             "quantity": 7,
             "unitList": 685.08,
             "unitPromo": 513.81,
@@ -1527,6 +1574,7 @@
           },
           {
             "sku": "MV-CTHW9825",
+            "name": "Wood Butcher Block Countertop 98in",
             "quantity": 1,
             "unitList": 791.13,
             "unitPromo": 593.35,
@@ -1535,6 +1583,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 1,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -1543,6 +1592,7 @@
           },
           {
             "sku": "IC-MW-W3015",
+            "name": "Double Door Wall Cabinet",
             "quantity": 1,
             "unitList": 256.42,
             "unitPromo": 192.32,
@@ -1551,6 +1601,7 @@
           },
           {
             "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
             "quantity": 7,
             "unitList": 211.86,
             "unitPromo": 158.90,
@@ -1559,6 +1610,7 @@
           },
           {
             "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 1,
             "unitList": 1534.50,
             "unitPromo": 1150.88,
@@ -1567,6 +1619,7 @@
           },
           {
             "sku": "MV-CTHW5025",
+            "name": "Wood Butcher Block Countertop 50in",
             "quantity": 2,
             "unitList": 350.69,
             "unitPromo": 263.02,
@@ -1822,6 +1875,7 @@
         "lineItems": [
           {
             "sku": "MV-F384",
+            "name": "Wall Filler",
             "quantity": 4,
             "unitList": 93.06,
             "unitPromo": 69.80,
@@ -1830,6 +1884,7 @@
           },
           {
             "sku": "MV-DB30-3",
+            "name": "3-Drawer Base Cabinet",
             "quantity": 1,
             "unitList": 1239.48,
             "unitPromo": 929.61,
@@ -1838,6 +1893,7 @@
           },
           {
             "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
             "quantity": 7,
             "unitList": 685.08,
             "unitPromo": 513.81,
@@ -1846,6 +1902,7 @@
           },
           {
             "sku": "MV-CTHW9825",
+            "name": "Wood Butcher Block Countertop 98in",
             "quantity": 1,
             "unitList": 791.13,
             "unitPromo": 593.35,
@@ -1854,6 +1911,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 1,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -1862,6 +1920,7 @@
           },
           {
             "sku": "IC-MW-W3015",
+            "name": "Double Door Wall Cabinet",
             "quantity": 1,
             "unitList": 256.42,
             "unitPromo": 192.32,
@@ -1870,6 +1929,7 @@
           },
           {
             "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
             "quantity": 7,
             "unitList": 211.86,
             "unitPromo": 158.90,
@@ -1878,6 +1938,7 @@
           },
           {
             "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
             "quantity": 1,
             "unitList": 1534.50,
             "unitPromo": 1150.88,
@@ -1886,6 +1947,7 @@
           },
           {
             "sku": "MV-CTHW5025",
+            "name": "Wood Butcher Block Countertop 50in",
             "quantity": 2,
             "unitList": 350.69,
             "unitPromo": 263.02,

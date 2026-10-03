@@ -76,3 +76,39 @@ public class ValidateAndPriceEndpointTests
             .Message.ShouldContain("Base");
     }
 }
+
+public class LineItemNameTests
+{
+    [Fact]
+    public void Every_line_item_carries_a_description_for_the_parts_table()
+    {
+        var api = ApiFixture.Api();
+        var layout = api.Solve(new SolveRequest(new WallDto(240m, 96m), "Balanced")).Options.First().Standard;
+
+        layout.LineItems.ShouldAllBe(i => i.Name.Length > 0 && i.Name != i.Sku);
+    }
+
+    [Fact]
+    public void The_description_is_the_catalogue_name()
+    {
+        var api = ApiFixture.Api();
+        var priced = api.Price(new PriceRequest(new LayoutDto(new[]
+        {
+            new PlacedItemDto("MV-DB24-4", 0m, 0m, 24m, 34.5m, 24m, "Base"),
+        })));
+
+        priced.LineItems.Single().Name.ShouldBe("4-Drawer Base Cabinet");
+    }
+
+    [Fact]
+    public void A_countertop_gets_its_name_too()
+    {
+        var api = ApiFixture.Api();
+        var priced = api.Price(new PriceRequest(new LayoutDto(new[]
+        {
+            new PlacedItemDto("MV-CTHW7425", 0m, 34.5m, 72m, 1.5m, 25m, "Counter"),
+        })));
+
+        priced.LineItems.Single().Name.ShouldContain("Countertop");
+    }
+}

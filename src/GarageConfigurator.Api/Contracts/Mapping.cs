@@ -10,6 +10,17 @@ internal static class Mapping
 
     private static string Canonical(string sku) => Catalog?.Resolve(sku) ?? sku;
 
+    private static string NameOf(string sku)
+    {
+        if (Catalog is null) return sku;
+
+        var canonical = Catalog.Resolve(sku);
+
+        return Catalog.Cabinets.FirstOrDefault(c => c.Sku == canonical)?.Name
+            ?? Catalog.Countertops.FirstOrDefault(c => c.Sku == canonical)?.Name
+            ?? sku;
+    }
+
     internal static Wall ToDomain(this WallDto dto)
     {
         if (dto.Length <= 0m)
@@ -82,7 +93,14 @@ internal static class Mapping
     internal static PricedLayoutDto ToDto(this PricedLayout priced) => new(
         priced.Layout.ToDto(),
         priced.LineItems
-            .Select(i => new LineItemDto(i.Sku, i.Quantity, i.UnitList, i.UnitPromo, i.ExtendedList, i.ExtendedPromo))
+            .Select(i => new LineItemDto(
+                i.Sku,
+                NameOf(i.Sku),
+                i.Quantity,
+                i.UnitList,
+                i.UnitPromo,
+                i.ExtendedList,
+                i.ExtendedPromo))
             .ToArray(),
         priced.SubtotalList,
         priced.SubtotalPromo);

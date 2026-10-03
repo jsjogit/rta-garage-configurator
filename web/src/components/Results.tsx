@@ -28,7 +28,7 @@ export function Results({
       <section className="failure">
         <h2>We can’t plan this wall</h2>
         <p>{response.failure.message}</p>
-        <div className="actions">
+        <div className="sheet-actions" style={{ marginTop: 16 }}>
           <button type="button" className="btn" onClick={onStartOver}>
             Change the measurements
           </button>
@@ -38,30 +38,23 @@ export function Results({
   }
 
   return (
-    <section>
-      <div className="results-head">
-        <div>
-          <p className="eyebrow">
-            {formatInches(wall.length)} wall · {formatInches(wall.ceiling)} ceiling
-          </p>
-          <h2>Three ways to build it</h2>
-        </div>
-        <button type="button" className="btn ghost" onClick={onStartOver}>
-          Start over
-        </button>
+    <section className="stage">
+      <div className="stage-head">
+        <h2>Three ways to build it</h2>
+        <span className="meta">
+          {formatInches(wall.length)} wall · {formatInches(wall.ceiling)} ceiling
+        </span>
       </div>
 
       <Notices notices={response.notices} />
 
-      <div className="sheets">
+      <div className="results">
         {response.options.map((option, rank) => (
           <Sheet key={rank} option={option} rank={rank} wall={wall} configId={configId} />
         ))}
       </div>
 
-      <p className="footnote">
-        Prices are for the cabinets shown. Delivery and tax are added at checkout.
-      </p>
+      <p className="footnote">Prices are for the cabinets shown. Delivery and tax are added at checkout.</p>
     </section>
   )
 }
@@ -78,6 +71,7 @@ function Sheet({
   configId?: string | null
 }) {
   const [tier, setTier] = useState<Tier>('Standard')
+  const [editing, setEditing] = useState(false)
   const [selected, setSelected] = useState<number | null>(null)
   const chosen = tier === 'Standard' ? option.standard : option.premiere
   const editor = useWallEditor(chosen, wall, configId)
@@ -90,22 +84,24 @@ function Sheet({
   return (
     <article className="sheet" data-rank={rank}>
       <header className="sheet-head">
-        <h3 className="sheet-label">{option.label}</h3>
-        <span className="sheet-no data">{`${rank + 1}/3`}</span>
+        <h3>{option.label}</h3>
+        <span className="rank">{`${rank + 1} of 3`}</span>
       </header>
 
       <div className="sheet-body">
-        <Elevation
-          layout={editor.layout}
-          wallLength={wall.length}
-          ceiling={wall.ceiling}
-          obstructions={wall.obstructions ?? []}
-          id={`sheet-${rank}-${tier.toLowerCase()}`}
-          selected={selected}
-          onSelect={setSelected}
-        />
+        <div className="drawing">
+          <Elevation
+            layout={editor.layout}
+            wallLength={wall.length}
+            ceiling={wall.ceiling}
+            obstructions={wall.obstructions ?? []}
+            id={`sheet-${rank}-${tier.toLowerCase()}`}
+            selected={editing ? selected : null}
+            onSelect={editing ? setSelected : undefined}
+          />
+        </div>
 
-        <div>
+        <div className="parts">
           <div className="tier-switch" role="group" aria-label="Cabinet tier">
             {(['Standard', 'Premiere'] as Tier[]).map((name) => (
               <button type="button" key={name} aria-pressed={tier === name} onClick={() => setTier(name)}>
@@ -113,54 +109,78 @@ function Sheet({
               </button>
             ))}
           </div>
-          {/* The names are the brand's; this line is what the customer is actually choosing between. */}
           <p className="tier-note">{TIER_NOTES[tier]}</p>
+
+          <table className="parts-table">
+            <thead>
+              <tr>
+                <th scope="col">SKU</th>
+                <th scope="col">Description</th>
+                <th scope="col" className="num">Qty</th>
+                <th scope="col" className="num">Unit</th>
+                <th scope="col" className="num">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {priced.lineItems.map((line) => (
+                <tr key={line.sku}>
+                  <td className="sku">{line.sku}</td>
+                  <td className="desc">{line.name}</td>
+                  <td className="num">{line.quantity}</td>
+                  <td className="num">{money(line.unitPromo)}</td>
+                  <td className="num">{money(line.extendedPromo)}</td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan={4}>Total</td>
+                <td className="num">{money(priced.subtotalPromo)}</td>
+              </tr>
+              {saving > 0 && (
+                <tr>
+                  <td colSpan={4} className="was">Was</td>
+                  <td className="num was">{money(priced.subtotalList)}</td>
+                </tr>
+              )}
+            </tfoot>
+          </table>
+
+          {blocked && (
+            <ul className="violations">
+              {editor.violations.map((violation, i) => (
+                <li key={`${violation.code}-${i}`}>{violation.message}</li>
+              ))}
+            </ul>
+          )}
+
+          <div className="sheet-actions">
+            <AddToCart layout={editor.layout} configId={configId} blocked={blocked} rank={rank} />
+
+            {editor.edited ? (
+              <p className="edited-note">
+                Edited{editor.checking ? ' · checking…' : ''} ·{' '}
+                <button type="button" className="linklike" onClick={editor.reset}>
+                  undo my changes
+                </button>
+              </p>
+            ) : (
+              <button
+                type="button"
+                className="linklike"
+                onClick={() => {
+                  setEditing((on) => !on)
+                  setSelected(null)
+                }}
+              >
+                {editing ? 'Done editing' : 'Edit this wall'}
+              </button>
+            )}
+          </div>
         </div>
-
-        {blocked && (
-          <ul className="violations">
-            {editor.violations.map((violation, i) => (
-              <li key={`${violation.code}-${i}`}>{violation.message}</li>
-            ))}
-          </ul>
-        )}
-
-        {editor.edited && (
-          <p className="edited-note">
-            Edited{editor.checking ? ' · checking…' : ''} ·{' '}
-            <button type="button" className="linklike" onClick={editor.reset}>
-              undo my changes
-            </button>
-          </p>
-        )}
-
-        <ul className="lines">
-          {priced.lineItems.map((line) => (
-            <li key={line.sku}>
-              <span className="qty">{line.quantity}×</span>
-              <span className="dots" aria-hidden="true" />
-              <span>{line.sku}</span>
-            </li>
-          ))}
-        </ul>
       </div>
 
-      <div className="title-block">
-        <span className="k">{saving > 0 ? 'Sale price' : 'Price'}</span>
-        <span className="v">{money(priced.subtotalPromo)}</span>
-        {saving > 0 && (
-          <>
-            <span className="k">Was</span>
-            <span className="was">{money(priced.subtotalList)}</span>
-          </>
-        )}
-      </div>
-
-      <div style={{ padding: '0 0.9rem 0.9rem' }}>
-        <AddToCart layout={editor.layout} configId={configId} blocked={blocked} rank={rank} />
-      </div>
-
-      {selected !== null && editor.layout.items[selected] && (
+      {editing && selected !== null && editor.layout.items[selected] && (
         <CabinetPanel
           item={editor.layout.items[selected]}
           index={selected}
@@ -175,6 +195,12 @@ function Sheet({
           }}
           onClose={() => setSelected(null)}
         />
+      )}
+
+      {editing && selected === null && (
+        <div className="editor">
+          <p className="dims">Tap a cabinet in the drawing to swap or remove it.</p>
+        </div>
       )}
     </article>
   )
@@ -237,16 +263,14 @@ function AddToCart({
 
   return (
     <>
-      <button
-        type="button"
-        className="btn wood"
-        style={{ display: 'block', width: '100%' }}
-        disabled={blocked || working}
-        onClick={add}
-      >
-        {blocked ? 'Fix the wall first' : working ? 'Adding…' : 'Add this wall to cart'}
+      <button type="button" className="btn accent" disabled={blocked || working} onClick={add}>
+        {blocked ? 'Fix the wall first' : working ? 'Adding…' : 'Add all to cart'}
       </button>
-      {problem && <p className="edited-note" role="status">{problem}</p>}
+      {problem && (
+        <p className="edited-note" role="status">
+          {problem}
+        </p>
+      )}
     </>
   )
 }

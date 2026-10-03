@@ -157,6 +157,7 @@
         "lineItems": [
           {
             "sku": "MV-B30-F",
+            "name": "Full Height Door Base Cabinet",
             "quantity": 8,
             "unitList": 883.08,
             "unitPromo": 662.31,
@@ -165,6 +166,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 8,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -330,6 +332,7 @@
         "lineItems": [
           {
             "sku": "MV-DB30-3",
+            "name": "3-Drawer Base Cabinet",
             "quantity": 1,
             "unitList": 1239.48,
             "unitPromo": 929.61,
@@ -338,6 +341,7 @@
           },
           {
             "sku": "MV-DB30-4",
+            "name": "4-Drawer Base Cabinet",
             "quantity": 7,
             "unitList": 1326.60,
             "unitPromo": 994.95,
@@ -346,6 +350,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 8,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -532,6 +537,7 @@
         "lineItems": [
           {
             "sku": "MV-B30-F",
+            "name": "Full Height Door Base Cabinet",
             "quantity": 7,
             "unitList": 883.08,
             "unitPromo": 662.31,
@@ -540,6 +546,7 @@
           },
           {
             "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
             "quantity": 2,
             "unitList": 685.08,
             "unitPromo": 513.81,
@@ -548,6 +555,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 7,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -556,6 +564,7 @@
           },
           {
             "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
             "quantity": 2,
             "unitList": 211.86,
             "unitPromo": 158.90,
@@ -739,6 +748,7 @@
         "lineItems": [
           {
             "sku": "MV-DB30-3",
+            "name": "3-Drawer Base Cabinet",
             "quantity": 1,
             "unitList": 1239.48,
             "unitPromo": 929.61,
@@ -747,6 +757,7 @@
           },
           {
             "sku": "MV-DB30-4",
+            "name": "4-Drawer Base Cabinet",
             "quantity": 6,
             "unitList": 1326.60,
             "unitPromo": 994.95,
@@ -755,6 +766,7 @@
           },
           {
             "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
             "quantity": 2,
             "unitList": 685.08,
             "unitPromo": 513.81,
@@ -763,6 +775,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 7,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -771,6 +784,7 @@
           },
           {
             "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
             "quantity": 2,
             "unitList": 211.86,
             "unitPromo": 158.90,
@@ -957,6 +971,7 @@
         "lineItems": [
           {
             "sku": "MV-B30-F",
+            "name": "Full Height Door Base Cabinet",
             "quantity": 4,
             "unitList": 883.08,
             "unitPromo": 662.31,
@@ -965,6 +980,7 @@
           },
           {
             "sku": "MV-B24-F",
+            "name": "Full Height Door Base Cabinet",
             "quantity": 5,
             "unitList": 683.10,
             "unitPromo": 512.32,
@@ -973,6 +989,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 4,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -981,6 +998,7 @@
           },
           {
             "sku": "MV-W2430",
+            "name": "Double Door Wall Cabinet",
             "quantity": 5,
             "unitList": 310.86,
             "unitPromo": 233.14,
@@ -1164,6 +1182,7 @@
         "lineItems": [
           {
             "sku": "MV-DB30-3",
+            "name": "3-Drawer Base Cabinet",
             "quantity": 1,
             "unitList": 1239.48,
             "unitPromo": 929.61,
@@ -1172,6 +1191,7 @@
           },
           {
             "sku": "MV-DB30-4",
+            "name": "4-Drawer Base Cabinet",
             "quantity": 3,
             "unitList": 1326.60,
             "unitPromo": 994.95,
@@ -1180,6 +1200,7 @@
           },
           {
             "sku": "MV-DB24-4",
+            "name": "4-Drawer Base Cabinet",
             "quantity": 5,
             "unitList": 1092.96,
             "unitPromo": 819.72,
@@ -1188,6 +1209,7 @@
           },
           {
             "sku": "MV-W3030",
+            "name": "Double Door Wall Cabinet",
             "quantity": 4,
             "unitList": 348.48,
             "unitPromo": 261.36,
@@ -1196,6 +1218,7 @@
           },
           {
             "sku": "MV-W2430",
+            "name": "Double Door Wall Cabinet",
             "quantity": 5,
             "unitList": 310.86,
             "unitPromo": 233.14,

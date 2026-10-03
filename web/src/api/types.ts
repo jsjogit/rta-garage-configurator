@@ -38,6 +38,7 @@ export interface LayoutDto {
 
 export interface LineItemDto {
   sku: string
+  name: string
   quantity: number
   unitList: number
   unitPromo: number

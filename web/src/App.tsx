@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { ApiError, loadDesign, solve, track } from './api/client'
 import type { Goal, SolveResponse, WallDto } from './api/types'
-import { Wizard, type WizardValue } from './components/Wizard'
+import { WallInputs, EMPTY_DRAFT, obstructionsFor, wallFor, type WallDraft } from './components/WallInputs'
+import { LivePreview } from './components/LivePreview'
 import { Results } from './components/Results'
 import { ShareBar, DESIGN_PATH } from './components/ShareBar'
 import { demoFixture } from './demo'
@@ -13,6 +14,9 @@ function configIdFromPath(): string | null {
 
 export function App() {
   const demo = import.meta.env.DEV ? demoFixture() : null
+  const [draft, setDraft] = useState<WallDraft>(
+    demo ? { ...EMPTY_DRAFT, length: demo.wall.length, ceiling: demo.wall.ceiling } : EMPTY_DRAFT,
+  )
   const [response, setResponse] = useState<SolveResponse | null>(demo?.response ?? null)
   const [wall, setWall] = useState<WallDto | null>(demo?.wall ?? null)
   const [goal, setGoal] = useState<Goal>('Balanced')
@@ -50,20 +54,22 @@ export function App() {
       .finally(() => setBusy(false))
   }, [])
 
-  const run = async (value: WizardValue) => {
+  const run = async (chosenGoal: Goal) => {
+    const nextWall = wallFor({ ...draft, goal: chosenGoal })
+
     setBusy(true)
     setError(null)
     track('wall_defined', null, {
-      length: String(value.wall.length),
-      ceiling: String(value.wall.ceiling),
-      goal: value.goal,
+      length: String(nextWall.length),
+      ceiling: String(nextWall.ceiling),
+      goal: chosenGoal,
     })
 
     try {
-      const solved = await solve(value)
+      const solved = await solve({ wall: nextWall, goal: chosenGoal })
       setResponse(solved)
-      setWall(value.wall)
-      setGoal(value.goal)
+      setWall(nextWall)
+      setGoal(chosenGoal)
       setConfigId(null)
       track('layouts_returned', null, { count: String(solved.options.length) })
     } catch (caught) {
@@ -73,17 +79,34 @@ export function App() {
     }
   }
 
+  const startOver = () => {
+    setResponse(null)
+    setWall(null)
+    setConfigId(null)
+    setDraft({ ...draft, goal: null })
+    window.history.pushState({}, '', '/')
+  }
+
   const chosen = response?.options[0]
+  const showResults = response !== null && wall !== null
+
+  // Below 1024 the preview is pinned to the top of the viewport, where it has ~92px to work with.
+  const [pinned, setPinned] = useState(() => window.matchMedia('(max-width: 1023px)').matches)
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 1023px)')
+    const onChange = (event: MediaQueryListEvent) => setPinned(event.matches)
+    query.addEventListener('change', onChange)
+    return () => query.removeEventListener('change', onChange)
+  }, [])
 
   return (
     <main className="shell">
       <header className="masthead">
-        <p className="eyebrow">RTA Cabinet Store · Signature Gray Garage</p>
-        <h1>Plan a garage wall</h1>
+        <h1>Plan your garage wall</h1>
         <p>
-          Tell us three things about the wall and we will draw you three complete, priced walls built
-          from cabinets we stock. Change your mind as often as you like — nothing is ordered until you
-          say so.
+          Tell us about the wall and we will draw three complete, priced walls built from cabinets we
+          stock — nothing is ordered until you say so.
         </p>
       </header>
 
@@ -94,35 +117,36 @@ export function App() {
         </div>
       )}
 
-      {response && wall ? (
-        <>
-          <Results
-            response={response}
-            wall={wall}
-            configId={configId}
-            onStartOver={() => {
-              setResponse(null)
-              setWall(null)
-              setConfigId(null)
-              window.history.pushState({}, '', '/')
-            }}
+      <div className="planner">
+        <WallInputs draft={draft} onChange={setDraft} onSolve={run} busy={busy} />
+
+        {showResults ? (
+          <div>
+            <Results response={response} wall={wall} configId={configId} onStartOver={startOver} />
+            {chosen && (
+              <ShareBar
+                wall={wall}
+                goal={goal}
+                layout={chosen.standard.layout}
+                configId={configId}
+                onSaved={(saved) => {
+                  setConfigId(saved)
+                  window.history.replaceState({}, '', `${DESIGN_PATH}/${saved}`)
+                }}
+              />
+            )}
+          </div>
+        ) : draft.length > 0 ? (
+          <LivePreview
+            length={draft.length}
+            ceiling={draft.ceiling}
+            obstructions={obstructionsFor(draft)}
+            compact={pinned}
           />
-          {chosen && (
-            <ShareBar
-              wall={wall}
-              goal={goal}
-              layout={chosen.standard.layout}
-              configId={configId}
-              onSaved={(saved) => {
-                setConfigId(saved)
-                window.history.replaceState({}, '', `${DESIGN_PATH}/${saved}`)
-              }}
-            />
-          )}
-        </>
-      ) : (
-        <Wizard onSolve={run} busy={busy} />
-      )}
+        ) : (
+          <p className="stage-placeholder">Your wall will be drawn here once you add a length.</p>
+        )}
+      </div>
     </main>
   )
 }

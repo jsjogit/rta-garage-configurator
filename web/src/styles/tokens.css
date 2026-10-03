@@ -1,0 +1,68 @@
+/*
+  Brand tokens read off https://www.rtacabinetstore.com/garage-cabinets with getComputedStyle, so
+  these are the store's real values rather than an approximation. This app is embedded on that site;
+  when it runs there the fonts are already loaded by the site's own Typekit and Google Fonts, and the
+  stacks below fall back sensibly when it runs standalone.
+*/
+:root {
+  /* Type ------------------------------------------------------------------ */
+  /* Body is Mulish (served by the site as the variable face "mulish-variable"). */
+  --font-body: 'mulish-variable', 'Mulish', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Headings are FreightDisplay Pro, an Adobe font we cannot serve ourselves —
+     Georgia is the closest widely available transitional serif. */
+  --font-heading: 'freight-display-pro', 'FreightDisp Pro', Georgia, 'Times New Roman', serif;
+
+  --text-size: 16px;
+  --text-line: 1.5;
+
+  --h1-size: 30px;
+  --h1-weight: 400;
+  --h1-line: 1.5;
+  --h1-tracking: 1px;
+
+  --h2-size: 26px;
+  --h2-weight: 400;
+
+  --h3-size: 22px;
+  --h3-weight: 700;
+
+  /* Colour ---------------------------------------------------------------- */
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-text: #333333;
+  --color-heading: #12223b;
+  --color-muted: #747474;
+  --color-link: #12223b;
+  --color-border: #d5dae0;
+  --color-rule: #e6e9ed;
+
+  /* Buttons --------------------------------------------------------------- */
+  --btn-bg: #2f3532;
+  --btn-color: #ffffff;
+  --btn-radius: 28px;
+  --btn-weight: 700;
+  --btn-pad-y: 10px;
+  --btn-pad-x: 24px;
+  --btn-size: 16px;
+
+  /* The store's secondary CTA: warm sand, square, used for add-to-cart. */
+  --btn-accent-bg: #e3dbcb;
+  --btn-accent-color: #000000;
+  --btn-accent-radius: 0px;
+
+  /* Selectable chips, as used by the garage page's own product filters. */
+  --chip-radius: 6px;
+  --chip-pad-y: 12px;
+  --chip-pad-x: 20px;
+
+  /* Layout ---------------------------------------------------------------- */
+  --content-max: 1440px;
+  --content-pad: 16px;
+
+  /* Product colours. Not brand chrome — these are what the cabinets look like. */
+  --slab: #b9bdc0;
+  --slab-edge: #9aa0a6;
+  --ink: #15171a;
+  --wood: #b5793a;
+  --wood-deep: #8a5a28;
+}

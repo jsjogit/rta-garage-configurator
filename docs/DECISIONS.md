@@ -76,8 +76,20 @@
 | 2026-10-02 | Deploys authenticate with federated credentials, not a stored secret | The only repository secret with real power is the Static Web Apps deploy token, which Azure scopes to that one app. |
 | 2026-10-02 | Every deploy ends in a smoke test against the live API | It solves a real 240" wall and fails the run unless a priced layout comes back, so green means the thing works rather than that the upload succeeded. `what-if` runs first and prints the infrastructure diff. |
 | 2026-10-02 | Bicep was compiled locally before committing | `az` is not installed here, so I pulled the standalone Bicep CLI rather than ship unvalidated infrastructure. It builds clean, warnings included — the storage account name is provably 18-24 characters by construction rather than truncated and hoped for. |
+| 2026-10-02 | The web wears the storefront's clothes, with tokens measured rather than guessed | It will be embedded on rtacabinetstore.com. `getComputedStyle` on the live garage page gave the real font stacks, heading sizes, `#12223b` navy, `#2f3532` pill buttons, `#e3dbcb` add-to-cart and the 1440px container; those are now `web/src/styles/tokens.css`. The shop-drawing treatment — mono, all-caps, concrete grid — is gone. |
+| 2026-10-02 | FreightDisplay Pro falls back to Georgia | The heading face is an Adobe font we cannot serve ourselves. Embedded on the store it is already loaded; standalone, Georgia is the closest widely available transitional serif. |
+| 2026-10-02 | The stepped wizard became one screen with a live drawing beside it | Inputs sit in a sticky left column and the drawing answers back as you type, so the wall is visible before any layout exists. Choosing a goal is what asks for layouts — there is no Continue button and no step indicator. |
+| 2026-10-02 | Results are vendor spec sheets: drawing left, parts table right | SKU, description, qty, unit, line total and a grand total, with the tier switch above and add-to-cart directly under the total. Editing moved behind an "Edit this wall" link rather than every cabinet being live by default. |
+| 2026-10-02 | `LineItemDto` gained `name` | The parts table needs a description; the solver only knows SKUs. The API joins the catalogue name on the way out. This is the only non-presentational change in the redesign. |
+| 2026-10-02 | Quick picks are tracked by label, not by length | Two presets are both 20 ft, so selecting one lit them both. The draft now records which chip was tapped. |
+| 2026-10-02 | The budget input was left out of the redesign | `budgetMax` was cut from V1 on 2026-10-02 and nothing downstream reads it. Rendering a control that silently does nothing is worse than leaving it out — see "Needs Joshua". |
 
 ## Needs Joshua
+- **Do you want the budget input back?** The redesign brief asked for "goal + optional budget", but
+  `budgetMax` was cut from V1 and neither the solver nor the API reads it, so a budget field would
+  collect a number and ignore it. Wiring it properly is solver work — a hard reject above the budget
+  plus rebalanced scoring so budget-constrained walls still rank sensibly — not a UI change. Say the
+  word and it is a session.
 - **Where should the wizard actually be served from?** Add-to-cart only completes when the page shares
   an origin with the store, so hosting it inside nopCommerce is the route that makes the cart work
   end to end; a Static Web App is the better preview and staging environment. README has the three

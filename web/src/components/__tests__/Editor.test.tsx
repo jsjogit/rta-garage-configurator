@@ -72,10 +72,15 @@ function firstSheet() {
   return screen.getAllByRole('article')[0]
 }
 
+/** Editing is now opt-in: open the editor on a card, then tap a cabinet in its drawing. */
+async function startEditing(user: ReturnType<typeof userEvent.setup>, sheet = firstSheet()) {
+  await user.click(within(sheet).getByRole('button', { name: /edit this wall/i }))
+  return sheet
+}
+
 async function selectFirstCabinet(user: ReturnType<typeof userEvent.setup>) {
-  const sheet = firstSheet()
-  const cabinet = within(sheet).getAllByRole('button', { name: /MV-B24-F, 24 inches wide/i })[0]
-  await user.click(cabinet)
+  const sheet = await startEditing(user)
+  await user.click(within(sheet).getAllByRole('button', { name: /MV-B24-F, 24 inches wide/i })[0])
   return sheet
 }
 
@@ -99,6 +104,7 @@ describe('editing a wall', () => {
     const user = userEvent.setup()
     render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
 
+    await startEditing(user)
     await user.click(within(firstSheet()).getByRole('button', { name: /open knee space, 24 inches wide/i }))
 
     expect(within(firstSheet()).getByRole('heading', { name: /open knee space/i })).toBeInTheDocument()
@@ -136,7 +142,7 @@ describe('editing a wall', () => {
     await waitFor(() => within(sheet).getByRole('button', { name: /MV-DB24-4/ }))
     await user.click(within(sheet).getByRole('button', { name: /MV-DB24-4/ }))
 
-    await waitFor(() => expect(sheet.querySelector('.title-block')!.textContent).toContain('$999'))
+    await waitFor(() => expect(sheet.querySelector('.parts-table tfoot')!.textContent).toContain('$999'))
   })
 
   it('shows what broke when an edit breaks a rule, in the customer’s words', async () => {
@@ -150,6 +156,17 @@ describe('editing a wall', () => {
     await user.click(within(sheet).getByRole('button', { name: /^remove$/i }))
 
     await waitFor(() => expect(sheet).toHaveTextContent(/close it with a filler strip/i))
+  })
+
+  it('a cabinet cannot be tapped until the editor is open', async () => {
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+
+    expect(within(firstSheet()).queryByRole('button', { name: /MV-B24-F, 24 inches wide/i })).not.toBeInTheDocument()
+
+    await startEditing(user)
+
+    expect(within(firstSheet()).getAllByRole('button', { name: /MV-B24-F, 24 inches wide/i })[0]).toBeInTheDocument()
   })
 
   it('will not let a broken wall go to the cart', async () => {
@@ -181,13 +198,14 @@ describe('editing a wall', () => {
     render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
 
     const [first, second] = screen.getAllByRole('article')
-    const secondBefore = second.querySelector('.title-block')!.textContent
+    const secondBefore = second.querySelector('.parts-table tfoot')!.textContent
 
+    await startEditing(user, first)
     await user.click(within(first).getAllByRole('button', { name: /MV-B24-F, 24 inches wide/i })[0])
     await user.click(within(first).getByRole('button', { name: /^remove$/i }))
 
     await waitFor(() => expect(first).toHaveTextContent(/edited/i))
-    expect(second.querySelector('.title-block')!.textContent).toBe(secondBefore)
+    expect(second.querySelector('.parts-table tfoot')!.textContent).toBe(secondBefore)
   })
 })
 
@@ -196,7 +214,7 @@ describe('adding to cart', () => {
     const user = userEvent.setup()
     render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
 
-    await user.click(screen.getAllByRole('button', { name: /add this wall to cart/i })[0])
+    await user.click(screen.getAllByRole('button', { name: /add all to cart/i })[0])
 
     await waitFor(() =>
       expect(calls.some((c) => c.url === '/addproducttocart/catalog/101/1/2')).toBe(true),
@@ -209,7 +227,7 @@ describe('adding to cart', () => {
     stubFetch({ storeOrigin: 'https://www.rtacabinetstore.com' })
     render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
 
-    await user.click(screen.getAllByRole('button', { name: /add this wall to cart/i })[0])
+    await user.click(screen.getAllByRole('button', { name: /add all to cart/i })[0])
 
     await waitFor(() => expect(calls.some((c) => c.url === '/api/cart')).toBe(true))
     expect(calls.some((c) => c.url.startsWith('/addproducttocart'))).toBe(false)
@@ -220,7 +238,7 @@ describe('adding to cart', () => {
     stubFetch({ cartReady: false, unmapped: ['MV-CTHW7425'] })
     render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
 
-    await user.click(screen.getAllByRole('button', { name: /add this wall to cart/i })[0])
+    await user.click(screen.getAllByRole('button', { name: /add all to cart/i })[0])
 
     await waitFor(() => expect(screen.getAllByRole('status')[0]).toHaveTextContent(/can’t add this wall automatically/i))
     expect(calls.some((c) => c.url.startsWith('/addproducttocart'))).toBe(false)

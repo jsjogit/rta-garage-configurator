@@ -38,13 +38,13 @@ describe('Results', () => {
     show(vignette as SolveResponse)
 
     const [first, second] = screen.getAllByRole('article')
-    const before = first.querySelector('.title-block')!.textContent
-    const secondBefore = second.querySelector('.title-block')!.textContent
+    const before = first.querySelector('.parts-table tfoot')!.textContent
+    const secondBefore = second.querySelector('.parts-table tfoot')!.textContent
 
     await user.click(within(first).getByRole('button', { name: /premiere/i }))
 
-    expect(first.querySelector('.title-block')!.textContent).not.toBe(before)
-    expect(second.querySelector('.title-block')!.textContent).toBe(secondBefore)
+    expect(first.querySelector('.parts-table tfoot')!.textContent).not.toBe(before)
+    expect(second.querySelector('.parts-table tfoot')!.textContent).toBe(secondBefore)
   })
 
   it('premiere costs more than standard', async () => {
@@ -52,7 +52,7 @@ describe('Results', () => {
     show(vignette as SolveResponse)
     const sheet = screen.getAllByRole('article')[0]
 
-    const price = () => Number(sheet.querySelector('.title-block .v')!.textContent!.replace(/[^0-9]/g, ''))
+    const price = () => Number(sheet.querySelector('.parts-table tfoot .num')!.textContent!.replace(/[^0-9]/g, ''))
     const doors = price()
 
     await user.click(within(sheet).getByRole('button', { name: /premiere/i }))
@@ -100,6 +100,30 @@ describe('Results', () => {
 
   it('offers a cart button on every sheet', () => {
     show(vignette as SolveResponse)
-    expect(screen.getAllByRole('button', { name: /add this wall to cart/i })).toHaveLength(3)
+    expect(screen.getAllByRole('button', { name: /add all to cart/i })).toHaveLength(3)
+  })
+
+  it('lays the parts out as a spec-sheet table', () => {
+    show(vignette as SolveResponse)
+    const table = screen.getAllByRole('table')[0]
+
+    expect(within(table).getByRole('columnheader', { name: /^sku$/i })).toBeInTheDocument()
+    expect(within(table).getByRole('columnheader', { name: /description/i })).toBeInTheDocument()
+    expect(within(table).getByRole('columnheader', { name: /qty/i })).toBeInTheDocument()
+    expect(within(table).getByRole('columnheader', { name: /unit/i })).toBeInTheDocument()
+    expect(within(table).getByRole('columnheader', { name: /^total$/i })).toBeInTheDocument()
+  })
+
+  it('describes each SKU rather than showing a bare code', () => {
+    show(vignette as SolveResponse)
+    expect(screen.getAllByRole('table')[0]).toHaveTextContent(/full height door base cabinet/i)
+  })
+
+  it('shows a grand total under the parts', () => {
+    show(vignette as SolveResponse)
+    const foot = screen.getAllByRole('table')[0].querySelector('tfoot')!
+
+    expect(foot.textContent).toMatch(/total/i)
+    expect(foot.textContent).toMatch(/\$\d/)
   })
 })
