@@ -23,6 +23,7 @@ public sealed class GarageApi
         _designs = designs;
         _solver = new WallSolver(catalog);
         _validator = new LayoutValidator(catalog);
+        Mapping.Catalog = catalog;
     }
 
     public SolveResponse Solve(SolveRequest request)
@@ -34,7 +35,10 @@ public sealed class GarageApi
         var result = _solver.Solve(wall, goal, prices);
 
         return new SolveResponse(
-            result.Layouts.Select(layout => Pricing.Price(layout, prices).ToDto()).ToArray(),
+            result.Options.Select(option => new LayoutOptionDto(
+                option.Label,
+                Pricing.Price(option.Standard, prices).ToDto(),
+                Pricing.Price(option.Premiere, prices).ToDto())).ToArray(),
             result.Failure is null ? null : new FailureDto(result.Failure.Code.ToString(), result.Failure.Message),
             result.Notices.Select(n => new NoticeDto(n.Code.ToString(), n.Message)).ToArray());
     }

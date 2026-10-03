@@ -62,15 +62,15 @@ public class FixtureIntegrationTests
 
         var response = ApiFixture.Api().Solve(request);
 
-        if (response.Layouts.Length == 0)
+        if (response.Options.Length == 0)
         {
             response.Failure.ShouldNotBeNull($"{fixtureId} returned nothing and no reason why");
             return;
         }
 
         response.Failure.ShouldBeNull();
-        response.Layouts.Length.ShouldBeLessThanOrEqualTo(3);
-        response.Layouts.ShouldAllBe(l => l.SubtotalList > 0m && l.Layout.Items.Length > 0);
+        response.Options.Length.ShouldBeLessThanOrEqualTo(3);
+        response.Options.ShouldAllBe(o => o.Standard.SubtotalList > 0m && o.Standard.Layout.Items.Length > 0);
     }
 
     [Theory]
@@ -80,9 +80,12 @@ public class FixtureIntegrationTests
         var (request, _) = RequestFor(fixtureId);
         var api = ApiFixture.Api();
 
-        foreach (var layout in api.Solve(request).Layouts)
+        foreach (var option in api.Solve(request).Options)
         {
-            api.Validate(new ValidateRequest(layout.Layout, request.Wall)).Violations.ShouldBeEmpty();
+            foreach (var tier in new[] { option.Standard, option.Premiere })
+            {
+                api.Validate(new ValidateRequest(tier.Layout, request.Wall)).Violations.ShouldBeEmpty();
+            }
         }
     }
 
@@ -96,8 +99,8 @@ public class FixtureIntegrationTests
         var json = JsonSerializer.Serialize(response, Web);
         var parsed = JsonSerializer.Deserialize<SolveResponse>(json, Web)!;
 
-        parsed.Layouts.Length.ShouldBe(response.Layouts.Length);
-        parsed.Layouts.Select(l => l.SubtotalList).ShouldBe(response.Layouts.Select(l => l.SubtotalList));
+        parsed.Options.Length.ShouldBe(response.Options.Length);
+        parsed.Options.Select(o => o.Standard.SubtotalList).ShouldBe(response.Options.Select(o => o.Standard.SubtotalList));
     }
 
     [Fact]
@@ -126,7 +129,7 @@ public class FixtureIntegrationTests
         var (request, _) = RequestFor("single-car-clean");
         var response = ApiFixture.Api().Solve(request);
 
-        var subtotal = response.Layouts[0].SubtotalList;
+        var subtotal = response.Options[0].Standard.SubtotalList;
         var roundTripped = JsonSerializer.Deserialize<decimal>(JsonSerializer.Serialize(subtotal, Web), Web);
 
         roundTripped.ShouldBe(subtotal);
@@ -138,7 +141,7 @@ public class FixtureIntegrationTests
     {
         var (request, _) = RequestFor("two-car-panel");
         var api = ApiFixture.Api();
-        var layout = api.Solve(request).Layouts.First().Layout;
+        var layout = api.Solve(request).Options.First().Standard.Layout;
 
         var saved = await api.SaveDesignAsync(new SaveDesignRequest(request.Wall, request.Goal, layout));
         var loaded = (await api.GetDesignAsync(saved.ConfigId))!;

@@ -4,10 +4,17 @@ namespace GarageConfigurator.Core;
 public sealed record Layout(
     IReadOnlyList<PlacedItem> Items,
     string? Label = null,
-    string? ConfigId = null)
+    string? ConfigId = null,
+    Tier Tier = Tier.Standard)
 {
-    /// <summary>Placements rolled up by SKU, in the order each SKU first appears on the wall.</summary>
-    public IReadOnlyList<LineItem> LineItems { get; } = Items
+    /// <summary>
+    /// Placements rolled up by SKU, in the order each SKU first appears on the wall. Knee spaces are
+    /// not products, so they never appear.
+    /// Computed on access rather than stored: a record `with { Items = ... }` copies backing fields,
+    /// so a stored roll-up would survive an edit and quote the layout we no longer have.
+    /// </summary>
+    public IReadOnlyList<LineItem> LineItems => Items
+        .Where(item => item.Zone != Zone.KneeSpace)
         .GroupBy(item => item.Sku, StringComparer.Ordinal)
         .Select(group => new LineItem(group.Key, group.Count()))
         .ToList();

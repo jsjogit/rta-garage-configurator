@@ -5,6 +5,11 @@ namespace GarageConfigurator.Api.Contracts;
 /// <summary>Translates between the wire contracts and the Core domain, rejecting nonsense at the edge.</summary>
 internal static class Mapping
 {
+    /// <summary>Set once at startup so incoming vendor "-SF" SKUs resolve to what we sell.</summary>
+    internal static Catalog? Catalog { get; set; }
+
+    private static string Canonical(string sku) => Catalog?.Resolve(sku) ?? sku;
+
     internal static Wall ToDomain(this WallDto dto)
     {
         if (dto.Length <= 0m)
@@ -52,7 +57,7 @@ internal static class Mapping
 
         var items = dto.Items
             .Select(i => new PlacedItem(
-                i.Sku,
+                Canonical(i.Sku),
                 i.X,
                 i.Y,
                 i.Width,
@@ -61,7 +66,9 @@ internal static class Mapping
                 ParseEnum<Zone>(i.Zone, "item.zone")))
             .ToList();
 
-        return new Layout(items, dto.Label, dto.ConfigId);
+        var tier = dto.Tier is null ? Core.Tier.Standard : ParseEnum<Tier>(dto.Tier, "layout.tier");
+
+        return new Layout(items, dto.Label, dto.ConfigId, tier);
     }
 
     internal static LayoutDto ToDto(this Layout layout) => new(
@@ -69,7 +76,8 @@ internal static class Mapping
             .Select(i => new PlacedItemDto(i.Sku, i.X, i.Y, i.Width, i.Height, i.Depth, i.Zone.ToString()))
             .ToArray(),
         layout.Label,
-        layout.ConfigId);
+        layout.ConfigId,
+        layout.Tier.ToString());
 
     internal static PricedLayoutDto ToDto(this PricedLayout priced) => new(
         priced.Layout.ToDto(),

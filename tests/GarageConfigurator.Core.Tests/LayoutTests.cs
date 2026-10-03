@@ -36,6 +36,16 @@ public class LayoutTests
     }
 
     [Fact]
+    public void Replacing_the_items_recomputes_the_line_items()
+    {
+        var layout = new Layout(new[] { Base24(0m) });
+
+        var edited = layout with { Items = new[] { Base24(0m), Base30(24m) } };
+
+        edited.LineItems.Select(i => i.Sku).ShouldBe(new[] { "MV-B24", "MV-B30" });
+    }
+
+    [Fact]
     public void Layout_width_spans_from_the_leftmost_item_to_the_rightmost()
     {
         var layout = new Layout(new[] { Base24(0m), Base30(24m) });

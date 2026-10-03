@@ -11,7 +11,10 @@ public class GoalHeuristicTests
     private static readonly Wall CleanWall = WallFixtures.Get("single-car-clean");
 
     private static Layout Best(Goal goal, Wall? wall = null) =>
-        Solver.Solve(wall ?? CleanWall, goal, Prices).Layouts.First();
+        Solver.Solve(wall ?? CleanWall, goal, Prices).Options.First().Standard;
+
+    private static Layout BestPremiere(Goal goal, Wall? wall = null) =>
+        Solver.Solve(wall ?? CleanWall, goal, Prices).Options.First().Premiere;
 
     [Fact]
     public void Workbench_gives_the_customer_a_countertop()
@@ -20,9 +23,9 @@ public class GoalHeuristicTests
     }
 
     [Fact]
-    public void Workbench_puts_a_drawer_bank_under_the_counter()
+    public void Workbench_puts_a_drawer_bank_under_the_counter_in_the_premiere_tier()
     {
-        var layout = Best(Goal.Workbench);
+        var layout = BestPremiere(Goal.Workbench);
         var counter = layout.Items.First(i => i.Zone == Zone.Counter);
 
         layout.Items
@@ -71,7 +74,7 @@ public class GoalHeuristicTests
     {
         var result = Solver.Solve(WallFixtures.Get("tall-ceiling-120"), Goal.Storage, Prices);
 
-        result.Layouts.SelectMany(l => l.Items)
+        result.Options.SelectMany(o => o.Standard.Items)
             .ShouldContain(i => i.Zone == Zone.Wall && i.Y == 84m);
     }
 }

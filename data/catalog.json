@@ -35,6 +35,10 @@
   "kits": [
     { "sku": "MV-GARAGE-KIT-6", "name": "Signature Gray 6-Piece Garage Cabinet Set", "listPrice": 3694.44, "promoPrice": 2770.83, "bom": null, "virtual": true, "excludeFromSolver": true, "notes": "Virtual marketplace-listing SKU only (Joshua 2026-10-01). Orderable in theory, never ordered in practice. Not a real assortment — solver must never emit it or price against it." }
   ],
+  "skuAliases": {
+    "MV-B24-SF": "MV-B24-F",
+    "MV-B30-SF": "MV-B30-F"
+  },
   "excludedFromSolver": [
     { "sku": "RV-BWB18GRAY",        "reason": "18in waste pullout insert from kitchen line; no 18in garage base" },
     { "sku": "RV-BWB18GRAYPREMIER", "reason": "same" }

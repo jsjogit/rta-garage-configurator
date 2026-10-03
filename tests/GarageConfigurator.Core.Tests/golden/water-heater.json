@@ -3,44 +3,204 @@
   "goal": "Balanced",
   "failure": null,
   "notices": [],
-  "layouts": [
+  "options": [
     {
       "label": "Recommended",
-      "listTotal": 11546.49,
-      "lineItems": [
-        "MV-B30 x1",
-        "MV-DB24-4 x3",
-        "MV-B24 x2",
-        "MV-CTHW9825 x1",
-        "MV-W3030 x5",
-        "MV-W1530 x1",
-        "MV-PC3084 x1",
-        "MV-B15 x2"
-      ]
+      "standard": {
+        "listTotal": 8744.79,
+        "footprint": [
+          "MV-B30-F @30-60 y0",
+          "MV-CTHW9825 @30-108 y34.5",
+          "MV-W3030 @30-60 y54",
+          "(knee space) @60-84 y0",
+          "MV-W2415 @60-84 y69",
+          "MV-B24-F @84-108 y0",
+          "MV-W2430 @84-108 y54",
+          "MV-PC3084 @108-138 y0",
+          "MV-B24-F @138-162 y0",
+          "MV-W2430 @138-162 y54",
+          "MV-B24-F @162-186 y0",
+          "MV-W2430 @162-186 y54",
+          "(knee space) @186-210 y0",
+          "MV-W2415 @186-210 y69",
+          "MV-B15 @210-225 y0",
+          "MV-W1530 @210-225 y54",
+          "MV-B15 @225-240 y0",
+          "MV-W1530 @225-240 y54"
+        ],
+        "lineItems": [
+          "MV-B30-F x1",
+          "MV-B24-F x3",
+          "MV-CTHW9825 x1",
+          "MV-W3030 x1",
+          "MV-W2415 x2",
+          "MV-W2430 x3",
+          "MV-PC3084 x1",
+          "MV-B15 x2",
+          "MV-W1530 x2"
+        ]
+      },
+      "premiere": {
+        "listTotal": 10255.53,
+        "footprint": [
+          "MV-DB30-3 @30-60 y0",
+          "MV-CTHW9825 @30-108 y34.5",
+          "MV-W3030 @30-60 y54",
+          "(knee space) @60-84 y0",
+          "MV-W2415 @60-84 y69",
+          "MV-DB24-4 @84-108 y0",
+          "MV-W2430 @84-108 y54",
+          "MV-PC3084 @108-138 y0",
+          "MV-DB24-3 @138-162 y0",
+          "MV-W2430 @138-162 y54",
+          "MV-DB24-4 @162-186 y0",
+          "MV-W2430 @162-186 y54",
+          "(knee space) @186-210 y0",
+          "MV-W2415 @186-210 y69",
+          "MV-B15 @210-225 y0",
+          "MV-W1530 @210-225 y54",
+          "MV-B15 @225-240 y0",
+          "MV-W1530 @225-240 y54"
+        ],
+        "lineItems": [
+          "MV-DB30-3 x1",
+          "MV-DB24-4 x2",
+          "MV-CTHW9825 x1",
+          "MV-W3030 x1",
+          "MV-W2415 x2",
+          "MV-W2430 x3",
+          "MV-PC3084 x1",
+          "MV-DB24-3 x1",
+          "MV-B15 x2",
+          "MV-W1530 x2"
+        ]
+      }
     },
     {
-      "label": "Another option",
-      "listTotal": 11657.37,
-      "lineItems": [
-        "MV-B30 x1",
-        "MV-DB24-4 x1",
-        "MV-B24 x2",
-        "MV-CTHW9825 x1",
-        "MV-W3030 x5",
-        "MV-W1530 x1",
-        "MV-PC3084 x1",
-        "MV-B15 x4",
-        "MV-BWB15-PS x1",
-        "MV-F384 x1"
-      ]
+      "label": "Bigger workbench",
+      "standard": {
+        "listTotal": 8555.84,
+        "footprint": [
+          "MV-B30-F @30-60 y0",
+          "MV-CTHW9825 @30-120 y34.5",
+          "MV-W3030 @30-60 y54",
+          "(knee space) @60-90 y0",
+          "IC-MW-W3015 @60-90 y69",
+          "MV-B30-F @90-120 y0",
+          "MV-W3030 @90-120 y54",
+          "MV-PC3084 @120-150 y0",
+          "MV-B30-F @150-180 y0",
+          "MV-CTHW9825 @150-240 y34.5",
+          "MV-W3030 @150-180 y54",
+          "(knee space) @180-210 y0",
+          "IC-MW-W3015 @180-210 y69",
+          "MV-B30-F @210-240 y0",
+          "MV-W3030 @210-240 y54"
+        ],
+        "lineItems": [
+          "MV-B30-F x4",
+          "MV-CTHW9825 x2",
+          "MV-W3030 x4",
+          "IC-MW-W3015 x2",
+          "MV-PC3084 x1"
+        ]
+      },
+      "premiere": {
+        "listTotal": 10155.68,
+        "footprint": [
+          "MV-DB30-3 @30-60 y0",
+          "MV-CTHW9825 @30-120 y34.5",
+          "MV-W3030 @30-60 y54",
+          "(knee space) @60-90 y0",
+          "IC-MW-W3015 @60-90 y69",
+          "MV-DB30-4 @90-120 y0",
+          "MV-W3030 @90-120 y54",
+          "MV-PC3084 @120-150 y0",
+          "MV-DB30-3 @150-180 y0",
+          "MV-CTHW9825 @150-240 y34.5",
+          "MV-W3030 @150-180 y54",
+          "(knee space) @180-210 y0",
+          "IC-MW-W3015 @180-210 y69",
+          "MV-DB30-4 @210-240 y0",
+          "MV-W3030 @210-240 y54"
+        ],
+        "lineItems": [
+          "MV-DB30-3 x2",
+          "MV-DB30-4 x2",
+          "MV-CTHW9825 x2",
+          "MV-W3030 x4",
+          "IC-MW-W3015 x2",
+          "MV-PC3084 x1"
+        ]
+      }
     },
     {
-      "label": "Lower cost",
-      "listTotal": 9535.68,
-      "lineItems": [
-        "MV-B30 x7",
-        "MV-W3030 x7"
-      ]
+      "label": "Bigger workbench",
+      "standard": {
+        "listTotal": 8786.50,
+        "footprint": [
+          "MV-B30-F @30-60 y0",
+          "MV-CTHW9825 @30-114 y34.5",
+          "MV-W3030 @30-60 y54",
+          "(knee space) @60-90 y0",
+          "IC-MW-W3015 @60-90 y69",
+          "MV-B24-F @90-114 y0",
+          "MV-W2430 @90-114 y54",
+          "MV-PC3084 @114-144 y0",
+          "MV-B24-F @144-168 y0",
+          "MV-CTHW9825 @144-240 y34.5",
+          "MV-W2430 @144-168 y54",
+          "MV-B24-F @168-192 y0",
+          "MV-W2430 @168-192 y54",
+          "(knee space) @192-216 y0",
+          "MV-W2415 @192-216 y69",
+          "MV-B24-F @216-240 y0",
+          "MV-W2430 @216-240 y54"
+        ],
+        "lineItems": [
+          "MV-B30-F x1",
+          "MV-B24-F x4",
+          "MV-CTHW9825 x2",
+          "MV-W3030 x1",
+          "IC-MW-W3015 x1",
+          "MV-W2430 x4",
+          "MV-PC3084 x1",
+          "MV-W2415 x1"
+        ]
+      },
+      "premiere": {
+        "listTotal": 10707.10,
+        "footprint": [
+          "MV-DB30-3 @30-60 y0",
+          "MV-CTHW9825 @30-114 y34.5",
+          "MV-W3030 @30-60 y54",
+          "(knee space) @60-90 y0",
+          "IC-MW-W3015 @60-90 y69",
+          "MV-DB24-4 @90-114 y0",
+          "MV-W2430 @90-114 y54",
+          "MV-PC3084 @114-144 y0",
+          "MV-DB24-3 @144-168 y0",
+          "MV-CTHW9825 @144-240 y34.5",
+          "MV-W2430 @144-168 y54",
+          "MV-DB24-4 @168-192 y0",
+          "MV-W2430 @168-192 y54",
+          "(knee space) @192-216 y0",
+          "MV-W2415 @192-216 y69",
+          "MV-DB24-4 @216-240 y0",
+          "MV-W2430 @216-240 y54"
+        ],
+        "lineItems": [
+          "MV-DB30-3 x1",
+          "MV-DB24-4 x3",
+          "MV-CTHW9825 x2",
+          "MV-W3030 x1",
+          "IC-MW-W3015 x1",
+          "MV-W2430 x4",
+          "MV-PC3084 x1",
+          "MV-DB24-3 x1",
+          "MV-W2415 x1"
+        ]
+      }
     }
   ]
 }

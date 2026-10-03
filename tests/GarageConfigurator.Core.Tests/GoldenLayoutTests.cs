@@ -25,6 +25,16 @@ public class GoldenLayoutTests
         return data;
     }
 
+    private static object Snapshot(Layout layout, PriceMap prices) => new
+    {
+        listTotal = layout.LineItems.Sum(i => prices.List(i.Sku) * i.Quantity),
+        footprint = layout.Items
+            .OrderBy(i => i.X).ThenBy(i => i.Y)
+            .Select(i => $"{(i.Zone == Zone.KneeSpace ? "(knee space)" : i.Sku)} @{i.X}-{i.Right} y{i.Y}")
+            .ToArray(),
+        lineItems = layout.LineItems.Select(i => $"{i.Sku} x{i.Quantity}").ToArray()
+    };
+
     [Theory]
     [MemberData(nameof(Fixtures))]
     public void Solver_output_matches_the_golden_file(string fixtureId)
@@ -41,11 +51,11 @@ public class GoldenLayoutTests
             goal = goal.ToString(),
             failure = result.Failure?.Code.ToString(),
             notices = result.Notices.Select(n => n.Code.ToString()).ToArray(),
-            layouts = result.Layouts.Select(layout => new
+            options = result.Options.Select(option => new
             {
-                label = layout.Label,
-                listTotal = layout.LineItems.Sum(i => prices.List(i.Sku) * i.Quantity),
-                lineItems = layout.LineItems.Select(i => $"{i.Sku} x{i.Quantity}").ToArray()
+                label = option.Label,
+                standard = Snapshot(option.Standard, prices),
+                premiere = Snapshot(option.Premiere, prices)
             }).ToArray()
         }, Json);
 

@@ -57,7 +57,7 @@ public sealed partial class WallSolver
                 "We couldn't fit a layout on this wall — there may be too little clear space.");
         }
 
-        return new SolveResult(Rank(scored), null, notices);
+        return new SolveResult(Rank(scored, _catalog), null, notices);
     }
 
     // ---- search -----------------------------------------------------------------------------

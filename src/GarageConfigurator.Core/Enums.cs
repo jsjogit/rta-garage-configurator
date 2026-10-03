@@ -7,7 +7,19 @@ public enum Zone
     Counter,
     Wall,
     Tall,
-    Filler
+    Filler,
+
+    /// <summary>An open gap in a counter run where someone can sit. Not a product: no SKU, no price.</summary>
+    KneeSpace
+}
+
+/// <summary>
+/// Two price points over one footprint. Only the base cabinets differ.
+/// </summary>
+public enum Tier
+{
+    Standard,
+    Premiere
 }
 
 public enum CabinetType

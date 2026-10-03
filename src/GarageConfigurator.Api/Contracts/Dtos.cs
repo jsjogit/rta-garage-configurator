@@ -9,7 +9,7 @@ public sealed record WallDto(decimal Length, decimal Ceiling, ObstructionDto[]? 
 
 public sealed record PlacedItemDto(string Sku, decimal X, decimal Y, decimal Width, decimal Height, decimal Depth, string Zone);
 
-public sealed record LayoutDto(PlacedItemDto[] Items, string? Label = null, string? ConfigId = null);
+public sealed record LayoutDto(PlacedItemDto[] Items, string? Label = null, string? ConfigId = null, string? Tier = null);
 
 public sealed record LineItemDto(string Sku, int Quantity, decimal UnitList, decimal UnitPromo, decimal ExtendedList, decimal ExtendedPromo);
 
@@ -23,7 +23,9 @@ public sealed record FailureDto(string Code, string Message);
 
 public sealed record SolveRequest(WallDto Wall, string Goal);
 
-public sealed record SolveResponse(PricedLayoutDto[] Layouts, FailureDto? Failure, NoticeDto[] Notices);
+public sealed record LayoutOptionDto(string Label, PricedLayoutDto Standard, PricedLayoutDto Premiere);
+
+public sealed record SolveResponse(LayoutOptionDto[] Options, FailureDto? Failure, NoticeDto[] Notices);
 
 public sealed record ValidateRequest(LayoutDto Layout, WallDto Wall);
 

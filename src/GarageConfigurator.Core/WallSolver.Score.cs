@@ -4,13 +4,12 @@ public sealed partial class WallSolver
 {
     // Scoring weights. Named so a ranking argument is a conversation about numbers, not about code.
     private const decimal WorkbenchCounterInch = 2.0m;
-    private const decimal WorkbenchDrawerBank = 40m;
-    private const decimal WorkbenchNoDrawerBank = -80m;
     private const decimal WorkbenchUpperCabinet = 3m;
+    private const decimal KneeSpaceWithBridge = 50m;
+    private const decimal WideUpperOverKneeSpace = 40m;
     private const decimal StorageCubicFeetPerDollar = 12000m;
     private const decimal StorageTall = 8m;
     private const decimal StorageWideBox = 2m;
-    private const decimal HiddenFullDoor = 10m;
     private const decimal HiddenTall = 12m;
     private const decimal HiddenOpenCounterInch = 0.5m;
     private const decimal BalancedIdealRun = 30m;
@@ -35,17 +34,20 @@ public sealed partial class WallSolver
             _ => ScoreBalanced(layout, counterLength, fillRatio)
         };
 
-        return new ScoredLayout(layout, score - Penalties(layout, wall, occupied), price, cubicFeet, counterLength);
+        return new ScoredLayout(
+            layout,
+            score + KneeSpaceScore(layout) - Penalties(layout, wall, occupied),
+            price,
+            cubicFeet,
+            counterLength);
     }
 
     private static decimal ScoreWorkbench(Layout layout, decimal counterLength)
     {
-        var drawerBanks = layout.Items.Count(i => i.Sku.StartsWith("MV-DB", StringComparison.Ordinal));
         var uppers = layout.Items.Count(i => i.Zone == Zone.Wall);
 
-        return (counterLength * WorkbenchCounterInch)
-            + (drawerBanks > 0 ? WorkbenchDrawerBank : WorkbenchNoDrawerBank)
-            + (uppers * WorkbenchUpperCabinet);
+        // Drawer banks are no longer a footprint decision — the Premiere tier always has them.
+        return (counterLength * WorkbenchCounterInch) + (uppers * WorkbenchUpperCabinet);
     }
 
     private static decimal ScoreStorage(Layout layout, decimal cubicFeet, decimal price)
@@ -59,11 +61,9 @@ public sealed partial class WallSolver
 
     private static decimal ScoreHidden(Layout layout, decimal counterLength, decimal fillRatio)
     {
-        var fullDoors = layout.Items.Count(i => i.Sku.EndsWith("-F", StringComparison.Ordinal));
         var talls = layout.Items.Count(i => i.Zone == Zone.Tall);
 
-        return (fullDoors * HiddenFullDoor)
-            + (talls * HiddenTall)
+        return (talls * HiddenTall)
             - (counterLength * HiddenOpenCounterInch)
             + (fillRatio * FillRatioWeight);
     }
@@ -79,6 +79,33 @@ public sealed partial class WallSolver
             : talls.Count(t => t.Right == counters[0].X || t.X == counters[0].Right) * BalancedFlankingTall;
 
         return idealRun + flanked + (fillRatio * FillRatioWeight);
+    }
+
+    /// <summary>
+    /// A knee space earns its keep only with a width-matched 15" bridge over it. A full-height upper
+    /// above one drops straight into the head room the knee space exists to create.
+    /// </summary>
+    private decimal KneeSpaceScore(Layout layout)
+    {
+        var score = 0m;
+        var uppers = layout.Items.Where(i => i.Zone == Zone.Wall).ToList();
+
+        foreach (var knee in layout.Items.Where(i => i.Zone == Zone.KneeSpace))
+        {
+            var above = uppers.Where(u => u.X < knee.Right && knee.X < u.Right).ToList();
+
+            if (above.Any(u => u.Top == Constants.DatumTop && u.Height == 15m && u.Width == knee.Width))
+            {
+                score += KneeSpaceWithBridge;
+            }
+
+            if (above.Any(u => u.Height >= 30m))
+            {
+                score -= WideUpperOverKneeSpace;
+            }
+        }
+
+        return score;
     }
 
     private decimal Penalties(Layout layout, Wall wall, decimal occupied)
@@ -106,7 +133,7 @@ public sealed partial class WallSolver
     {
         var current = new List<PlacedItem>();
 
-        foreach (var cabinet in layout.Items.Where(i => i.Zone == Zone.Base).OrderBy(i => i.X))
+        foreach (var cabinet in layout.Items.Where(i => i.Zone is Zone.Base or Zone.KneeSpace).OrderBy(i => i.X))
         {
             if (current.Count > 0 && current[^1].Right != cabinet.X)
             {
@@ -129,7 +156,7 @@ public sealed partial class WallSolver
             .Sum(i => i.Width * i.Height * i.Depth) / 1728m;
 
     private static bool IsFloorStanding(PlacedItem item) =>
-        item.Zone is Zone.Base or Zone.Tall or Zone.Filler;
+        item.Zone is Zone.Base or Zone.Tall or Zone.Filler or Zone.KneeSpace;
 
     // ---- ranking ----------------------------------------------------------------------------
 
@@ -137,7 +164,7 @@ public sealed partial class WallSolver
     /// Best first, distinct layouts only. Ties break on price, then on fewer line items — a cheaper
     /// wall built from fewer different boxes is the easier sell.
     /// </summary>
-    private static IReadOnlyList<Layout> Rank(List<ScoredLayout> scored)
+    private static IReadOnlyList<LayoutOption> Rank(List<ScoredLayout> scored, Catalog catalog)
     {
         var ordered = scored
             .OrderByDescending(s => s.Score)
@@ -156,9 +183,15 @@ public sealed partial class WallSolver
             }
         }
 
-        return chosen.Select((candidate, rank) => candidate.Layout with
+        return chosen.Select((candidate, rank) =>
         {
-            Label = rank == 0 ? "Recommended" : LabelAgainst(candidate, chosen[0])
+            var label = rank == 0 ? "Recommended" : LabelAgainst(candidate, chosen[0]);
+            var footprint = candidate.Layout with { Label = label };
+
+            return new LayoutOption(
+                label,
+                Tiering.Apply(footprint, Tier.Standard, catalog),
+                Tiering.Apply(footprint, Tier.Premiere, catalog));
         }).ToList();
     }
 

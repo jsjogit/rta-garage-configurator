@@ -3,30 +3,97 @@
   "goal": "HideTheMess",
   "failure": null,
   "notices": [],
-  "layouts": [
+  "options": [
     {
       "label": "Recommended",
-      "listTotal": 6336.00,
-      "lineItems": [
-        "MV-PC2484 x5"
-      ]
+      "standard": {
+        "listTotal": 6336.00,
+        "footprint": [
+          "MV-PC2484 @0-24 y0",
+          "MV-PC2484 @24-48 y0",
+          "MV-PC2484 @48-72 y0",
+          "MV-PC2484 @72-96 y0",
+          "MV-PC2484 @96-120 y0"
+        ],
+        "lineItems": [
+          "MV-PC2484 x5"
+        ]
+      },
+      "premiere": {
+        "listTotal": 6336.00,
+        "footprint": [
+          "MV-PC2484 @0-24 y0",
+          "MV-PC2484 @24-48 y0",
+          "MV-PC2484 @48-72 y0",
+          "MV-PC2484 @72-96 y0",
+          "MV-PC2484 @96-120 y0"
+        ],
+        "lineItems": [
+          "MV-PC2484 x5"
+        ]
+      }
     },
     {
       "label": "Lower cost",
-      "listTotal": 4809.42,
-      "lineItems": [
-        "MV-B24-F x5",
-        "MV-W3030 x4"
-      ]
+      "standard": {
+        "listTotal": 6056.82,
+        "footprint": [
+          "MV-F384 @0-3 y0",
+          "MV-PC3084 @3-33 y0",
+          "MV-PC3084 @33-63 y0",
+          "MV-PC3084 @63-93 y0",
+          "MV-PC2484 @93-117 y0",
+          "MV-F384 @117-120 y0"
+        ],
+        "lineItems": [
+          "MV-F384 x2",
+          "MV-PC3084 x3",
+          "MV-PC2484 x1"
+        ]
+      },
+      "premiere": {
+        "listTotal": 6056.82,
+        "footprint": [
+          "MV-F384 @0-3 y0",
+          "MV-PC3084 @3-33 y0",
+          "MV-PC3084 @33-63 y0",
+          "MV-PC3084 @63-93 y0",
+          "MV-PC2484 @93-117 y0",
+          "MV-F384 @117-120 y0"
+        ],
+        "lineItems": [
+          "MV-F384 x2",
+          "MV-PC3084 x3",
+          "MV-PC2484 x1"
+        ]
+      }
     },
     {
       "label": "Lower cost",
-      "listTotal": 6056.82,
-      "lineItems": [
-        "MV-F384 x2",
-        "MV-PC3084 x3",
-        "MV-PC2484 x1"
-      ]
+      "standard": {
+        "listTotal": 6138.00,
+        "footprint": [
+          "MV-PC3084 @0-30 y0",
+          "MV-PC3084 @30-60 y0",
+          "MV-PC3084 @60-90 y0",
+          "MV-PC3084 @90-120 y0"
+        ],
+        "lineItems": [
+          "MV-PC3084 x4"
+        ]
+      },
+      "premiere": {
+        "listTotal": 6138.00,
+        "footprint": [
+          "MV-PC3084 @0-30 y0",
+          "MV-PC3084 @30-60 y0",
+          "MV-PC3084 @60-90 y0",
+          "MV-PC3084 @90-120 y0"
+        ],
+        "lineItems": [
+          "MV-PC3084 x4"
+        ]
+      }
     }
   ]
 }

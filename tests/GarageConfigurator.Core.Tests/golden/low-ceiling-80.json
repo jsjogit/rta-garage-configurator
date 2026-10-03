@@ -5,29 +5,122 @@
   "notices": [
     "TallsExcludedLowCeiling"
   ],
-  "layouts": [
+  "options": [
     {
       "label": "Recommended",
-      "listTotal": 8110.08,
-      "lineItems": [
-        "MV-B30 x8"
-      ]
+      "standard": {
+        "listTotal": 7064.64,
+        "footprint": [
+          "MV-B30-F @0-30 y0",
+          "MV-B30-F @30-60 y0",
+          "MV-B30-F @60-90 y0",
+          "MV-B30-F @90-120 y0",
+          "MV-B30-F @120-150 y0",
+          "MV-B30-F @150-180 y0",
+          "MV-B30-F @180-210 y0",
+          "MV-B30-F @210-240 y0"
+        ],
+        "lineItems": [
+          "MV-B30-F x8"
+        ]
+      },
+      "premiere": {
+        "listTotal": 10525.68,
+        "footprint": [
+          "MV-DB30-3 @0-30 y0",
+          "MV-DB30-4 @30-60 y0",
+          "MV-DB30-4 @60-90 y0",
+          "MV-DB30-4 @90-120 y0",
+          "MV-DB30-4 @120-150 y0",
+          "MV-DB30-4 @150-180 y0",
+          "MV-DB30-4 @180-210 y0",
+          "MV-DB30-4 @210-240 y0"
+        ],
+        "lineItems": [
+          "MV-DB30-3 x1",
+          "MV-DB30-4 x7"
+        ]
+      }
     },
     {
       "label": "Another option",
-      "listTotal": 8064.54,
-      "lineItems": [
-        "MV-B30 x4",
-        "MV-B24 x5"
-      ]
+      "standard": {
+        "listTotal": 6947.82,
+        "footprint": [
+          "MV-B30-F @0-30 y0",
+          "MV-B30-F @30-60 y0",
+          "MV-B30-F @60-90 y0",
+          "MV-B30-F @90-120 y0",
+          "MV-B24-F @120-144 y0",
+          "MV-B24-F @144-168 y0",
+          "MV-B24-F @168-192 y0",
+          "MV-B24-F @192-216 y0",
+          "MV-B24-F @216-240 y0"
+        ],
+        "lineItems": [
+          "MV-B30-F x4",
+          "MV-B24-F x5"
+        ]
+      },
+      "premiere": {
+        "listTotal": 10684.08,
+        "footprint": [
+          "MV-DB30-3 @0-30 y0",
+          "MV-DB30-4 @30-60 y0",
+          "MV-DB30-4 @60-90 y0",
+          "MV-DB30-4 @90-120 y0",
+          "MV-DB24-4 @120-144 y0",
+          "MV-DB24-4 @144-168 y0",
+          "MV-DB24-4 @168-192 y0",
+          "MV-DB24-4 @192-216 y0",
+          "MV-DB24-4 @216-240 y0"
+        ],
+        "lineItems": [
+          "MV-DB30-3 x1",
+          "MV-DB30-4 x3",
+          "MV-DB24-4 x5"
+        ]
+      }
     },
     {
-      "label": "Another option",
-      "listTotal": 8466.48,
-      "lineItems": [
-        "MV-B30 x7",
-        "MV-B15 x2"
-      ]
+      "label": "Lower cost",
+      "standard": {
+        "listTotal": 6831.00,
+        "footprint": [
+          "MV-B24-F @0-24 y0",
+          "MV-B24-F @24-48 y0",
+          "MV-B24-F @48-72 y0",
+          "MV-B24-F @72-96 y0",
+          "MV-B24-F @96-120 y0",
+          "MV-B24-F @120-144 y0",
+          "MV-B24-F @144-168 y0",
+          "MV-B24-F @168-192 y0",
+          "MV-B24-F @192-216 y0",
+          "MV-B24-F @216-240 y0"
+        ],
+        "lineItems": [
+          "MV-B24-F x10"
+        ]
+      },
+      "premiere": {
+        "listTotal": 10854.36,
+        "footprint": [
+          "MV-DB24-3 @0-24 y0",
+          "MV-DB24-4 @24-48 y0",
+          "MV-DB24-4 @48-72 y0",
+          "MV-DB24-4 @72-96 y0",
+          "MV-DB24-4 @96-120 y0",
+          "MV-DB24-4 @120-144 y0",
+          "MV-DB24-4 @144-168 y0",
+          "MV-DB24-4 @168-192 y0",
+          "MV-DB24-4 @192-216 y0",
+          "MV-DB24-4 @216-240 y0"
+        ],
+        "lineItems": [
+          "MV-DB24-3 x1",
+          "MV-DB24-4 x9"
+        ]
+      }
     }
   ]
 }

@@ -144,7 +144,11 @@ components:
       type: object
       required: [sku, x, y, width, height, depth, zone]
       properties:
-        sku: { type: string }
+        sku:
+          type: string
+          description: >
+            Empty for a KneeSpace. Vendor "-SF" aliases (MV-B24-SF, MV-B30-SF) are accepted on the
+            way in and resolved to the canonical "-F" SKU; responses always use canonical SKUs.
         x: { type: number, format: double }
         y: { type: number, format: double }
         width: { type: number, format: double }
@@ -152,7 +156,10 @@ components:
         depth: { type: number, format: double }
         zone:
           type: string
-          enum: [Base, Counter, Wall, Tall, Filler]
+          enum: [Base, Counter, Wall, Tall, Filler, KneeSpace]
+          description: >
+            KneeSpace is an open gap in a counter run, 24 or 30 inches wide, with a base cabinet on
+            each side. It is not a product: its sku is empty and it never appears in lineItems.
     Layout:
       type: object
       required: [items]
@@ -162,6 +169,11 @@ components:
           items: { $ref: '#/components/schemas/PlacedItem' }
         label: { type: string, nullable: true }
         configId: { type: string, nullable: true }
+        tier:
+          type: string
+          enum: [Standard, Premiere]
+          nullable: true
+          description: Defaults to Standard when omitted.
     LineItem:
       type: object
       properties:
@@ -192,10 +204,10 @@ components:
     SolveResponse:
       type: object
       properties:
-        layouts:
+        options:
           type: array
           maxItems: 3
-          items: { $ref: '#/components/schemas/PricedLayout' }
+          items: { $ref: '#/components/schemas/LayoutOption' }
         failure:
           nullable: true
           type: object
@@ -213,6 +225,15 @@ components:
                 type: string
                 enum: [TallsExcludedLowCeiling]
               message: { type: string }
+    LayoutOption:
+      type: object
+      description: >
+        One footprint at two price points. Standard and Premiere place the same boxes in the same
+        positions; only the base cabinets, and therefore the price, differ.
+      properties:
+        label: { type: string, example: Recommended }
+        standard: { $ref: '#/components/schemas/PricedLayout' }
+        premiere: { $ref: '#/components/schemas/PricedLayout' }
     ValidateRequest:
       type: object
       required: [layout, wall]

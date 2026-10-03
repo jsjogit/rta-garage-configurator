@@ -14,7 +14,7 @@ public class SolveGuardTests
     {
         var result = Solver.Solve(WallFixtures.Get("too-short"), Goal.Balanced, Prices);
 
-        result.Layouts.ShouldBeEmpty();
+        result.Options.ShouldBeEmpty();
         result.Failure!.Code.ShouldBe(SolveReason.WallTooShort);
     }
 
@@ -31,7 +31,7 @@ public class SolveGuardTests
     {
         var result = Solver.Solve(WallFixtures.Get("ceiling-too-low"), Goal.Balanced, Prices);
 
-        result.Layouts.ShouldBeEmpty();
+        result.Options.ShouldBeEmpty();
         result.Failure!.Code.ShouldBe(SolveReason.CeilingTooLow);
     }
 
@@ -48,8 +48,8 @@ public class SolveGuardTests
     {
         var result = Solver.Solve(WallFixtures.Get("low-ceiling-80"), Goal.Storage, Prices);
 
-        result.Layouts.ShouldNotBeEmpty();
-        result.Layouts.SelectMany(l => l.Items)
+        result.Options.ShouldNotBeEmpty();
+        result.Options.SelectMany(o => o.Tiers).SelectMany(l => l.Items)
             .ShouldAllBe(i => i.Zone != Zone.Tall && i.Zone != Zone.Wall);
     }
 
@@ -59,7 +59,7 @@ public class SolveGuardTests
         var result = Solver.Solve(WallFixtures.Get("ceiling-exactly-84"), Goal.Storage, Prices);
 
         result.Notices.ShouldBeEmpty();
-        result.Layouts.SelectMany(l => l.Items).ShouldContain(i => i.Zone == Zone.Tall);
+        result.Options.SelectMany(o => o.Standard.Items).ShouldContain(i => i.Zone == Zone.Tall);
     }
 
     [Fact]
@@ -68,6 +68,6 @@ public class SolveGuardTests
         var result = Solver.Solve(WallFixtures.Get("single-car-clean"), Goal.Balanced, Prices);
 
         result.Failure.ShouldBeNull();
-        result.Layouts.ShouldNotBeEmpty();
+        result.Options.ShouldNotBeEmpty();
     }
 }

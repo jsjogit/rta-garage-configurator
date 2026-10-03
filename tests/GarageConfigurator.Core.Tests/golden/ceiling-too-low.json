@@ -3,5 +3,5 @@
   "goal": "Balanced",
   "failure": "CeilingTooLow",
   "notices": [],
-  "layouts": []
+  "options": []
 }

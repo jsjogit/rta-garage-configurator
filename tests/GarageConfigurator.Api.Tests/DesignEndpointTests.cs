@@ -10,7 +10,7 @@ public class DesignEndpointTests
     private static SaveDesignRequest ADesign(GarageApi api)
     {
         var wall = new WallDto(240m, 96m);
-        var layout = api.Solve(new SolveRequest(wall, "Balanced")).Layouts.First().Layout;
+        var layout = api.Solve(new SolveRequest(wall, "Balanced")).Options.First().Standard.Layout;
 
         return new SaveDesignRequest(wall, "Balanced", layout);
     }

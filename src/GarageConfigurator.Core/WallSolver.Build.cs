@@ -8,19 +8,12 @@ public sealed partial class WallSolver
         [24m] = "MV-PC2484"
     };
 
-    private static readonly IReadOnlyDictionary<decimal, string> DoorBaseSkus = new Dictionary<decimal, string>
-    {
-        [30m] = "MV-B30", [24m] = "MV-B24", [15m] = "MV-B15"
-    };
-
-    private static readonly IReadOnlyDictionary<decimal, string> FullDoorBaseSkus = new Dictionary<decimal, string>
+    /// <summary>
+    /// Footprints are built in the Standard tier; <see cref="Tiering"/> derives Premiere from them.
+    /// </summary>
+    private static readonly IReadOnlyDictionary<decimal, string> BaseSkus = new Dictionary<decimal, string>
     {
         [30m] = "MV-B30-F", [24m] = "MV-B24-F", [15m] = "MV-B15"
-    };
-
-    private static readonly IReadOnlyDictionary<decimal, string> DrawerBaseSkus = new Dictionary<decimal, string>
-    {
-        [30m] = "MV-DB30-4", [24m] = "MV-DB24-4", [15m] = "MV-BWB15-PS"
     };
 
     private static readonly IReadOnlyDictionary<decimal, string> WallSkus = new Dictionary<decimal, string>
@@ -71,7 +64,8 @@ public sealed partial class WallSolver
         for (var r = 0; r < runs.Count; r++)
         {
             var runStart = x;
-            x = PlaceRun(items, runs[r], policy, x);
+            var slots = PlaceRun(items, runs[r], policy, x);
+            x = slots.Count > 0 ? slots[^1].Right : x;
 
             if (policy.WantCounter)
             {
@@ -80,7 +74,7 @@ public sealed partial class WallSolver
 
             if (tallsAllowed)
             {
-                PlaceWallCabinets(items, runStart, x, wall, keepOuts, policy);
+                PlaceUppers(items, slots, wall, keepOuts, policy);
             }
 
             if (r < runs.Count - 1 && tallQueue.Count > 0)
@@ -154,41 +148,53 @@ public sealed partial class WallSolver
         return runs;
     }
 
-    private decimal PlaceRun(List<PlacedItem> items, List<decimal> run, Policy policy, decimal x)
+    /// <summary>Lays a run out left to right and returns the slots, so the uppers can match them.</summary>
+    private List<PlacedItem> PlaceRun(List<PlacedItem> items, List<decimal> run, Policy policy, decimal x)
     {
-        // A workbench needs drawers where you stand: put them at the middle of the run.
-        var drawerSlots = policy.PreferDrawers ? DrawerSlots(run) : new HashSet<int>();
+        var kneeIndex = KneeSlot(run, policy);
+        var slots = new List<PlacedItem>();
 
         for (var i = 0; i < run.Count; i++)
         {
             var width = run[i];
-            var skus = drawerSlots.Contains(i) ? DrawerBaseSkus
-                : policy.PreferFullDoors ? FullDoorBaseSkus
-                : DoorBaseSkus;
 
-            items.Add(FromCatalog(skus[width], x, 0m, Zone.Base));
+            slots.Add(i == kneeIndex
+                ? new PlacedItem(string.Empty, x, 0m, width, Constants.BaseHeight, 24m, Zone.KneeSpace)
+                : FromCatalog(BaseSkus[width], x, 0m, Zone.Base));
+
             x += width;
         }
 
-        return x;
+        items.AddRange(slots);
+
+        return slots;
     }
 
-    private static HashSet<int> DrawerSlots(List<decimal> run)
+    /// <summary>
+    /// Which slot becomes the open knee space: a 24" or 30" module nearest the middle, never the
+    /// first or last, so the counter always lands on a cabinet at both ends.
+    /// </summary>
+    private static int KneeSlot(List<decimal> run, Policy policy)
     {
-        if (run.Count == 0)
+        if (!policy.WantKneeSpace || !policy.WantCounter || run.Count < 3)
         {
-            return new HashSet<int>();
+            return -1;
         }
 
         var centre = run.Count / 2;
-        var slots = new HashSet<int> { centre };
 
-        if (run.Count >= 4)
+        for (var offset = 0; offset < run.Count; offset++)
         {
-            slots.Add(Math.Max(0, centre - 1));
+            foreach (var index in new[] { centre - offset, centre + offset })
+            {
+                if (index >= 1 && index <= run.Count - 2 && (run[index] == 24m || run[index] == 30m))
+                {
+                    return index;
+                }
+            }
         }
 
-        return slots;
+        return -1;
     }
 
     private decimal PlaceTall(List<PlacedItem> items, decimal width, decimal x)
@@ -220,34 +226,41 @@ public sealed partial class WallSolver
         items.Add(new PlacedItem(stock.Sku, left, Constants.BaseHeight, runWidth, stock.Thickness, stock.Depth, Zone.Counter));
     }
 
-    private void PlaceWallCabinets(
+    /// <summary>
+    /// One upper per slot below, width-matched. Over a knee space that is a 15" bridge hung on the
+    /// datum, which is what leaves head room for whoever is sitting there.
+    /// </summary>
+    private void PlaceUppers(
         List<PlacedItem> items,
-        decimal left,
-        decimal right,
+        IReadOnlyList<PlacedItem> slots,
         Wall wall,
         IReadOnlyList<KeepOut> keepOuts,
         Policy policy)
     {
-        var x = left;
-
-        while (x < right)
+        foreach (var slot in slots)
         {
-            var width = new[] { 30m, 24m, 15m }.FirstOrDefault(w => x + w <= right);
+            var isKnee = slot.Zone == Zone.KneeSpace;
+            var table = isKnee ? ShortWallSkus : WallSkus;
 
-            if (width == 0m)
+            if (!table.TryGetValue(slot.Width, out var sku))
             {
-                return;
+                continue;
             }
 
-            var cabinet = FromCatalog(WallSkus[width], x, Constants.DatumTop - 30m, Zone.Wall);
+            var height = isKnee ? 15m : 30m;
+            var upper = FromCatalog(sku, slot.X, Constants.DatumTop - height, Zone.Wall);
 
-            if (!keepOuts.Any(k => k.Blocks(cabinet)))
+            if (keepOuts.Any(k => k.Blocks(upper)))
             {
-                items.Add(cabinet);
-                TryStack(items, policy, wall, keepOuts, x, width);
+                continue;
             }
 
-            x += width;
+            items.Add(upper);
+
+            if (!isKnee)
+            {
+                TryStack(items, policy, wall, keepOuts, slot.X, slot.Width);
+            }
         }
     }
 

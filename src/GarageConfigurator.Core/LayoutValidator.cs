@@ -19,6 +19,7 @@ public sealed class LayoutValidator
         ValidateVerticalGrammar(layout, wall, violations);
         ValidateHorizontalGrammar(layout, wall, violations);
         ValidateCounterRules(layout, violations);
+        ValidateKneeSpaces(layout, violations);
 
         return violations;
     }
@@ -26,7 +27,7 @@ public sealed class LayoutValidator
     /// <summary>Bases, talls and fillers — the items that stand on the floor and consume wall length.</summary>
     private static IReadOnlyList<PlacedItem> FloorRun(Layout layout) =>
         layout.Items
-            .Where(i => i.Zone is Zone.Base or Zone.Tall or Zone.Filler)
+            .Where(i => i.Zone is Zone.Base or Zone.Tall or Zone.Filler or Zone.KneeSpace)
             .OrderBy(i => i.X)
             .ToList();
 
@@ -213,6 +214,50 @@ public sealed class LayoutValidator
         }
     }
 
+    /// <summary>
+    /// A knee space is a cabinet-module gap someone can sit in: 24" or 30" wide, one per run, with a
+    /// base cabinet on each side so the counter has something to land on.
+    /// </summary>
+    private void ValidateKneeSpaces(Layout layout, List<Violation> violations)
+    {
+        foreach (var knee in layout.Items.Where(i => i.Zone == Zone.KneeSpace))
+        {
+            if (knee.Width != 24m && knee.Width != 30m)
+            {
+                violations.Add(new Violation(
+                    ViolationCode.KneeSpaceWrongWidth,
+                    $"A knee space is 24\" or 30\" wide so the counter lands on cabinet modules; this one is {knee.Width}\".")); 
+            }
+
+            if (!string.IsNullOrEmpty(knee.Sku))
+            {
+                violations.Add(new Violation(
+                    ViolationCode.KneeSpaceMustHaveNoSku,
+                    "A knee space is an open gap, not a cabinet — it cannot carry a SKU.",
+                    knee.Sku));
+            }
+        }
+
+        foreach (var run in ContiguousBaseRuns(layout))
+        {
+            var knees = run.Where(i => i.Zone == Zone.KneeSpace).ToList();
+
+            if (knees.Count > 1)
+            {
+                violations.Add(new Violation(
+                    ViolationCode.TooManyKneeSpaces,
+                    $"A counter run takes one knee space; this run has {knees.Count}."));
+            }
+
+            if (knees.Count > 0 && (run[0].Zone == Zone.KneeSpace || run[^1].Zone == Zone.KneeSpace))
+            {
+                violations.Add(new Violation(
+                    ViolationCode.KneeSpaceAtRunEnd,
+                    "A knee space needs a base cabinet on both sides — it cannot start or end a run."));
+            }
+        }
+    }
+
     private void ValidateCounterRules(Layout layout, List<Violation> violations)
     {
         var runs = ContiguousBaseRuns(layout);
@@ -326,7 +371,10 @@ public sealed class LayoutValidator
         var runs = new List<IReadOnlyList<PlacedItem>>();
         var current = new List<PlacedItem>();
 
-        foreach (var cabinet in layout.Items.Where(i => i.Zone == Zone.Base).OrderBy(i => i.X))
+        // A knee space is part of the run it sits in: the counter has to cover it.
+        foreach (var cabinet in layout.Items
+                     .Where(i => i.Zone is Zone.Base or Zone.KneeSpace)
+                     .OrderBy(i => i.X))
         {
             if (current.Count > 0 && current[^1].Right != cabinet.X)
             {

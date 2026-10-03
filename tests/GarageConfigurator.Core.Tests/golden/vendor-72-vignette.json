@@ -1,0 +1,144 @@
+{
+  "fixture": "vendor-72-vignette",
+  "goal": "Workbench",
+  "failure": null,
+  "notices": [],
+  "options": [
+    {
+      "label": "Recommended",
+      "standard": {
+        "listTotal": 2721.04,
+        "footprint": [
+          "MV-B24-F @0-24 y0",
+          "MV-CTHW7425 @0-72 y34.5",
+          "MV-W2430 @0-24 y54",
+          "(knee space) @24-48 y0",
+          "MV-W2415 @24-48 y69",
+          "MV-B24-F @48-72 y0",
+          "MV-W2430 @48-72 y54"
+        ],
+        "lineItems": [
+          "MV-B24-F x2",
+          "MV-CTHW7425 x1",
+          "MV-W2430 x2",
+          "MV-W2415 x1"
+        ]
+      },
+      "premiere": {
+        "listTotal": 3465.52,
+        "footprint": [
+          "MV-DB24-3 @0-24 y0",
+          "MV-CTHW7425 @0-72 y34.5",
+          "MV-W2430 @0-24 y54",
+          "(knee space) @24-48 y0",
+          "MV-W2415 @24-48 y69",
+          "MV-DB24-4 @48-72 y0",
+          "MV-W2430 @48-72 y54"
+        ],
+        "lineItems": [
+          "MV-DB24-3 x1",
+          "MV-DB24-4 x1",
+          "MV-CTHW7425 x1",
+          "MV-W2430 x2",
+          "MV-W2415 x1"
+        ]
+      }
+    },
+    {
+      "label": "Another option",
+      "standard": {
+        "listTotal": 2954.68,
+        "footprint": [
+          "MV-B30-F @0-30 y0",
+          "MV-CTHW7425 @0-69 y34.5",
+          "MV-W3030 @0-30 y54",
+          "(knee space) @30-54 y0",
+          "MV-W2415 @30-54 y69",
+          "MV-B15 @54-69 y0",
+          "MV-W1530 @54-69 y54",
+          "MV-F384 @69-72 y0"
+        ],
+        "lineItems": [
+          "MV-B30-F x1",
+          "MV-B15 x1",
+          "MV-CTHW7425 x1",
+          "MV-W3030 x1",
+          "MV-W2415 x1",
+          "MV-W1530 x1",
+          "MV-F384 x1"
+        ]
+      },
+      "premiere": {
+        "listTotal": 3311.08,
+        "footprint": [
+          "MV-DB30-3 @0-30 y0",
+          "MV-CTHW7425 @0-69 y34.5",
+          "MV-W3030 @0-30 y54",
+          "(knee space) @30-54 y0",
+          "MV-W2415 @30-54 y69",
+          "MV-B15 @54-69 y0",
+          "MV-W1530 @54-69 y54",
+          "MV-F384 @69-72 y0"
+        ],
+        "lineItems": [
+          "MV-DB30-3 x1",
+          "MV-B15 x1",
+          "MV-CTHW7425 x1",
+          "MV-W3030 x1",
+          "MV-W2415 x1",
+          "MV-W1530 x1",
+          "MV-F384 x1"
+        ]
+      }
+    },
+    {
+      "label": "More storage",
+      "standard": {
+        "listTotal": 4305.04,
+        "footprint": [
+          "MV-B24-F @0-24 y0",
+          "MV-CTHW7425 @0-69 y34.5",
+          "MV-W2430 @0-24 y54",
+          "MV-B15 @24-39 y0",
+          "MV-W1530 @24-39 y54",
+          "MV-B15 @39-54 y0",
+          "MV-W1530 @39-54 y54",
+          "MV-B15 @54-69 y0",
+          "MV-W1530 @54-69 y54",
+          "MV-F384 @69-72 y0"
+        ],
+        "lineItems": [
+          "MV-B24-F x1",
+          "MV-B15 x3",
+          "MV-CTHW7425 x1",
+          "MV-W2430 x1",
+          "MV-W1530 x3",
+          "MV-F384 x1"
+        ]
+      },
+      "premiere": {
+        "listTotal": 4639.66,
+        "footprint": [
+          "MV-DB24-3 @0-24 y0",
+          "MV-CTHW7425 @0-69 y34.5",
+          "MV-W2430 @0-24 y54",
+          "MV-B15 @24-39 y0",
+          "MV-W1530 @24-39 y54",
+          "MV-B15 @39-54 y0",
+          "MV-W1530 @39-54 y54",
+          "MV-B15 @54-69 y0",
+          "MV-W1530 @54-69 y54",
+          "MV-F384 @69-72 y0"
+        ],
+        "lineItems": [
+          "MV-DB24-3 x1",
+          "MV-B15 x3",
+          "MV-CTHW7425 x1",
+          "MV-W2430 x1",
+          "MV-W1530 x3",
+          "MV-F384 x1"
+        ]
+      }
+    }
+  ]
+}

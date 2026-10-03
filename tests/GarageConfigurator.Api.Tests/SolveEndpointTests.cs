@@ -13,14 +13,14 @@ public class SolveEndpointTests
         var response = ApiFixture.Api().Solve(new SolveRequest(TwentyFootWall, "Balanced"));
 
         response.Failure.ShouldBeNull();
-        response.Layouts.ShouldNotBeEmpty();
-        response.Layouts.ShouldAllBe(l => l.SubtotalList > 0m);
+        response.Options.ShouldNotBeEmpty();
+        response.Options.ShouldAllBe(o => o.Standard.SubtotalList > 0m && o.Premiere.SubtotalList > 0m);
     }
 
     [Fact]
     public void Each_returned_layout_carries_line_items_the_cart_can_use()
     {
-        var layout = ApiFixture.Api().Solve(new SolveRequest(TwentyFootWall, "Workbench")).Layouts.First();
+        var layout = ApiFixture.Api().Solve(new SolveRequest(TwentyFootWall, "Workbench")).Options.First().Standard;
 
         layout.LineItems.ShouldNotBeEmpty();
         layout.LineItems.ShouldAllBe(i => i.Quantity > 0 && i.ExtendedList == i.UnitList * i.Quantity);
@@ -31,7 +31,7 @@ public class SolveEndpointTests
     {
         var response = ApiFixture.Api().Solve(new SolveRequest(TwentyFootWall, "Storage"));
 
-        response.Layouts.ShouldAllBe(l => l.SubtotalPromo <= l.SubtotalList);
+        response.Options.ShouldAllBe(o => o.Standard.SubtotalPromo <= o.Standard.SubtotalList);
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public class SolveEndpointTests
     {
         var response = ApiFixture.Api().Solve(new SolveRequest(new WallDto(12m, 96m), "Balanced"));
 
-        response.Layouts.ShouldBeEmpty();
+        response.Options.ShouldBeEmpty();
         response.Failure!.Code.ShouldBe("WallTooShort");
         response.Failure.Message.ShouldBe("This wall is too short for our smallest cabinet.");
     }

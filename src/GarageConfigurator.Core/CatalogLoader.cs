@@ -29,7 +29,8 @@ public static class CatalogLoader
             ReadLine(root.GetProperty("line")),
             cabinets,
             countertops,
-            ReadConstants(root.GetProperty("constants")));
+            ReadConstants(root.GetProperty("constants")),
+            ReadAliases(root));
     }
 
     /// <summary>
@@ -58,6 +59,21 @@ public static class CatalogLoader
         }
 
         return new PriceMap(prices);
+    }
+
+    private static IReadOnlyDictionary<string, string> ReadAliases(JsonElement root)
+    {
+        var aliases = new Dictionary<string, string>(StringComparer.Ordinal);
+
+        if (root.TryGetProperty("skuAliases", out var map))
+        {
+            foreach (var entry in map.EnumerateObject())
+            {
+                aliases[entry.Name] = entry.Value.GetString()!;
+            }
+        }
+
+        return aliases;
     }
 
     /// <summary>

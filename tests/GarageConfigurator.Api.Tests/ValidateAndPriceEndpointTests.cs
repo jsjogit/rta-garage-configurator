@@ -8,7 +8,7 @@ public class ValidateAndPriceEndpointTests
     private static readonly WallDto Wall = new(240m, 96m);
 
     private static LayoutDto SolvedLayout(GarageApi api) =>
-        api.Solve(new SolveRequest(Wall, "Balanced")).Layouts.First().Layout;
+        api.Solve(new SolveRequest(Wall, "Balanced")).Options.First().Standard.Layout;
 
     [Fact]
     public void A_layout_the_solver_produced_validates_clean()

@@ -43,8 +43,22 @@
 | 2026-10-02 | The API refuses to start in a deployed environment without `DesignStorageConnection` | Falling back to in-memory would hand customers share links that vanish on the next restart — a silent failure worth a loud startup error. |
 | 2026-10-02 | A loaded design is repriced on read, never served from stored money | Prices come from nopCommerce at request time. A design saved during a promotion must not quote that promotion back months later. |
 | 2026-10-02 | openapi.yaml is hand-written, with a test that walks the real [HttpTrigger] routes | The generated-spec packages for the isolated worker are fragile; a sync test gives the same protection against drift in both directions. |
+| 2026-10-02 | Knee spaces are `Zone.KneeSpace` with an empty SKU, excluded from line items | A knee space is absence of a cabinet, not a product. Inventing a SKU for it would violate "never invent a SKU" and would put a phantom line on the cart. It still consumes wall length and the counter still has to cover it. |
+| 2026-10-02 | The knee space is the middle module of a run, converted in place | Converting a slot rather than inserting one keeps the composition arithmetic untouched: a 3x24 run becomes B24 + knee(24) + B24 at the same 72" total, which is exactly the vendor vignette. |
+| 2026-10-02 | Uppers are placed one per floor slot, width-matched, instead of greedily tiled | Greedy tiling cannot guarantee the 15" bridge lands on the knee space. One-per-slot gives the vignette shape for free and is simpler. |
+| 2026-10-02 | Tier replaces the per-policy base SKU choice | With Standard/Premiere owning base SKUs, `PreferDrawers` and `PreferFullDoors` had nothing left to decide. Workbench scoring no longer needs a drawer-bank term: the Premiere tier always has them. |
+| 2026-10-02 | Premiere gives the first base in each run the 3-drawer unit and the rest the 4-drawer | Matches the vendor vignette (DB24-3 then DB24-4). The rule behind it is a guess — see "Needs Joshua". |
+| 2026-10-02 | The solver no longer emits MV-BWB15-PS | Base SKUs are now a tier decision and the waste pullout is neither a door base nor a drawer base. It remains valid in a hand-edited layout; revisit as an add-on if customers want a shop bin. |
+| 2026-10-02 | `Layout.LineItems` is computed on access, not stored | Found by the tier work: it was an auto-property with an initializer, so a record `with { Items = ... }` copied the stale backing field. Every edited layout would have been quoted against the layout it used to be. |
+| 2026-10-02 | SKU aliases resolve at the catalogue and at the API edge | `MV-B24-SF` → `MV-B24-F`, `MV-B30-SF` → `MV-B30-F`. Aliases never become catalogue entries and the solver only ever emits canonical SKUs. |
 
 ## Needs Joshua
+- **Is the 15" bridge width-matched to the knee space, or can a 30"-wide IC-MW-W3015 span a 24" knee
+  space?** We currently require a width match (W2415 over a 24" knee, IC-MW-W3015 over a 30" knee),
+  which is what the vendor vignette shows. If a wider bridge is allowed the solver gains layouts on
+  walls where the widths do not line up.
+- Does Premiere really mean 3-drawer first then 4-drawer, or is the drawer count chosen some other way?
+  The vendor vignette shows DB24-3 then DB24-4 and we inferred a rule from one example.
 - An 84" ceiling is the knife edge: an 84" pantry fits only if assembled upright in place (its tipping
   diagonal is ~87"). Should `minCeilingForTallsAndWalls` be raised above 84?
 - Confirm the electrical-panel clearance numbers (30" wide, floor to 78") with ops/legal before launch.

@@ -30,7 +30,7 @@ public class SolveRankingTests
     {
         var wall = WallFixtures.Get(fixtureId);
 
-        foreach (var layout in Solver.Solve(wall, goal, Prices).Layouts)
+        foreach (var layout in Solver.Solve(wall, goal, Prices).Options.SelectMany(o => o.Tiers))
         {
             Validator.Validate(layout, wall).ShouldBeEmpty();
         }
@@ -40,14 +40,14 @@ public class SolveRankingTests
     [MemberData(nameof(EveryFixtureAndGoal))]
     public void Never_more_than_three_layouts_come_back(string fixtureId, Goal goal)
     {
-        Solver.Solve(WallFixtures.Get(fixtureId), goal, Prices).Layouts.Count.ShouldBeLessThanOrEqualTo(3);
+        Solver.Solve(WallFixtures.Get(fixtureId), goal, Prices).Options.Count.ShouldBeLessThanOrEqualTo(3);
     }
 
     [Theory]
     [MemberData(nameof(EveryFixtureAndGoal))]
     public void Returned_layouts_are_distinct_from_one_another(string fixtureId, Goal goal)
     {
-        var layouts = Solver.Solve(WallFixtures.Get(fixtureId), goal, Prices).Layouts;
+        var layouts = Solver.Solve(WallFixtures.Get(fixtureId), goal, Prices).Options.Select(o => o.Standard).ToList();
 
         var signatures = layouts.Select(l => string.Join(
             "|",
@@ -60,7 +60,7 @@ public class SolveRankingTests
     [MemberData(nameof(EveryFixtureAndGoal))]
     public void A_wall_never_gets_more_than_one_waste_pullout(string fixtureId, Goal goal)
     {
-        var layouts = Solver.Solve(WallFixtures.Get(fixtureId), goal, Prices).Layouts;
+        var layouts = Solver.Solve(WallFixtures.Get(fixtureId), goal, Prices).Options.SelectMany(o => o.Tiers).ToList();
 
         foreach (var layout in layouts)
         {
@@ -72,14 +72,14 @@ public class SolveRankingTests
     public void The_first_layout_is_the_recommended_one()
     {
         Solver.Solve(WallFixtures.Get("single-car-clean"), Goal.Balanced, Prices)
-            .Layouts[0].Label.ShouldBe("Recommended");
+            .Options[0].Label.ShouldBe("Recommended");
     }
 
     [Fact]
     public void Every_layout_is_labelled_for_the_results_card()
     {
         Solver.Solve(WallFixtures.Get("single-car-clean"), Goal.Balanced, Prices)
-            .Layouts.ShouldAllBe(l => l.Label != null && l.Label.Length > 0);
+            .Options.ShouldAllBe(o => o.Label.Length > 0);
     }
 
     [Fact]
@@ -87,8 +87,8 @@ public class SolveRankingTests
     {
         var result = Solver.Solve(WallFixtures.Get("two-car-panel"), Goal.Workbench, Prices);
 
-        result.Layouts.ShouldNotBeEmpty();
-        result.Layouts.SelectMany(l => l.Items)
+        result.Options.ShouldNotBeEmpty();
+        result.Options.SelectMany(o => o.Standard.Items)
             .ShouldAllBe(i => i.Right <= 173m || i.X >= 203m || i.Y >= 78m);
     }
 }

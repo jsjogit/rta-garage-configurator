@@ -19,6 +19,9 @@ need confirmation from product/ops; implement them as configurable constants wit
 - **Kit:** MV-GARAGE-KIT-6 is a virtual SKU used only to list this page on marketplaces — not a real
   assortment. The solver never emits it and never price-matches a layout against it. Every layout is
   quoted and added to cart à la carte.
+- **SKU aliases:** vendor sheets use a "-SF" suffix for the same box we list as "-F".
+  `MV-B24-SF` → `MV-B24-F`, `MV-B30-SF` → `MV-B30-F`. Aliases resolve to the canonical SKU on the way
+  in; the solver only ever emits canonical SKUs. The map lives in catalog.json `skuAliases`.
 - RV-BWB18GRAY / RV-BWB18GRAYPREMIER are 18" waste-pullout inserts from the kitchen line and there is
   no 18" garage base. Exclude from Phase 1 solver output. **[VERIFY]** whether they belong on the page at all.
 
@@ -26,9 +29,12 @@ need confirmation from product/ops; implement them as configurable constants wit
 - Base run top: 34.5. Counter top: 36.0 (34.5 + 1.5).
 - Wall cabinet bottom above a counter run: 54.0 (18" clearance). → 30" wall top = 84.0.
 - Pantry/tall top = 84.0. This is the horizontal datum line: **wall-cabinet tops and pantry tops align.**
-- 15" wall cabinets may be used (a) above a 30" wall (top at 99.0) when ceiling ≥ 108, or
-  (b) alone above zones where a full 30" wall is blocked (window, panel) when there is ≥15" clear.
-  In case (b) the top aligns to the 84" datum, so the bottom sits at 69.0.
+- 15"-high wall cabinets (MV-W2415, IC-MW-W3015) always top-align to the 84" datum, so their bottom
+  sits at 69.0. Their uses, in order:
+  - **(primary) a bridge above a knee space** — centred over the gap and width-matched to it, leaving
+    head room where someone sits. This is what the vendor vignettes show.
+  - (secondary) stacked above a 30" wall (top at 99.0) when ceiling ≥ 108.
+  - (secondary) alone above a zone where a full 30" wall is blocked (window, panel), given ≥15" clear.
 - Nothing may be placed above a tall cabinet.
 - Ceiling height is a **required customer input**, defaulting to 96 (8 ft). It gates what may be placed:
   - **ceiling ≥ 108** — a 15" wall may stack on a 30" wall (top at 99.0).
@@ -71,7 +77,25 @@ need confirmation from product/ops; implement them as configurable constants wit
   capped at 98". A longer base run is split into separate counter runs.
 - A placed countertop's width is its **cut** width; the constraint is the stock top it was cut from, which
   must be at least as wide as the run. A 50" top cannot be placed 60" wide.
+- A counter run may include **one open knee space**: a 24" or 30" gap between two base cabinets where
+  someone can sit. Rules:
+  - Width is exactly 24" or 30" — it is a cabinet-module gap, not an arbitrary one.
+  - At most one per counter run.
+  - Never at either end of the run: a knee space must have a base cabinet on both sides.
+  - The counter spans the whole run including the knee space, under the usual overhang limits
+    (preferred ≤ 2" per side, max 4").
+  - A knee space is **not a product**. It occupies wall length and carries no SKU, so it never reaches
+    the quote or the cart. It is `Zone.KneeSpace` with an empty SKU.
 - Drawer banks (DB) should be under counter where possible; a counter run with ≥1 DB is a "workbench".
+
+## Tiers
+Every returned layout comes in two tiers that share one footprint — same positions, same widths, same
+counter, same wall cabinets. Only the base cabinets and therefore the price differ:
+- **Standard** — full-height door bases: `MV-B24-F` (24"), `MV-B30-F` (30").
+- **Premiere** — drawer bases where the width allows: `MV-DB24-3` / `MV-DB24-4` (24"),
+  `MV-DB30-3` / `MV-DB30-4` (30"). The first base in each run takes the 3-drawer unit and the rest
+  take the 4-drawer unit.
+15"-wide positions have no drawer equivalent in the line, so they are identical in both tiers.
 
 ## Goal heuristics (scoring, higher = better)
 - **Workbench:** maximise counter length, require ≥1 DB in the run, prefer DB24-4/DB30-4 nearest centre,
@@ -79,7 +103,10 @@ need confirmation from product/ops; implement them as configurable constants wit
 - **Storage:** maximise cubic storage per dollar; favour talls and 30"-wide units; counters optional.
 - **HideTheMess:** favour full-height doors (B-F) and talls; minimise open counter; fill the wall end-to-end.
 - **Balanced:** one workbench run (72 or 96) centred, flanked by talls; walls above counter.
-- Universal penalties: unused wall > 6"; mixed 15/24/30 widths in one run (mild); counter overhang > 2".
+- Universal bonus: a knee space with a **width-matched 15" wall bridge** above it is strongly preferred —
+  this is the shape the vendor vignettes sell.
+- Universal penalties: unused wall > 6"; mixed 15/24/30 widths in one run (mild); counter overhang > 2";
+  a 30"-high wall cabinet hung above a knee space (it drops into the head room the knee space exists for).
 - No budget constraint in V1 — `budgetMax` is deferred to a later phase.
 - Tie-break: lower price, then fewer line items.
 

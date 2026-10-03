@@ -12,5 +12,6 @@
   { "id": "ceiling-exactly-84", "length": 240, "ceiling": 84,  "obstructions": [], "goal": "Storage", "expect": "talls allowed — 84 is the boundary, not below it" },
   { "id": "tall-ceiling-120",  "length": 240, "ceiling": 120, "obstructions": [], "goal": "Storage", "expect": "15in wall may stack on 30in wall" },
   { "id": "ceiling-too-low",   "length": 240, "ceiling": 30,  "obstructions": [], "goal": "Balanced", "expect": "no valid layout", "expectReason": "CeilingTooLow" },
+  { "id": "vendor-72-vignette", "length": 72,  "ceiling": 96,  "obstructions": [], "goal": "Workbench", "expect": "W2430 + W2415 + W2430 over B24-F + knee space + B24-F under CTHW7425" },
   { "id": "too-short",         "length": 12,  "ceiling": 96,  "obstructions": [], "goal": "Balanced", "expect": "no valid layout", "expectReason": "WallTooShort" }
 ]

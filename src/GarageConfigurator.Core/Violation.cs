@@ -32,6 +32,12 @@ public enum ViolationCode
     CounterRunTooLong,
     CountersJoinedEndToEnd,
 
+    // Knee spaces
+    KneeSpaceWrongWidth,
+    KneeSpaceAtRunEnd,
+    TooManyKneeSpaces,
+    KneeSpaceMustHaveNoSku,
+
     // Obstructions
     ItemOverlapsObstruction
 }
