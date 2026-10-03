@@ -33,7 +33,7 @@ describe('Results', () => {
     }
   })
 
-  it('switching to drawers reprices that sheet without touching the others', async () => {
+  it('switching tier reprices that sheet without touching the others', async () => {
     const user = userEvent.setup()
     show(vignette as SolveResponse)
 
@@ -41,13 +41,13 @@ describe('Results', () => {
     const before = first.querySelector('.title-block')!.textContent
     const secondBefore = second.querySelector('.title-block')!.textContent
 
-    await user.click(within(first).getByRole('button', { name: /drawers/i }))
+    await user.click(within(first).getByRole('button', { name: /premiere/i }))
 
     expect(first.querySelector('.title-block')!.textContent).not.toBe(before)
     expect(second.querySelector('.title-block')!.textContent).toBe(secondBefore)
   })
 
-  it('drawers cost more than doors', async () => {
+  it('premiere costs more than standard', async () => {
     const user = userEvent.setup()
     show(vignette as SolveResponse)
     const sheet = screen.getAllByRole('article')[0]
@@ -55,7 +55,7 @@ describe('Results', () => {
     const price = () => Number(sheet.querySelector('.title-block .v')!.textContent!.replace(/[^0-9]/g, ''))
     const doors = price()
 
-    await user.click(within(sheet).getByRole('button', { name: /drawers/i }))
+    await user.click(within(sheet).getByRole('button', { name: /premiere/i }))
 
     expect(price()).toBeGreaterThan(doors)
   })
@@ -84,6 +84,18 @@ describe('Results', () => {
     expect(screen.getByText(/too short for our smallest cabinet/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /change the measurements/i })).toBeInTheDocument()
     expect(screen.queryAllByRole('article')).toHaveLength(0)
+  })
+
+  it('says what each tier actually changes, since the names do not', async () => {
+    const user = userEvent.setup()
+    show(vignette as SolveResponse)
+    const sheet = screen.getAllByRole('article')[0]
+
+    expect(sheet).toHaveTextContent(/full-height doors/i)
+
+    await user.click(within(sheet).getByRole('button', { name: /premiere/i }))
+
+    expect(sheet).toHaveTextContent(/drawer banks/i)
   })
 
   it('sends the cart button to the store cart', () => {

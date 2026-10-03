@@ -5,6 +5,11 @@ import { Elevation, formatInches } from './Elevation'
 import { Notices } from './Notices'
 import { money } from './Money'
 
+const TIER_NOTES: Record<Tier, string> = {
+  Standard: 'Full-height doors on the base cabinets.',
+  Premiere: 'Drawer banks instead, wherever the width allows.',
+}
+
 export function Results({
   response,
   wall,
@@ -78,17 +83,16 @@ function Sheet({ option, rank, wall }: { option: LayoutOptionDto; rank: number; 
           id={`sheet-${rank}-${tier.toLowerCase()}`}
         />
 
-        <div className="tier-switch" role="group" aria-label="Cabinet level">
-          {(['Standard', 'Premiere'] as Tier[]).map((option_) => (
-            <button
-              type="button"
-              key={option_}
-              aria-pressed={tier === option_}
-              onClick={() => setTier(option_)}
-            >
-              {option_ === 'Standard' ? 'Doors' : 'Drawers'}
-            </button>
-          ))}
+        <div>
+          <div className="tier-switch" role="group" aria-label="Cabinet tier">
+            {(['Standard', 'Premiere'] as Tier[]).map((name) => (
+              <button type="button" key={name} aria-pressed={tier === name} onClick={() => setTier(name)}>
+                {name}
+              </button>
+            ))}
+          </div>
+          {/* The names are the brand's; this line is what the customer is actually choosing between. */}
+          <p className="tier-note">{TIER_NOTES[tier]}</p>
         </div>
 
         <ul className="lines">

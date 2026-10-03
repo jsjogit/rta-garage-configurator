@@ -62,12 +62,9 @@
 | 2026-10-02 | Web fixtures are exported from the API by a test that also guards them | `WebFixtureExportTests` writes real /solve payloads into web/src/fixtures and fails when they drift. The web renders exactly what the API returns rather than a hand-written guess. |
 | 2026-10-02 | Dev-only `?demo=<fixture>` renders a stored payload | `func` is not installed here, so the UI would otherwise be undevelopable and unscreenshottable. Guarded by `import.meta.env.DEV`, so it never ships. |
 | 2026-10-02 | Result labels are now guaranteed unique | Found in the browser: 28 of 52 fixture/goal pairs produced two cards both reading "Another option", and React warned on the duplicate key. Labels are picked from the biggest real difference, never reused. |
-| 2026-10-02 | The tier switch says "Doors" and "Drawers", not "Standard" and "Premiere" | The customer is choosing between fronts, not tiers. The API keeps the tier names — see "Needs Joshua" if merchandising wants the brand names on screen. |
+| 2026-10-02 | The tier switch shows "Standard" and "Premiere" | Joshua: the brand names are more compelling. Because the names do not say what changes, a one-line caption under the switch does — "Full-height doors on the base cabinets" / "Drawer banks instead, wherever the width allows" — so the customer still knows what they are buying. |
 
 ## Needs Joshua
-- Should the tier switch show the brand names ("Standard" / "Premiere") or what the customer is
-  actually choosing between ("Doors" / "Drawers")? The UI currently says Doors/Drawers; the API keeps
-  Standard/Premiere either way. This is a merchandising call, not a technical one.
 - **Is the 15" bridge width-matched to the knee space, or can a 30"-wide IC-MW-W3015 span a 24" knee
   space?** We currently require a width match (W2415 over a 24" knee, IC-MW-W3015 over a 30" knee),
   which is what the vendor vignette shows. If a wider bridge is allowed the solver gains layouts on
