@@ -18,7 +18,7 @@ export interface WallDraft {
 export const EMPTY_DRAFT: WallDraft = { length: 0, ceiling: 96, obstructions: [], goal: null, preset: null }
 
 const WALL_PRESETS = [
-  { label: 'Single-car back wall', inches: 120 },
+  { label: 'Single-car back wall', inches: 144 },
   { label: 'Two-car back wall', inches: 240 },
   { label: 'Three-car back wall', inches: 360 },
 ]

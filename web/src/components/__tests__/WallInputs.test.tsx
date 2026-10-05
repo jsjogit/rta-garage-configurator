@@ -170,7 +170,7 @@ describe('WallInputs', () => {
       lengths.push(wallState().length)
     }
 
-    expect(lengths).toEqual([120, 240, 360])
+    expect(lengths).toEqual([144, 240, 360])
   })
 
   it('lights only the quick pick that was chosen', async () => {

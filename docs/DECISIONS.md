@@ -92,7 +92,7 @@
 | 2026-10-05 | Doors and water heaters do not ask for a height | Both stand on the floor and block the full height a cabinet would use, so the two extra fields would only be a chance to type something wrong. |
 | 2026-10-05 | The page will not solve while an obstruction is off the wall or through the ceiling | The message says which one and why. Silently clamping it would solve a different wall from the one the customer described. |
 | 2026-10-05 | Dragging moves an obstruction along the wall only, snapped to half inches | Height and size stay typed: a free 2D drag on a 115px mobile strip would be more fiddle than help. Arrow keys move it an inch, shift-arrow a foot, so it is reachable without a mouse. |
-| 2026-10-05 | Quick picks are 10 ft, 20 ft and 30 ft back walls | Joshua: the single-car side wall duplicated the two-car back wall at 20 ft, so two of three chips said the same thing. Three distinct lengths plus the typed field cover more garages. 12 ft was offered as closer to a typical single-car interior; 10 ft chosen. |
+| 2026-10-05 | Quick picks are 12 ft, 20 ft and 30 ft back walls | Joshua: the single-car side wall duplicated the two-car back wall at 20 ft, so two of three chips said the same thing. Three distinct lengths plus the typed field cover more garages. Started at 10 ft; moved to 12 ft because single-car interiors run 12–14 ft and the hint says round down, so 10 ft would under-fill most of them. |
 
 ## Needs Joshua
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a

@@ -20,7 +20,7 @@ Secondary: share-link created, design emailed, "talk to a designer" clicks.
 
 ## Inputs (Phase 1)
 1. **Wall length** — number input in inches with ft/in helper, OR quick-picks:
-   - Single-car back wall ≈ 120" (10 ft)
+   - Single-car back wall ≈ 144" (12 ft)
    - Two-car back wall ≈ 240" (20 ft) / three-car ≈ 360" (30 ft)
    - "I'll measure" (free input)
 1b. **Ceiling height** — same step as wall length, one-tap quick-picks, default 8 ft:
