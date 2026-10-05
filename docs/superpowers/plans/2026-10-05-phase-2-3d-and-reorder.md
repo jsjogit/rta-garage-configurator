@@ -16,6 +16,24 @@
 
 **Spec:** `docs/superpowers/specs/2026-10-05-phase-2-3d-design.md`
 
+## Versions and branches (Joshua, 2026-10-05)
+
+1B and 1C are optional and independent. Either can be dropped without touching the other or 1A.
+
+| Version | Branch | Built from | Tasks |
+|---|---|---|---|
+| **1A** | `v1a` | today's Phase 1 (this commit) | — |
+| **1B** — reorder | `v1b-reorder` | `v1a` | 2, 3, 4 |
+| **1C** — 3D view | `v1c-3d` | `v1a` | 1, 5, 6, 7 |
+| **2.0** | `v2.0` | `v1a` + merge `v1b-reorder` + merge `v1c-3d` | 8, 9 |
+
+- **1C does not depend on 1B.**
+  - Task 7's `onReorder={editing ? onMove : undefined}` line is left out on `v1c-3d`.
+  - `v1c-3d` adds only the `'view_3d_opened'` event name.
+  - Both are restored when the branches merge into `v2.0`.
+- **The bundle check (Task 1) ships with 1C.** Its job is keeping Three.js lazy. `v2.0` runs it over everything.
+- **Each branch records its own decisions** in DECISIONS.md and is tested and browser-checked on its own before `v2.0`.
+
 ## Global Constraints
 
 - **No backend changes:** no changes to `src/`, `tests/`, `data/` or the API. Every layout change still goes through `POST /api/validate` + `POST /api/price`.

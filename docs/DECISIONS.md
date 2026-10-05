@@ -98,6 +98,7 @@
 | 2026-10-05 | 3D is plain Three.js, view-only, generated from the layout DTO | Fewest concepts for RTA's team to own: no React Three Fiber layer, no model files, one file that imports Three.js. A new SKU appears in 3D without anyone modelling it. |
 | 2026-10-05 | Reordering lives in the 2D editor, not in 3D | Dragging in 2D is a 1D problem we have already solved for obstructions; 3D drag means raycasting and constraint planes. Moves stay within their row and unbroken stretch, re-pack without gaps, and the API validator remains the authority. |
 | 2026-10-05 | `three` is added to web/ only, lazy-loaded | ~150 KB gzipped, fetched on the first "See it in 3D" so the main bundle does not grow. Core and the API gain nothing. |
+| 2026-10-05 | Phase 2 ships as optional versions: 1A (Phase 1), 1B reorder, 1C 3D, 2.0 all three | Joshua wants Phase 1's scope as tight as possible and is wary of the complexity in reorder and 3D. Each is its own branch built from 1A, so either can be dropped without touching the other. 2.0 is only the merge of the three plus the joint browser pass. |
 
 ## Needs Joshua
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a

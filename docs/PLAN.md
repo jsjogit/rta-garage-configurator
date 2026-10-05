@@ -44,6 +44,10 @@ Finish every session with `dotnet test` green and DECISIONS.md updated.
 
 ## Phase 2 — 3D view + reorder (design: docs/superpowers/specs/2026-10-05-phase-2-3d-design.md)
 
+Versions (Joshua, 2026-10-05): **1A** is Phase 1 as it stands (`v1a`). **1B** is Session 8 on `v1b-reorder`,
+and **1C** is Session 9 on `v1c-3d`. Each is built from 1A and each is optional. **2.0** merges all three
+(`v2.0`) and is where Session 10 runs.
+
 Goal: confidence to buy. View-only plain Three.js, built from the same layout data as the SVG; the
 only new edit is reordering cabinets, in the 2D editor. No stain toggle, no export, no AR.
 
