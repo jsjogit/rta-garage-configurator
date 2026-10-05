@@ -42,5 +42,25 @@ Finish every session with `dotnet test` green and DECISIONS.md updated.
 > Bicep for Static Web App + Function App + Table Storage + App Insights. GitHub Actions: build, test,
 > deploy to a `garage-dev` environment. README with runbook.
 
-## Phase 2 — 3D (Three.js scene, drag-to-rearrange, GLB/USDZ export, counter stain toggle)
-## Phase 3 — AI edges (photo intake via Azure OpenAI vision, intent chat, deterministic render → style pass, AR Quick Look)
+## Phase 2 — 3D view + reorder (design: docs/superpowers/specs/2026-10-05-phase-2-3d-design.md)
+
+Goal: confidence to buy. View-only plain Three.js, built from the same layout data as the SVG; the
+only new edit is reordering cabinets, in the 2D editor. No stain toggle, no export, no AR.
+
+### Session 8 — Reorder in the 2D editor
+> Read the Phase 2 design spec. Add web/src/editor/reorder.ts (row + unbroken-stretch rules, re-pack
+> from the stretch's left edge, fillers and counters fixed), useWallEditor.move, drag-to-reorder in
+> edit mode, Move left/right in CabinetPanel, arrow keys. One drop = one validate + price round trip.
+> Tests first.
+
+### Session 9 — 3D view
+> Extract web/src/geometry/fronts.ts from Elevation (snapshots must not change). Add
+> web/src/three/buildScene.ts (pure, unit-tested) and Wall3D.tsx (the only Three.js file: clamped
+> OrbitControls, Front view, render on demand, full disposal). "See it in 3D" toggle per card via
+> React.lazy; hidden without WebGL; falls back to 2D on error.
+
+### Session 10 — Polish + prototype build
+> Real-browser pass desktop + 390px, touch inside a scrolling page, view_3d_opened and
+> layout_reordered events, main-bundle size check in CI, memory check across cards and tiers, docs.
+
+## Phase 3 — AI edges (photo intake via Azure OpenAI vision, intent chat, deterministic render → style pass)

@@ -69,6 +69,7 @@ No photo upload, no 3D, no AI, no multi-wall rooms, no account requirement.
 No budget cap, and no cross-goal comparison (three layouts always share the chosen goal).
 
 ## Later phases (see PLAN.md)
-Phase 2: Three.js 3D scene, drag-to-rearrange, GLB/USDZ export.
+Phase 2: view-only Three.js 3D view per layout, and reordering cabinets in the 2D editor.
 Phase 3: photo intake (vision estimates wall length/obstructions), intent chat, deterministic-render →
-AI glamour pass, AR Quick Look.
+AI glamour pass.
+Not planned: counter stain toggle, GLB/USDZ export, AR.

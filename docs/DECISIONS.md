@@ -93,6 +93,11 @@
 | 2026-10-05 | The page will not solve while an obstruction is off the wall or through the ceiling | The message says which one and why. Silently clamping it would solve a different wall from the one the customer described. |
 | 2026-10-05 | Dragging moves an obstruction along the wall only, snapped to half inches | Height and size stay typed: a free 2D drag on a 115px mobile strip would be more fiddle than help. Arrow keys move it an inch, shift-arrow a foot, so it is reachable without a mouse. |
 | 2026-10-05 | Quick picks are 12 ft, 20 ft and 30 ft back walls | Joshua: the single-car side wall duplicated the two-car back wall at 20 ft, so two of three chips said the same thing. Three distinct lengths plus the typed field cover more garages. Started at 10 ft; moved to 12 ft because single-car interiors run 12–14 ft and the hint says round down, so 10 ft would under-fill most of them. |
+| 2026-10-05 | Phase 2's job is confidence to buy, not a 3D editor or sales assets | Joshua. Success is more cart adds from people who already have a layout; measured by `view_3d_opened` against `cart_add_all`. |
+| 2026-10-05 | No counter stain toggle, no GLB/USDZ export, no AR — anywhere in the MVP | Joshua: unnecessary, and the team must be able to build and own what ships. The stain toggle also had no SKUs behind it. Phase 3's AR Quick Look is removed with them. |
+| 2026-10-05 | 3D is plain Three.js, view-only, generated from the layout DTO | Fewest concepts for RTA's team to own: no React Three Fiber layer, no model files, one file that imports Three.js. A new SKU appears in 3D without anyone modelling it. |
+| 2026-10-05 | Reordering lives in the 2D editor, not in 3D | Dragging in 2D is a 1D problem we have already solved for obstructions; 3D drag means raycasting and constraint planes. Moves stay within their row and unbroken stretch, re-pack without gaps, and the API validator remains the authority. |
+| 2026-10-05 | `three` is added to web/ only, lazy-loaded | ~150 KB gzipped, fetched on the first "See it in 3D" so the main bundle does not grow. Core and the API gain nothing. |
 
 ## Needs Joshua
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a
