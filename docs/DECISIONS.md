@@ -110,6 +110,8 @@
 | 2026-10-05 | 1C: one unit cube scaled per box, one material per surface | A whole wall is a single geometry on the GPU, so memory does not grow with wall length. |
 | 2026-10-05 | 1C: the 3D chunk is ~136 KB gzipped and loads only on "See it in 3D"; the entry chunk is 57.3 KB | Measured on `v1c-3d`. `npm run check:bundle` fails CI if Three.js ever reaches the entry chunk or it passes 58,200 bytes. |
 | 2026-10-05 | 2.0's bundle budget is 58,400 bytes, not 58,200 | 1B (~1.0 KB) and 1C (~1.1 KB) each fit the 2 KB budget alone; together the entry chunk measured 58,298 bytes, 98 over. Raised by 200 bytes on `v2.0` only rather than trimming code to game the number; `v1c-3d` keeps 58,200. **Joshua can reverse this** — the alternative is cutting ~100 bytes of reorder or 3D code. |
+| 2026-10-05 | 2.0: the 3D view orbits ±45°, not ±60° | Found in the 2.0 browser pass: at ±60° the near end of a 20 ft wall left the frame. Also applied to `v1c-3d`. |
+| 2026-10-05 | 2.0 measured: a 30 ft wall opens in 3D in ~110–140 ms at 4× CPU throttling; GPU memory flat across six opens | One geometry, one internal texture, no WebGL contexts left behind, no browser warnings. The spec's targets were under 1 s and no growth. |
 
 ## Needs Joshua
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a

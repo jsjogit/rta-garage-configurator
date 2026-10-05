@@ -22,7 +22,7 @@ data/                          catalog.json, wall fixtures, nop product-id map
 
 ```bash
 dotnet test                                  # 451 Core + 108 API tests
-cd web && npm install && npm test            # 91 web tests
+cd web && npm install && npm test            # 139 web tests (2.0)
 ```
 
 The full stack is three processes:
@@ -50,6 +50,22 @@ If the `azurite` link is not executable, run it as `node ~/.local/lib/node_modul
 
 The UI alone works without any of this — `http://localhost:5173/?demo=vignette-72` renders a stored
 API payload. See `web/README.md` for the full list of demo fixtures.
+
+`?demo=vignette-72`, then **See it in 3D** on any card, shows the 3D view without the API.
+
+### Versions
+
+Phase 2 ships as optional branches, each built from Phase 1 (decided 2026-10-05, see DECISIONS):
+
+| Branch | What it adds | Web tests |
+|---|---|---|
+| `v1a` | Phase 1 as reviewed | 91 |
+| `v1b-reorder` | Reordering in the editor: drag, arrow keys, Move left/right | 116 |
+| `v1c-3d` | "See it in 3D" — a view-only, lazily loaded Three.js view per layout | 114 |
+| `v2.0` | All three together | 139 |
+
+1B and 1C do not depend on each other; either can be dropped. `npm run check:bundle` (on `v1c-3d` and
+`v2.0`) fails the build if the page everyone loads grows past budget or Three.js leaks into it.
 
 ## Deploying
 
