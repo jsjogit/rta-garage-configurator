@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { ApiError, loadDesign, solve, track } from './api/client'
-import type { Goal, SolveResponse, WallDto } from './api/types'
-import { WallInputs, EMPTY_DRAFT, obstructionsFor, wallFor, type WallDraft } from './components/WallInputs'
+import type { Goal, LayoutDto, SolveResponse, WallDto } from './api/types'
+import { WallInputs, EMPTY_DRAFT, draftFor, obstructionsFor, wallFor, type WallDraft } from './components/WallInputs'
 import { LivePreview } from './components/LivePreview'
-import { Results } from './components/Results'
+import { Results, type ActiveWall } from './components/Results'
 import { ShareBar, DESIGN_PATH } from './components/ShareBar'
 import { demoFixture } from './demo'
 
@@ -20,7 +20,9 @@ export function App() {
   const [response, setResponse] = useState<SolveResponse | null>(demo?.response ?? null)
   const [wall, setWall] = useState<WallDto | null>(demo?.wall ?? null)
   const [goal, setGoal] = useState<Goal>('Balanced')
-  const [configId, setConfigId] = useState<string | null>(null)
+  // A code belongs to the exact layout it saved. Change the wall afterwards and it needs a new one.
+  const [saved, setSaved] = useState<{ configId: string; layout: LayoutDto } | null>(null)
+  const [active, setActive] = useState<ActiveWall | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -40,9 +42,10 @@ export function App() {
           return
         }
 
-        setConfigId(design.configId)
+        setSaved({ configId: design.configId, layout: design.design.layout })
         setWall(design.wall)
         setGoal(design.goal)
+        setDraft(draftFor(design.wall, design.goal))
         setResponse({
           options: [{ label: 'Your saved wall', standard: design.design, premiere: design.design }],
           failure: null,
@@ -70,7 +73,7 @@ export function App() {
       setResponse(solved)
       setWall(nextWall)
       setGoal(chosenGoal)
-      setConfigId(null)
+      setSaved(null)
       track('layouts_returned', null, { count: String(solved.options.length) })
     } catch (caught) {
       setError(caught instanceof ApiError ? caught.message : 'Something went wrong. Try again.')
@@ -82,12 +85,14 @@ export function App() {
   const startOver = () => {
     setResponse(null)
     setWall(null)
-    setConfigId(null)
+    setSaved(null)
     setDraft({ ...draft, goal: null })
     window.history.pushState({}, '', '/')
   }
 
   const chosen = response?.options[0]
+  const shareLayout = active?.layout ?? chosen?.standard.layout
+  const configId = saved && saved.layout === shareLayout ? saved.configId : null
   const showResults = response !== null && wall !== null
 
   // Below 1024 the preview is pinned to the top of the viewport, where it has ~92px to work with.
@@ -122,16 +127,27 @@ export function App() {
 
         {showResults ? (
           <div>
-            <Results response={response} wall={wall} configId={configId} onStartOver={startOver} />
+            <Results
+              response={response}
+              wall={wall}
+              configId={configId}
+              onStartOver={startOver}
+              onActiveChange={setActive}
+            />
             {chosen && (
               <ShareBar
                 wall={wall}
                 goal={goal}
-                layout={chosen.standard.layout}
+                layout={shareLayout ?? chosen.standard.layout}
                 configId={configId}
-                onSaved={(saved) => {
-                  setConfigId(saved)
-                  window.history.replaceState({}, '', `${DESIGN_PATH}/${saved}`)
+                describing={
+                  active && response.options.length > 1
+                    ? `${active.label} · ${active.tier}${active.edited ? ' · edited' : ''}`
+                    : undefined
+                }
+                onSaved={(id) => {
+                  setSaved({ configId: id, layout: shareLayout ?? chosen.standard.layout })
+                  window.history.replaceState({}, '', `${DESIGN_PATH}/${id}`)
                 }}
               />
             )}

@@ -83,8 +83,21 @@
 | 2026-10-02 | `LineItemDto` gained `name` | The parts table needs a description; the solver only knows SKUs. The API joins the catalogue name on the way out. This is the only non-presentational change in the redesign. |
 | 2026-10-02 | Quick picks are tracked by label, not by length | Two presets are both 20 ft, so selecting one lit them both. The draft now records which chip was tapped. |
 | 2026-10-02 | The budget input was left out of the redesign | `budgetMax` was cut from V1 on 2026-10-02 and nothing downstream reads it. Rendering a control that silently does nothing is worse than leaving it out — see "Needs Joshua". |
+| 2026-10-05 | Phase 1 closeout ran the whole stack locally for the first time: Azurite, `func`, Vite | Every endpoint answered against real Table Storage; warm solves were 6–56 ms over HTTP. The browser pass found three defects no test had caught, all fixed below with tests. |
+| 2026-10-05 | Switching tier no longer leaves the parts table on the old tier | Found in the browser: Premiere drew drawer banks but the table and total stayed Standard, because a reprice of the old tier's layout fired during the switch and landed last. The editor now resets during render, and any in-flight reprice is dropped when the wall returns to its original — which also fixes undo while "checking…". |
+| 2026-10-05 | Sharing saves the wall the customer is looking at, and says which | The share bar always saved the recommended Standard wall, whatever card, tier or edits were on screen, so links, emails and designer hand-offs showed a different wall and price. It now saves the sheet last switched or edited (recommended by default), labels it ("Saving: Bigger workbench · Premiere"), and a code is only reused for the exact layout it saved. |
+| 2026-10-05 | A shared link opens as one wall, on its saved tier, with the inputs filled in | It said "Three ways to build it · 1 of 3", offered a tier switch that changed only the caption, and left the wall inputs blank. |
+| 2026-10-05 | Validator messages call a knee space "the knee space" | A knee space has no SKU, so "a 30\" gap between MV-PC3084 and ;" reached the customer. |
 
 ## Needs Joshua
+- **"Email me this" does not send an email.** The API stores the request (and designer requests) in a
+  table, then the page tells the customer "Sent. Check your inbox". Nothing sends mail and nothing
+  notifies a designer. Before launch we need an email route (e.g. Azure Communication Services, or the
+  ESP RTA already uses) and somewhere designer requests land that a person actually watches. Until
+  then the copy is a promise we are not keeping.
+- **Should water heaters get a side clearance?** `catalog.json` gives the electrical panel and side
+  door clearances but the water heater none, so cabinets can butt straight up against one. Gas units
+  usually want a few inches of air either side; ops should give us a number.
 - **Do you want the budget input back?** The redesign brief asked for "goal + optional budget", but
   `budgetMax` was cut from V1 and neither the solver nor the API reads it, so a budget field would
   collect a number and ignore it. Wiring it properly is solver work — a hard reject above the budget

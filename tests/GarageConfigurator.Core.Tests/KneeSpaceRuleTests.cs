@@ -38,6 +38,23 @@ public class KneeSpaceRuleTests
     }
 
     [Fact]
+    public void Messages_name_a_knee_space_rather_than_its_blank_sku()
+    {
+        // Found in the browser: removing the base beside a knee space read
+        // "a 30" gap between MV-B24-F and ; cabinets butt together."
+        var layout = Layout(
+            Base("MV-B24-F", 0m, 24m),
+            Knee(54m, 24m),
+            Base("MV-B24-F", 78m, 24m),
+            Counter("MV-CTHW9825", 0m, 102m));
+
+        var gap = Validator.Validate(layout, new Wall(102m, 96m))
+            .Single(v => v.Code == ViolationCode.GapBetweenCabinets);
+
+        gap.Message.ShouldBe("There is a 30\" gap between MV-B24-F and the knee space; cabinets butt together.");
+    }
+
+    [Fact]
     public void A_knee_space_must_be_24_or_30_wide()
     {
         var layout = Layout(

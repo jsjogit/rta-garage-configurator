@@ -5,3 +5,4 @@ dist/
 .env
 local.settings.json
 .playwright-mcp/
+.azurite/

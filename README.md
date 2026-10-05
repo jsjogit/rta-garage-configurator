@@ -21,16 +21,35 @@ data/                          catalog.json, wall fixtures, nop product-id map
 ## Running it locally
 
 ```bash
-dotnet test                                  # 450 Core + 105 API tests
-cd web && npm install && npm test            # 59 web tests
+dotnet test                                  # 451 Core + 108 API tests
+cd web && npm install && npm test            # 79 web tests
+```
 
+The full stack is three processes:
+
+```bash
+azurite --location .azurite                           # Table Storage for designs and leads
 func start --script-root src/GarageConfigurator.Api   # API on :7071
 cd web && npm run dev                                 # web on :5173, proxies /api to :7071
 ```
 
-`func` (Azure Functions Core Tools) and Azurite are only needed to run the API. The UI alone works
-without them — `http://localhost:5173/?demo=vignette-72` renders a stored API payload. See
-`web/README.md` for the full list of demo fixtures.
+Copy `src/GarageConfigurator.Api/local.settings.example.json` to `local.settings.json` first.
+
+**Installing the tools without Homebrew or sudo.** `npm i -g --prefix ~/.local azurite` works as is.
+The npm package for Functions Core Tools downloads its binary in a postinstall step, and Node rejects
+the TLS certificate on this network even though `curl` accepts it, so fetch the zip directly:
+
+```bash
+mkdir -p ~/.local/share/azure-functions-cli && cd ~/.local/share/azure-functions-cli
+curl -sSLO https://cdn.functions.azure.com/public/4.0.306962/Azure.Functions.Cli.osx-arm64.4.15.2.zip
+unzip -q Azure.Functions.Cli.osx-arm64.4.15.2.zip && chmod +x func
+ln -sf "$PWD/func" ~/.local/bin/func
+```
+
+If the `azurite` link is not executable, run it as `node ~/.local/lib/node_modules/azurite/dist/src/azurite.js`.
+
+The UI alone works without any of this — `http://localhost:5173/?demo=vignette-72` renders a stored
+API payload. See `web/README.md` for the full list of demo fixtures.
 
 ## Deploying
 

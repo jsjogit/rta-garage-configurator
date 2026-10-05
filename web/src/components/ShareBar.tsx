@@ -14,12 +14,15 @@ export function ShareBar({
   layout,
   configId,
   onSaved,
+  describing,
 }: {
   wall: WallDto
   goal: Goal
   layout: LayoutDto
   configId: string | null
   onSaved: (configId: string) => void
+  /** Which wall the buttons act on, since the bar sits under all three sheets. */
+  describing?: string
 }) {
   const [busy, setBusy] = useState(false)
   const [kind, setKind] = useState<'EmailMe' | 'DesignerHelp' | null>(null)
@@ -85,6 +88,7 @@ export function ShareBar({
 
   return (
     <section className="sharebar">
+      {describing && <p className="edited-note">Saving: {describing}</p>}
       <div className="row">
         <button type="button" className="btn ghost" onClick={share} disabled={busy}>
           {link ? 'Copy share link' : 'Save & copy link'}

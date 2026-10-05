@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { LayoutOptionDto, SolveResponse, Tier, WallDto } from '../api/types'
+import type { LayoutDto, LayoutOptionDto, SolveResponse, Tier, WallDto } from '../api/types'
 import { buildCart, track } from '../api/client'
 import { Elevation, formatInches } from './Elevation'
 import { Notices } from './Notices'
@@ -12,17 +12,29 @@ const TIER_NOTES: Record<Tier, string> = {
   Premiere: 'Drawer banks instead, wherever the width allows.',
 }
 
+/** The wall the customer is looking at: the sheet they last switched or edited, with its tier and edits. */
+export interface ActiveWall {
+  label: string
+  tier: Tier
+  layout: LayoutDto
+  edited: boolean
+}
+
 export function Results({
   response,
   wall,
   onStartOver,
   configId,
+  onActiveChange,
 }: {
   response: SolveResponse
   wall: WallDto
   onStartOver: () => void
   configId?: string | null
+  onActiveChange?: (active: ActiveWall) => void
 }) {
+  const [activeRank, setActiveRank] = useState(0)
+
   if (response.failure) {
     return (
       <section className="failure">
@@ -40,7 +52,7 @@ export function Results({
   return (
     <section className="stage">
       <div className="stage-head">
-        <h2>Three ways to build it</h2>
+        <h2>{response.options.length === 1 ? 'Your wall' : 'Three ways to build it'}</h2>
         <span className="meta">
           {formatInches(wall.length)} wall · {formatInches(wall.ceiling)} ceiling
         </span>
@@ -50,7 +62,16 @@ export function Results({
 
       <div className="results">
         {response.options.map((option, rank) => (
-          <Sheet key={rank} option={option} rank={rank} wall={wall} configId={configId} />
+          <Sheet
+            key={rank}
+            option={option}
+            rank={rank}
+            count={response.options.length}
+            wall={wall}
+            configId={configId}
+            onTouch={() => setActiveRank(rank)}
+            onActiveChange={rank === activeRank ? onActiveChange : undefined}
+          />
         ))}
       </div>
 
@@ -62,15 +83,23 @@ export function Results({
 function Sheet({
   option,
   rank,
+  count,
   wall,
   configId,
+  onTouch,
+  onActiveChange,
 }: {
   option: LayoutOptionDto
   rank: number
+  count: number
   wall: WallDto
   configId?: string | null
+  onTouch: () => void
+  onActiveChange?: (active: ActiveWall) => void
 }) {
-  const [tier, setTier] = useState<Tier>('Standard')
+  // A saved design comes back as one layout in both slots: there is no other tier to switch to.
+  const fixedTier = option.standard === option.premiere
+  const [tier, setTier] = useState<Tier>(fixedTier ? (option.standard.layout.tier ?? 'Standard') : 'Standard')
   const [editing, setEditing] = useState(false)
   const [selected, setSelected] = useState<number | null>(null)
   const chosen = tier === 'Standard' ? option.standard : option.premiere
@@ -81,11 +110,15 @@ function Sheet({
 
   useEffect(() => setSelected(null), [tier])
 
+  useEffect(() => {
+    onActiveChange?.({ label: option.label, tier, layout: editor.layout, edited: editor.edited })
+  }, [onActiveChange, option.label, tier, editor.layout, editor.edited])
+
   return (
     <article className="sheet" data-rank={rank}>
       <header className="sheet-head">
         <h3>{option.label}</h3>
-        <span className="rank">{`${rank + 1} of 3`}</span>
+        {count > 1 && <span className="rank">{`${rank + 1} of ${count}`}</span>}
       </header>
 
       <div className="sheet-body">
@@ -102,13 +135,23 @@ function Sheet({
         </div>
 
         <div className="parts">
-          <div className="tier-switch" role="group" aria-label="Cabinet tier">
-            {(['Standard', 'Premiere'] as Tier[]).map((name) => (
-              <button type="button" key={name} aria-pressed={tier === name} onClick={() => setTier(name)}>
-                {name}
-              </button>
-            ))}
-          </div>
+          {!fixedTier && (
+            <div className="tier-switch" role="group" aria-label="Cabinet tier">
+              {(['Standard', 'Premiere'] as Tier[]).map((name) => (
+                <button
+                  type="button"
+                  key={name}
+                  aria-pressed={tier === name}
+                  onClick={() => {
+                    setTier(name)
+                    onTouch()
+                  }}
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+          )}
           <p className="tier-note">{TIER_NOTES[tier]}</p>
 
           <table className="parts-table">
@@ -187,10 +230,12 @@ function Sheet({
           priced={priced}
           onSwap={(index, sku, name) => {
             editor.swap(index, sku, name)
+            onTouch()
             setSelected(null)
           }}
           onRemove={(index) => {
             editor.remove(index)
+            onTouch()
             setSelected(null)
           }}
           onClose={() => setSelected(null)}

@@ -89,7 +89,7 @@ public sealed class LayoutValidator
                 {
                     violations.Add(new Violation(
                         ViolationCode.ItemsOverlap,
-                        $"{items[i].Sku} and {items[j].Sku} occupy the same space.",
+                        $"{Name(items[i])} and {Name(items[j])} occupy the same space.",
                         items[i].Sku));
                 }
             }
@@ -112,7 +112,7 @@ public sealed class LayoutValidator
             {
                 violations.Add(new Violation(
                     ViolationCode.GapBetweenCabinets,
-                    $"There is a {gap}\" gap between {floorRun[i - 1].Sku} and {floorRun[i].Sku}; cabinets butt together.",
+                    $"There is a {gap}\" gap between {Name(floorRun[i - 1])} and {Name(floorRun[i])}; cabinets butt together.",
                     floorRun[i].Sku));
             }
         }
@@ -540,4 +540,8 @@ public sealed class LayoutValidator
 
     private static bool OverlapsVertically(PlacedItem a, PlacedItem b) =>
         a.Y < b.Top && b.Y < a.Top;
+
+    /// <summary>How a customer-facing message refers to an item. A knee space has no SKU to print.</summary>
+    private static string Name(PlacedItem item) =>
+        item.Zone == Zone.KneeSpace ? "the knee space" : item.Sku;
 }

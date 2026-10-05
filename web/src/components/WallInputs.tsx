@@ -55,6 +55,18 @@ export function obstructionsFor(draft: WallDraft): ObstructionDto[] {
   return OBSTRUCTIONS.filter((o) => draft.obstructions.includes(o.label)).map((o) => o.make(draft.length))
 }
 
+/** The inputs that would produce a saved wall, so a shared design opens with its own wall filled in. */
+export function draftFor(wall: WallDto, goal: Goal): WallDraft {
+  const types = new Set((wall.obstructions ?? []).map((o) => o.type))
+  return {
+    length: wall.length,
+    ceiling: wall.ceiling,
+    obstructions: OBSTRUCTIONS.filter((o) => types.has(o.make(wall.length).type)).map((o) => o.label),
+    goal,
+    preset: null,
+  }
+}
+
 export function wallFor(draft: WallDraft): WallDto {
   return { length: draft.length, ceiling: draft.ceiling, obstructions: obstructionsFor(draft) }
 }

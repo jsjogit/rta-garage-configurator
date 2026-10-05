@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Results } from '../Results'
 import type { SolveResponse } from '../../api/types'
 import vignette from '../../fixtures/vignette-72.json'
+import { money } from '../Money'
 
 const wall = { length: 72, ceiling: 96 }
 
@@ -242,5 +243,61 @@ describe('adding to cart', () => {
 
     await waitFor(() => expect(screen.getAllByRole('status')[0]).toHaveTextContent(/can’t add this wall automatically/i))
     expect(calls.some((c) => c.url.startsWith('/addproducttocart'))).toBe(false)
+  })
+})
+
+const total = (sheet: HTMLElement) => sheet.querySelector('.parts-table tfoot .num')!.textContent
+
+describe('switching tier', () => {
+  it('shows the premiere price once the network settles', async () => {
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+    const sheet = firstSheet()
+
+    await user.click(within(sheet).getByRole('button', { name: /premiere/i }))
+
+    // A stale reprice of the standard layout used to land here and overwrite the premiere total.
+    await new Promise((resolve) => setTimeout(resolve, 20))
+    const premiere = (vignette as SolveResponse).options[0].premiere.subtotalPromo
+    expect(total(sheet)).toBe(money(premiere))
+  })
+
+  it('does not ask the API to reprice a layout nobody edited', async () => {
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+
+    await user.click(within(firstSheet()).getByRole('button', { name: /premiere/i }))
+    await user.click(within(firstSheet()).getByRole('button', { name: /standard/i }))
+    await new Promise((resolve) => setTimeout(resolve, 20))
+
+    expect(calls.filter((c) => c.url === '/api/price' || c.url === '/api/validate')).toHaveLength(0)
+  })
+})
+
+describe('undo', () => {
+  it('a reprice still in flight cannot overwrite the undone wall', async () => {
+    const user = userEvent.setup()
+    let release: () => void = () => undefined
+    const gate = new Promise<void>((resolve) => (release = resolve))
+    const real = fetch as unknown as (url: string, init?: RequestInit) => Promise<Response>
+    vi.stubGlobal('fetch', vi.fn(async (url: string, init?: RequestInit) => {
+      if (url === '/api/price' || url === '/api/validate') await gate
+      return real(url, init)
+    }))
+
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+    const sheet = firstSheet()
+    const original = total(sheet)
+
+    await startEditing(user, sheet)
+    await user.click(within(sheet).getAllByRole('button', { name: /MV-B24-F, 24 inches wide/i })[0])
+    await user.click(await within(sheet).findByRole('button', { name: /MV-DB24-4/i }))
+    await user.click(await within(sheet).findByRole('button', { name: /undo my changes/i }))
+
+    release()
+    await new Promise((resolve) => setTimeout(resolve, 20))
+
+    expect(total(sheet)).toBe(original)
+    expect(sheet.textContent).not.toMatch(/checking/i)
   })
 })

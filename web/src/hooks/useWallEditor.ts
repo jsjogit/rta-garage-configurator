@@ -27,19 +27,30 @@ export function useWallEditor(
   const [priced, setPriced] = useState<PricedLayoutDto>(original)
   const [violations, setViolations] = useState<ViolationDto[]>([])
   const [checking, setChecking] = useState(false)
-  const edited = layout !== original.layout
+  const [source, setSource] = useState(original)
 
-  // Reset when the sheet switches tier underneath us.
-  useEffect(() => {
+  // Reset when the sheet switches tier underneath us. This happens during render, not in an
+  // effect, so no effect ever sees the new tier's original paired with the old tier's layout —
+  // that pairing looked like an edit and sent a reprice of the old tier that then overwrote the
+  // new tier's prices.
+  if (source !== original) {
+    setSource(original)
     setLayout(original.layout)
     setPriced(original)
     setViolations([])
-  }, [original])
+    setChecking(false)
+  }
 
+  const edited = layout !== original.layout
   const run = useRef(0)
 
   useEffect(() => {
-    if (layout === original.layout) return
+    if (layout === original.layout) {
+      // Back to the original (undo, or a tier switch): anything still in flight is stale.
+      run.current++
+      setChecking(false)
+      return
+    }
 
     const ticket = ++run.current
     setChecking(true)
