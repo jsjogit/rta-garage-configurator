@@ -99,6 +99,11 @@
 | 2026-10-05 | Reordering lives in the 2D editor, not in 3D | Dragging in 2D is a 1D problem we have already solved for obstructions; 3D drag means raycasting and constraint planes. Moves stay within their row and unbroken stretch, re-pack without gaps, and the API validator remains the authority. |
 | 2026-10-05 | `three` is added to web/ only, lazy-loaded | ~150 KB gzipped, fetched on the first "See it in 3D" so the main bundle does not grow. Core and the API gain nothing. |
 | 2026-10-05 | Phase 2 ships as optional versions: 1A (Phase 1), 1B reorder, 1C 3D, 2.0 all three | Joshua wants Phase 1's scope as tight as possible and is wary of the complexity in reorder and 3D. Each is its own branch built from 1A, so either can be dropped without touching the other. 2.0 is only the merge of the three plus the joint browser pass. |
+| 2026-10-05 | 1B: a reorder moves a whole slot; stacked uppers at one x move together | A storage wall at 9 ft+ can stack a 15" upper on a 30" one. Splitting the stack would leave a 15" cabinet floating with nothing under it. |
+| 2026-10-05 | 1B: a drag shorter than 2" is a tap | Fingers wobble. Below that it selects the cabinet as before; above it, the release does not also count as a tap. |
+| 2026-10-05 | 1B: elevation items are keyed by index, not position | The old key included x, so a moved cabinet was a new element and keyboard focus fell off it after every arrow press. |
+| 2026-10-05 | 1B: dragging uses `touch-action: pan-y` | A vertical swipe still scrolls the page on a phone; only a sideways drag reorders. |
+| 2026-10-05 | 1B: the edit hint mentions dragging | Found in the browser pass: "Tap a cabinet to swap or remove it" gave no hint that drag existed. |
 
 ## Needs Joshua
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a

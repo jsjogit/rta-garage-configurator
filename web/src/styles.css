@@ -279,6 +279,7 @@ table.parts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 
 /* ---- editor ------------------------------------------------------------ */
 .editor { border-top: 1px solid var(--color-rule); padding: 14px 16px; display: grid; gap: 10px; background: #fafbfc; }
+.move-row .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .editor h4 { font-size: 15px; font-weight: 700; color: var(--color-heading); margin: 0; }
 .editor .dims { font-size: 13px; color: var(--color-muted); }
 .editor .swaps { display: grid; gap: 6px; }
@@ -313,6 +314,8 @@ table.parts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .elev-hit { cursor: pointer; }
 .elev-hit:focus { outline: none; }
 .elev-hit:focus-visible { outline: none; }
+.elev-movable { cursor: grab; touch-action: pan-y; }
+.elev-movable:active { cursor: grabbing; }
 .elev-drag { cursor: grab; touch-action: none; }
 .elev-drag:active { cursor: grabbing; }
 .elev-drag-hit { fill: var(--color-heading); fill-opacity: 0.06; }

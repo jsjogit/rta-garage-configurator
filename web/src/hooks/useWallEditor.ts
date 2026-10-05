@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { price as priceLayout, track, validate } from '../api/client'
+import { reorder } from '../editor/reorder'
 import type { LayoutDto, PricedLayoutDto, ViolationDto, WallDto } from '../api/types'
 
 export interface WallEditor {
@@ -10,6 +11,7 @@ export interface WallEditor {
   edited: boolean
   swap: (index: number, sku: string, name: string) => void
   remove: (index: number) => void
+  move: (index: number, steps: number) => void
   reset: () => void
 }
 
@@ -97,11 +99,16 @@ export function useWallEditor(
     [configId],
   )
 
+  // Tracking lives with the caller, which knows the sheet's rank.
+  const move = useCallback((index: number, steps: number) => {
+    setLayout((current) => reorder(current, index, steps))
+  }, [])
+
   const reset = useCallback(() => {
     setLayout(original.layout)
     setPriced(original)
     setViolations([])
   }, [original])
 
-  return { layout, priced, violations, checking, edited, swap, remove, reset }
+  return { layout, priced, violations, checking, edited, swap, remove, move, reset }
 }

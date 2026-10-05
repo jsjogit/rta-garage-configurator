@@ -6,6 +6,7 @@ import { Notices } from './Notices'
 import { money } from './Money'
 import { CabinetPanel } from './CabinetPanel'
 import { useWallEditor } from '../hooks/useWallEditor'
+import { canMove, reorder, rowOf } from '../editor/reorder'
 
 const TIER_NOTES: Record<Tier, string> = {
   Standard: 'Full-height doors on the base cabinets.',
@@ -108,6 +109,14 @@ function Sheet({
   const saving = priced.subtotalList - priced.subtotalPromo
   const blocked = editor.violations.length > 0
 
+  const onMove = (index: number, steps: number) => {
+    const item = editor.layout.items[index]
+    if (!item || reorder(editor.layout, index, steps) === editor.layout) return
+    editor.move(index, steps)
+    onTouch()
+    track('layout_reordered', configId, { rank: String(rank), row: rowOf(item) ?? '' })
+  }
+
   useEffect(() => setSelected(null), [tier])
 
   useEffect(() => {
@@ -131,6 +140,7 @@ function Sheet({
             id={`sheet-${rank}-${tier.toLowerCase()}`}
             selected={editing ? selected : null}
             onSelect={editing ? setSelected : undefined}
+            onReorder={editing ? onMove : undefined}
           />
         </div>
 
@@ -239,12 +249,15 @@ function Sheet({
             setSelected(null)
           }}
           onClose={() => setSelected(null)}
+          onMove={onMove}
+          canMoveLeft={canMove(editor.layout, selected, -1)}
+          canMoveRight={canMove(editor.layout, selected, 1)}
         />
       )}
 
       {editing && selected === null && (
         <div className="editor">
-          <p className="dims">Tap a cabinet in the drawing to swap or remove it.</p>
+          <p className="dims">Tap a cabinet to swap or remove it, or drag one along its row to reorder.</p>
         </div>
       )}
     </article>

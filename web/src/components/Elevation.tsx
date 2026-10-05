@@ -1,5 +1,6 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import type { ObstructionDto, PlacedItemDto, LayoutDto } from '../api/types'
+import { stepsForDrag } from '../editor/reorder'
 
 /*
   A true-proportion front elevation, drawn the way the shop would draw it: everything is in inches,
@@ -31,6 +32,8 @@ export interface ElevationProps {
   /** Index into layout.items, or null. Tapping a cabinet opens the side panel. */
   selected?: number | null
   onSelect?: (index: number | null) => void
+  /** Edit mode only: a cabinet was dragged or arrowed `steps` places along its row. */
+  onReorder?: (index: number, steps: number) => void
   /** Makes obstructions draggable along the wall. Called with the obstruction's index and new startX. */
   onMoveObstruction?: (index: number, startX: number) => void
 }
@@ -46,6 +49,7 @@ export function Elevation({
   selected = null,
   onSelect,
   onMoveObstruction,
+  onReorder,
 }: ElevationProps) {
   const padX = compact ? COMPACT_PAD.x : PAD_X
   const padTop = compact ? COMPACT_PAD.top : PAD_TOP
@@ -117,13 +121,15 @@ export function Elevation({
 
       {ordered.map(({ item, index }) => (
         <Item
-          key={`${item.sku}-${item.x}-${item.y}-${index}`}
+          key={`item-${index}`}
           item={item}
           toY={toY}
           id={id}
           index={index}
           selected={selected === index}
           onSelect={onSelect}
+          onReorder={onReorder}
+          stepsFor={(dx) => stepsForDrag(layout, index, dx)}
         />
       ))}
 
@@ -139,6 +145,8 @@ function zOrder(item: PlacedItemDto): number {
   return 1
 }
 
+const DRAG_THRESHOLD = 2 // inches; less than this is a tap
+
 function Item({
   item,
   toY,
@@ -146,6 +154,8 @@ function Item({
   index,
   selected,
   onSelect,
+  onReorder,
+  stepsFor,
 }: {
   item: PlacedItemDto
   toY: (up: number) => number
@@ -153,11 +163,18 @@ function Item({
   index: number
   selected: boolean
   onSelect?: (index: number | null) => void
+  onReorder?: (index: number, steps: number) => void
+  stepsFor: (dx: number) => number
 }) {
+  const [dx, setDx] = useState(0)
+  const grab = useRef<{ start: number; dragged: boolean } | null>(null)
+  const swallowClick = useRef(false)
   const y = toY(item.y + item.height)
   const body = <ItemBody item={item} toY={toY} id={id} />
 
   if (!onSelect) return body
+
+  const svgOf = (target: EventTarget) => (target as SVGGElement).ownerSVGElement!
 
   return (
     <g
@@ -165,12 +182,46 @@ function Item({
       tabIndex={0}
       aria-label={`${item.zone === 'KneeSpace' ? 'Open knee space' : item.sku}, ${item.width} inches wide`}
       aria-pressed={selected}
-      className="elev-hit"
-      onClick={() => onSelect(selected ? null : index)}
+      className={onReorder ? 'elev-hit elev-movable' : 'elev-hit'}
+      transform={dx ? `translate(${dx} 0)` : undefined}
+      onPointerDown={(event) => {
+        if (!onReorder) return
+        grab.current = { start: wallX(svgOf(event.currentTarget), event.clientX), dragged: false }
+        ;(event.currentTarget as Element).setPointerCapture?.(event.pointerId)
+      }}
+      onPointerMove={(event) => {
+        if (!grab.current) return
+        const moved = wallX(svgOf(event.currentTarget), event.clientX) - grab.current.start
+        if (Math.abs(moved) >= DRAG_THRESHOLD) grab.current.dragged = true
+        if (grab.current.dragged) setDx(moved)
+      }}
+      onPointerUp={(event) => {
+        const drag = grab.current
+        grab.current = null
+        setDx(0)
+        if (!drag?.dragged || !onReorder) return
+        swallowClick.current = true
+        const steps = stepsFor(wallX(svgOf(event.currentTarget), event.clientX) - drag.start)
+        if (steps !== 0) onReorder(index, steps)
+      }}
+      onPointerCancel={() => {
+        grab.current = null
+        setDx(0)
+      }}
+      onClick={() => {
+        if (swallowClick.current) {
+          swallowClick.current = false
+          return
+        }
+        onSelect(selected ? null : index)
+      }}
       onKeyDown={(event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault()
           onSelect(selected ? null : index)
+        } else if (onReorder && (event.key === 'ArrowRight' || event.key === 'ArrowLeft')) {
+          event.preventDefault()
+          onReorder(index, event.key === 'ArrowRight' ? 1 : -1)
         }
       }}
     >
