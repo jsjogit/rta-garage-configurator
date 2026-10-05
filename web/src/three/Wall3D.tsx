@@ -57,8 +57,8 @@ export default function Wall3D({ layout, wall }: { layout: LayoutDto; wall: Wall
     const camera = new THREE.PerspectiveCamera(FOV, 1, 1, 10000)
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.enablePan = false
-    controls.minAzimuthAngle = -Math.PI / 3 // never round the back of the wall
-    controls.maxAzimuthAngle = Math.PI / 3
+    controls.minAzimuthAngle = -Math.PI / 4 // never round the back of the wall, nor so far a long wall leaves the frame
+    controls.maxAzimuthAngle = Math.PI / 4
     controls.minPolarAngle = Math.PI / 4
     controls.maxPolarAngle = Math.PI / 2 - 0.02 // never under the floor
 
