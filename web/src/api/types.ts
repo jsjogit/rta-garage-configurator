@@ -102,6 +102,7 @@ export type FunnelEventName =
   | 'cart_add_item'
   | 'share_created'
   | 'lead_captured'
+  | 'view_3d_opened'
 
 export interface SolveResponse {
   options: LayoutOptionDto[]

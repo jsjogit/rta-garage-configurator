@@ -91,11 +91,39 @@ describe('frameCamera', () => {
     }
   })
 
-  it('keeps the same distance when it swings round to an angle', () => {
+  it('swings round to the side it is asked for, never closer than straight on', () => {
     const straight = frameCamera(wall72, 35, 1.6)
     const angled = frameCamera(wall72, 35, 1.6, { azimuthDeg: -25, elevationDeg: 12 })
-    const dist = (f: typeof straight) => Math.hypot(...f.position.map((p, i) => p - f.target[i]))
-    expect(dist(angled)).toBeCloseTo(dist(straight), 6)
     expect(angled.position[0]).toBeLessThan(straight.position[0])
+    expect(angled.distance).toBeGreaterThanOrEqual(straight.distance)
+  })
+
+  /** Every corner of the cabinet volume (wall face to counter front) inside the picture? */
+  function fitsInPerspective(wall: WallDto, fov: number, aspect: number, angle: { azimuthDeg: number; elevationDeg: number }) {
+    const f = frameCamera(wall, fov, aspect, angle)
+    const forward = f.target.map((t, i) => t - f.position[i])
+    const norm = (v: number[]) => v.map((x) => x / Math.hypot(...v))
+    const fwd = norm(forward)
+    const right = norm([-fwd[2], 0, fwd[0]]) // forward × world up
+    const up = [right[1] * fwd[2] - right[2] * fwd[1], right[2] * fwd[0] - right[0] * fwd[2], right[0] * fwd[1] - right[1] * fwd[0]]
+    const tanV = Math.tan((fov * Math.PI) / 360)
+    const tanH = tanV * aspect
+    for (const x of [0, wall.length]) for (const y of [0, wall.ceiling]) for (const z of [0, 25]) {
+      const v = [x - f.position[0], y - f.position[1], z - f.position[2]]
+      const depth = v[0] * fwd[0] + v[1] * fwd[1] + v[2] * fwd[2]
+      const sx = (v[0] * right[0] + v[1] * right[1] + v[2] * right[2]) / depth
+      const sy = (v[0] * up[0] + v[1] * up[1] + v[2] * up[2]) / depth
+      expect(Math.abs(sx)).toBeLessThanOrEqual(tanH + 1e-9)
+      expect(Math.abs(sy)).toBeLessThanOrEqual(tanV + 1e-9)
+    }
+  }
+
+  it('keeps the whole wall, front edge included, in the picture from the opening angle', () => {
+    for (const wall of [{ length: 72, ceiling: 96 }, { length: 360, ceiling: 84 }, { length: 144, ceiling: 120 }]) {
+      for (const aspect of [16 / 9, 1 / 0.62]) {
+        fitsInPerspective(wall, 35, aspect, { azimuthDeg: -22, elevationDeg: 10 })
+        fitsInPerspective(wall, 35, aspect, { azimuthDeg: 0, elevationDeg: 0 })
+      }
+    }
   })
 })

@@ -26,3 +26,7 @@ if (!('PointerEvent' in window)) {
   }
   ;(window as unknown as { PointerEvent: typeof PointerEventPolyfill }).PointerEvent = PointerEventPolyfill
 }
+
+// jsdom has no canvas backend and logs "Not implemented" for getContext. Answer like a browser
+// without WebGL would.
+HTMLCanvasElement.prototype.getContext = (() => null) as typeof HTMLCanvasElement.prototype.getContext

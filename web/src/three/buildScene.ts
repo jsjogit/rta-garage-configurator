@@ -68,10 +68,12 @@ export interface CameraFrame {
 }
 
 const FRAME_MARGIN = 1.12
+const CABINET_REACH = 25 // the counter's front edge, the nearest thing to the camera
 
 /**
  * Where to put a camera with this vertical field of view and aspect ratio so the whole wall, floor
- * to ceiling and corner to corner, fits — then optionally swing it round the wall's centre.
+ * to ceiling and corner to corner, fits — then optionally swing it round the wall's centre, backing
+ * off until the near end of the cabinets is still in the picture.
  */
 export function frameCamera(
   wall: WallDto,
@@ -86,14 +88,43 @@ export function frameCamera(
   const target: [number, number, number] = [wall.length / 2, wall.ceiling / 2, 0]
   const az = ((angle.azimuthDeg ?? 0) * Math.PI) / 180
   const el = ((angle.elevationDeg ?? 0) * Math.PI) / 180
+  const at = (d: number): [number, number, number] => [
+    target[0] + d * Math.cos(el) * Math.sin(az),
+    target[1] + d * Math.sin(el),
+    target[2] + d * Math.cos(el) * Math.cos(az),
+  ]
 
-  return {
-    target,
-    distance,
-    position: [
-      target[0] + distance * Math.cos(el) * Math.sin(az),
-      target[1] + distance * Math.sin(el),
-      target[2] + distance * Math.cos(el) * Math.cos(az),
-    ],
+  let d = distance
+  while (!inPicture(wall, at(d), target, halfH, halfV)) d *= 1.04
+  return { target, distance: d, position: at(d) }
+}
+
+/** Do all eight corners of the cabinet volume project inside the camera's view? */
+function inPicture(
+  wall: WallDto,
+  position: [number, number, number],
+  target: [number, number, number],
+  tanH: number,
+  tanV: number,
+): boolean {
+  const unit = (v: number[]) => v.map((x) => x / Math.hypot(...v))
+  const forward = unit(target.map((t, i) => t - position[i]))
+  const right = unit([-forward[2], 0, forward[0]]) // forward × world up
+  const up = [
+    right[1] * forward[2] - right[2] * forward[1],
+    right[2] * forward[0] - right[0] * forward[2],
+    right[0] * forward[1] - right[1] * forward[0],
+  ]
+  const dot = (a: number[], b: number[]) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+
+  for (const x of [0, wall.length]) {
+    for (const y of [0, wall.ceiling]) {
+      for (const z of [0, CABINET_REACH]) {
+        const v = [x - position[0], y - position[1], z - position[2]]
+        const depth = dot(v, forward)
+        if (Math.abs(dot(v, right) / depth) > tanH || Math.abs(dot(v, up) / depth) > tanV) return false
+      }
+    }
   }
+  return true
 }
