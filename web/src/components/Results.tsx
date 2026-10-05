@@ -140,6 +140,7 @@ function Sheet({
             id={`sheet-${rank}-${tier.toLowerCase()}`}
             selected={editing ? selected : null}
             onSelect={editing ? setSelected : undefined}
+            onReorder={editing ? onMove : undefined}
           />
         </div>
 
@@ -256,7 +257,7 @@ function Sheet({
 
       {editing && selected === null && (
         <div className="editor">
-          <p className="dims">Tap a cabinet in the drawing to swap or remove it.</p>
+          <p className="dims">Tap a cabinet to swap or remove it, or drag one along its row to reorder.</p>
         </div>
       )}
     </article>

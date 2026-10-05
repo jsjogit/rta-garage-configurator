@@ -387,3 +387,13 @@ describe('moving a cabinet', () => {
     expect(event?.body).toMatchObject({ properties: { rank: '0', row: 'floor' } })
   })
 })
+
+describe('the edit hint', () => {
+  it('says cabinets can be dragged to reorder, not just tapped', async () => {
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+    const sheet = await startEditing(user)
+
+    expect(within(sheet).getByText(/drag one along its row to reorder/i)).toBeInTheDocument()
+  })
+})
