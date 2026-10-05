@@ -301,3 +301,89 @@ describe('undo', () => {
     expect(sheet.textContent).not.toMatch(/checking/i)
   })
 })
+
+describe('moving a cabinet', () => {
+  const checks = () => calls.filter((c) => c.url === '/api/validate')
+  const prices = () => calls.filter((c) => c.url === '/api/price')
+  type Sent = { layout: { items: { x: number }[] } }
+
+  it('moves one place right, and the API checks and prices it once', async () => {
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+    const sheet = await selectFirstCabinet(user)
+
+    await user.click(within(sheet).getByRole('button', { name: 'Move right' }))
+
+    await waitFor(() => expect(prices()).toHaveLength(1))
+    expect(checks()).toHaveLength(1)
+    const sent = (prices()[0].body as Sent).layout.items
+    expect(sent[0].x).toBe(24)
+    expect(sent[1].x).toBe(0)
+  })
+
+  it('offers no move left at the start of a run', async () => {
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+    const sheet = await selectFirstCabinet(user)
+
+    expect(within(sheet).getByRole('button', { name: 'Move left' })).toBeDisabled()
+    expect(within(sheet).getByRole('button', { name: 'Move right' })).toBeEnabled()
+  })
+
+  it('two quick moves end on the two-step wall, priced by the last answer', async () => {
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+    const sheet = await selectFirstCabinet(user)
+
+    await user.click(within(sheet).getByRole('button', { name: 'Move right' }))
+    await user.click(within(sheet).getByRole('button', { name: 'Move right' }))
+
+    await waitFor(() => expect(prices()).toHaveLength(2))
+    expect((prices()[1].body as Sent).layout.items[0].x).toBe(48)
+    expect(total(sheet)).toBe(money(1234))
+  })
+
+  it('undo puts the cabinets back', async () => {
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+    const sheet = await selectFirstCabinet(user)
+    const original = total(sheet)
+    const firstCabinetX = () =>
+      within(sheet).getAllByRole('button', { name: /MV-B24-F, 24 inches wide/i })[0].querySelector('rect')!.getAttribute('x')
+    const startX = firstCabinetX()
+
+    await user.click(within(sheet).getByRole('button', { name: 'Move right' }))
+    expect(firstCabinetX()).not.toBe(startX)
+    await user.click(await within(sheet).findByRole('button', { name: /undo my changes/i }))
+
+    expect(total(sheet)).toBe(original)
+    expect(firstCabinetX()).toBe(startX)
+  })
+
+  it('a move the rules reject says why and blocks the cart', async () => {
+    stubFetch({
+      violations: [
+        { code: 'KneeSpaceAtRunEnd', message: 'A knee space needs a base cabinet on both sides — it cannot start or end a run.', sku: null },
+      ],
+    })
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+    const sheet = await selectFirstCabinet(user)
+
+    await user.click(within(sheet).getByRole('button', { name: 'Move right' }))
+
+    expect(await within(sheet).findByText(/knee space needs a base cabinet/i)).toBeInTheDocument()
+    expect(within(sheet).getByRole('button', { name: /fix the wall first/i })).toBeDisabled()
+  })
+
+  it('records the move in the funnel', async () => {
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+    const sheet = await selectFirstCabinet(user)
+
+    await user.click(within(sheet).getByRole('button', { name: 'Move right' }))
+
+    const event = calls.find((c) => c.url === '/api/events' && (c.body as { name: string }).name === 'layout_reordered')
+    expect(event?.body).toMatchObject({ properties: { rank: '0', row: 'floor' } })
+  })
+})
