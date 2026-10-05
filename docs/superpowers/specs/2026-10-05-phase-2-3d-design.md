@@ -141,8 +141,8 @@ At prototype review, compare `cart_add_all` rates for sessions with and without 
   covers desktop and 390px phone screenshots, tier switching, orbit limits, Front view, and the
   WebGL-disabled fallback.
 - **Performance:**
-  - the main bundle stays within 2 KB gzipped of today's 54.9 KB (a CI step fails the build
-    otherwise);
+  - the main bundle stays within 2 KB gzipped of the Phase 2 starting point, 56.2 KB measured at
+    `6ef976d` (limit 58,200 bytes; a CI step fails the build otherwise);
   - a 30 ft wall opens in 3D in under 1 s with Chrome's 4x CPU throttling at 390px;
   - no growth in `renderer.info.memory` geometries/textures after opening and closing 3D across all
     three cards and both tiers.
