@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import type { ObstructionDto, PlacedItemDto, LayoutDto } from '../api/types'
 import { stepsForDrag } from '../editor/reorder'
+import { fronts } from '../geometry/fronts'
 
 /*
   A true-proportion front elevation, drawn the way the shop would draw it: everything is in inches,
@@ -16,8 +17,6 @@ const PAD_BOTTOM = 30
    wall ends up a thumbnail inside a mostly empty box. Proportions stay true either way. */
 const COMPACT_PAD = { x: 4, top: 4, bottom: 14 }
 
-const REVEAL = 0.75 // gap drawn between adjacent fronts
-const PULL = { length: 0.45, thickness: 1.1 } // bar pull: fraction of face, inches thick
 
 export interface ElevationProps {
   layout: LayoutDto
@@ -291,68 +290,20 @@ function ItemBody({ item, toY, id }: { item: PlacedItemDto; toY: (up: number) =>
   )
 }
 
-/** Slab fronts with matte black bar pulls, laid out the way the box is actually built. */
+/** Slab fronts with matte black bar pulls, from the shared description in geometry/fronts.ts. */
 function Fronts({ item, top }: { item: PlacedItemDto; top: number }) {
-  const drawers = drawerCount(item.sku)
-
-  if (drawers > 0) {
-    const each = (item.height - REVEAL * (drawers + 1)) / drawers
-
-    return (
-      <>
-        {Array.from({ length: drawers }, (_, i) => {
-          const y = top + REVEAL + i * (each + REVEAL)
-          return (
-            <g key={i}>
-              <rect x={item.x + REVEAL} y={y} width={item.width - REVEAL * 2} height={each} fill="var(--slab)" stroke="var(--slab-edge)" strokeWidth="0.3" />
-              <rect
-                x={item.x + item.width / 2 - (item.width * PULL.length) / 2}
-                y={y + each / 2 - PULL.thickness / 2}
-                width={item.width * PULL.length}
-                height={PULL.thickness}
-                fill="var(--ink)"
-              />
-            </g>
-          )
-        })}
-      </>
-    )
-  }
-
-  // A pair of doors above 24", otherwise a single door. Pulls sit at the opening edge.
-  const pair = item.width >= 24
-  const faceWidth = pair ? (item.width - REVEAL * 3) / 2 : item.width - REVEAL * 2
-  const faceHeight = item.height - REVEAL * 2
-  const pullHeight = Math.min(faceHeight * 0.4, 10)
+  const { faces, pulls } = fronts(item, top)
 
   return (
     <>
-      {Array.from({ length: pair ? 2 : 1 }, (_, i) => {
-        const x = item.x + REVEAL + i * (faceWidth + REVEAL)
-        // Pull goes on the inner edge for a pair, the right edge for a single door.
-        const pullX = pair
-          ? i === 0
-            ? x + faceWidth - 2.2
-            : x + 1.1
-          : x + faceWidth - 2.2
-
-        return (
-          <g key={i}>
-            <rect x={x} y={top + REVEAL} width={faceWidth} height={faceHeight} fill="var(--slab)" stroke="var(--slab-edge)" strokeWidth="0.3" />
-            <rect x={pullX} y={top + item.height / 2 - pullHeight / 2} width={PULL.thickness} height={pullHeight} fill="var(--ink)" />
-          </g>
-        )
-      })}
+      {faces.map((face, i) => (
+        <g key={i}>
+          <rect x={face.x} y={face.y} width={face.width} height={face.height} fill="var(--slab)" stroke="var(--slab-edge)" strokeWidth="0.3" />
+          <rect x={pulls[i].x} y={pulls[i].y} width={pulls[i].width} height={pulls[i].height} fill="var(--ink)" />
+        </g>
+      ))}
     </>
   )
-}
-
-function drawerCount(sku: string): number {
-  if (sku.includes('-DB') || sku.startsWith('MV-DB')) {
-    const match = sku.match(/-(\d)$/)
-    return match ? Number(match[1]) : 3
-  }
-  return sku.includes('BWB') ? 1 : 0
 }
 
 /** Short names, because the label has to sit inside a 16" panel without running over the cabinets. */
