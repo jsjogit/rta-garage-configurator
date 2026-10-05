@@ -1,10 +1,15 @@
 import type { Goal, ObstructionDto, WallDto } from '../api/types'
 import { formatInches } from './Elevation'
 
+/** Something on the wall, as the customer measured it. Inches from the left corner and the floor. */
+export interface DraftObstruction extends ObstructionDto {
+  id: number
+}
+
 export interface WallDraft {
   length: number
   ceiling: number
-  obstructions: string[]
+  obstructions: DraftObstruction[]
   goal: Goal | null
   /** Which quick pick is lit. Two presets share 20', so length alone cannot tell them apart. */
   preset: string | null
@@ -25,24 +30,60 @@ const CEILINGS = [
 ]
 
 /*
-  Presets only, no fine positioning and no custom shapes: a wall that needs more than this is a
-  conversation with a designer, not a bigger widget (docs/DECISIONS.md).
+  Typical sizes to start from; the customer then types what they measured or drags it in the drawing.
+  Doors and water heaters stand on the floor and block the full height cabinets would use, so only
+  windows and panels ask how high they sit.
 */
-const OBSTRUCTIONS: { label: string; make: (wallLength: number) => ObstructionDto }[] = [
+const OBSTRUCTIONS: {
+  type: string
+  label: string
+  standsOnFloor: boolean
+  make: (wallLength: number) => ObstructionDto
+}[] = [
   {
+    type: 'ElectricalPanel',
     label: 'Electrical panel',
+    standsOnFloor: false,
     make: (w) => ({ type: 'ElectricalPanel', startX: Math.max(0, w * 0.75), width: 16, height: 30, bottomY: 48 }),
   },
-  { label: 'Water heater', make: () => ({ type: 'WaterHeater', startX: 0, width: 30, height: 72, bottomY: 0 }) },
   {
+    type: 'WaterHeater',
+    label: 'Water heater',
+    standsOnFloor: true,
+    make: () => ({ type: 'WaterHeater', startX: 0, width: 30, height: 72, bottomY: 0 }),
+  },
+  {
+    type: 'Window',
     label: 'Window',
+    standsOnFloor: false,
     make: (w) => ({ type: 'Window', startX: Math.max(0, w / 2 - 18), width: 36, height: 24, bottomY: 40 }),
   },
   {
+    type: 'SideDoor',
     label: 'Side door',
+    standsOnFloor: true,
     make: (w) => ({ type: 'SideDoor', startX: Math.max(0, w - 42), width: 38, height: 84, bottomY: 0 }),
   },
 ]
+
+const kindOf = (type: string) => OBSTRUCTIONS.find((o) => o.type === type)
+
+/** "Window", or "Window 2" when there is more than one, so every field has its own name. */
+function nameOf(obstruction: DraftObstruction, all: DraftObstruction[]): string {
+  const label = kindOf(obstruction.type)?.label ?? obstruction.type
+  const same = all.filter((o) => o.type === obstruction.type)
+  return same.length > 1 ? `${label} ${same.indexOf(obstruction) + 1}` : label
+}
+
+/** What is wrong with an obstruction as entered, in the customer's terms, or null. */
+export function obstructionProblem(o: ObstructionDto, length: number, ceiling: number): string | null {
+  if (!(o.width > 0)) return 'Give it a width.'
+  if (o.startX < 0) return 'Measure from the left corner — this cannot be negative.'
+  if (o.startX + o.width > length) return `This runs past the end of the wall (${formatInches(length)}).`
+  if (o.bottomY < 0 || !(o.height > 0)) return 'Give it a height.'
+  if (o.bottomY + o.height > ceiling) return 'This goes above the ceiling — check the height.'
+  return null
+}
 
 const GOALS: { value: Goal; name: string; blurb: string }[] = [
   { value: 'Workbench', name: 'Workbench', blurb: 'Counter to work on, drawers where you stand.' },
@@ -52,16 +93,15 @@ const GOALS: { value: Goal; name: string; blurb: string }[] = [
 ]
 
 export function obstructionsFor(draft: WallDraft): ObstructionDto[] {
-  return OBSTRUCTIONS.filter((o) => draft.obstructions.includes(o.label)).map((o) => o.make(draft.length))
+  return draft.obstructions.map(({ id: _id, ...o }) => o)
 }
 
 /** The inputs that would produce a saved wall, so a shared design opens with its own wall filled in. */
 export function draftFor(wall: WallDto, goal: Goal): WallDraft {
-  const types = new Set((wall.obstructions ?? []).map((o) => o.type))
   return {
     length: wall.length,
     ceiling: wall.ceiling,
-    obstructions: OBSTRUCTIONS.filter((o) => types.has(o.make(wall.length).type)).map((o) => o.label),
+    obstructions: (wall.obstructions ?? []).map((o, i) => ({ ...o, id: i + 1 })),
     goal,
     preset: null,
   }
@@ -84,7 +124,17 @@ export function WallInputs({
   busy: boolean
 }) {
   const set = (patch: Partial<WallDraft>) => onChange({ ...draft, ...patch })
-  const ready = draft.length > 0 && draft.ceiling > 0
+  const problems = draft.obstructions.map((o) => obstructionProblem(o, draft.length, draft.ceiling))
+  const firstProblem = draft.obstructions.find((_, i) => problems[i] !== null)
+  const ready = draft.length > 0 && draft.ceiling > 0 && !firstProblem
+
+  const add = (kind: (typeof OBSTRUCTIONS)[number]) => {
+    const id = Math.max(0, ...draft.obstructions.map((o) => o.id)) + 1
+    set({ obstructions: [...draft.obstructions, { ...kind.make(draft.length), id }] })
+  }
+  const update = (id: number, patch: Partial<ObstructionDto>) =>
+    set({ obstructions: draft.obstructions.map((o) => (o.id === id ? { ...o, ...patch } : o)) })
+  const remove = (id: number) => set({ obstructions: draft.obstructions.filter((o) => o.id !== id) })
 
   return (
     <section className="inputs" aria-label="Your wall">
@@ -154,26 +204,69 @@ export function WallInputs({
 
       <div className="field">
         <h3>Anything in the way?</h3>
-        <p className="hint">Tap what is on this wall. We leave the clearance each one needs.</p>
+        <p className="hint">
+          Add what is on this wall, then measure from the left corner to its nearest edge. You can also drag
+          it along the drawing.
+        </p>
         <div className="chips" role="group" aria-label="Things on the wall">
-          {OBSTRUCTIONS.map((option) => (
+          {OBSTRUCTIONS.map((kind) => (
             <button
               type="button"
-              key={option.label}
+              key={kind.type}
               className="chip"
-              aria-pressed={draft.obstructions.includes(option.label)}
-              onClick={() =>
-                set({
-                  obstructions: draft.obstructions.includes(option.label)
-                    ? draft.obstructions.filter((l) => l !== option.label)
-                    : [...draft.obstructions, option.label],
-                })
-              }
+              aria-label={`Add ${kind.label.toLowerCase()}`}
+              disabled={draft.length <= 0}
+              onClick={() => add(kind)}
             >
-              {option.label}
+              + {kind.label}
             </button>
           ))}
         </div>
+
+        {draft.obstructions.length > 0 && (
+          <ul className="obstructions">
+            {draft.obstructions.map((o, i) => {
+              const name = nameOf(o, draft.obstructions)
+              const floorStanding = kindOf(o.type)?.standsOnFloor ?? false
+              const field = (key: 'startX' | 'width' | 'bottomY' | 'height', label: string) => (
+                <label className="measure-field">
+                  <span>{label}</span>
+                  <input
+                    type="number"
+                    min={0}
+                    step={0.5}
+                    inputMode="decimal"
+                    value={Number.isFinite(o[key]) ? o[key] : ''}
+                    onChange={(e) => update(o.id, { [key]: e.target.value === '' ? NaN : Number(e.target.value) })}
+                    aria-label={`${name} ${label.toLowerCase()}, inches`}
+                  />
+                </label>
+              )
+
+              return (
+                <li key={o.id} className="obstruction">
+                  <div className="obstruction-head">
+                    <strong>{name}</strong>
+                    <button type="button" className="linklike" onClick={() => remove(o.id)} aria-label={`Remove ${name.toLowerCase()}`}>
+                      Remove
+                    </button>
+                  </div>
+                  <div className="obstruction-fields">
+                    {field('startX', 'From left corner')}
+                    {field('width', 'Width')}
+                    {!floorStanding && field('bottomY', 'Off the floor')}
+                    {!floorStanding && field('height', 'Height')}
+                  </div>
+                  {problems[i] && (
+                    <p className="field-error" role="alert">
+                      {problems[i]}
+                    </p>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </div>
 
       <div className="field">
@@ -197,7 +290,10 @@ export function WallInputs({
             </button>
           ))}
         </div>
-        {!ready && <p className="hint">Add a wall length first.</p>}
+        {draft.length <= 0 && <p className="hint">Add a wall length first.</p>}
+        {firstProblem && (
+          <p className="hint">Fix the {nameOf(firstProblem, draft.obstructions).toLowerCase()} measurements first.</p>
+        )}
         {busy && <p className="hint">Working it out…</p>}
       </div>
     </section>

@@ -10,11 +10,13 @@ export function LivePreview({
   ceiling,
   obstructions,
   compact = false,
+  onMoveObstruction,
 }: {
   length: number
   ceiling: number
   obstructions: ObstructionDto[]
   compact?: boolean
+  onMoveObstruction?: (index: number, startX: number) => void
 }) {
   return (
     <section className="stage is-preview">
@@ -33,12 +35,13 @@ export function LivePreview({
           obstructions={obstructions}
           id="live-preview"
           compact={compact}
+          onMoveObstruction={onMoveObstruction}
         />
       </div>
 
       <p className="preview-empty">
         {obstructions.length > 0
-          ? 'We will leave the clearance each of these needs. Pick what the wall is for and we will fill it.'
+          ? 'Drag anything that is not quite where it should be. We will leave the clearance each one needs.'
           : 'Pick what the wall is for and we will fill it with cabinets.'}
       </p>
     </section>

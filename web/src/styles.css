@@ -90,6 +90,34 @@ a { color: var(--color-link); }
   min-height: 44px;
 }
 .measure .unit, .measure .feet { color: var(--color-muted); font-size: 14px; }
+.chip:disabled { opacity: 0.45; cursor: not-allowed; }
+.chip:disabled:hover { border-color: var(--color-border); }
+
+/* One card per thing on the wall: its name, then the measurements a tape measure gives you. */
+.obstructions { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; }
+.obstruction {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: grid;
+  gap: 10px;
+}
+.obstruction-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.obstruction-head strong { color: var(--color-heading); font-size: 15px; }
+.obstruction-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
+.measure-field { display: grid; gap: 4px; font-size: 13px; color: var(--color-muted); }
+.measure-field input {
+  font-family: inherit;
+  font-size: 16px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--chip-radius);
+  background: #fff;
+  color: var(--color-text);
+  min-height: 40px;
+}
+.field-error { color: var(--color-error, #a33a2c); font-size: 14px; margin: 0; }
 
 .goals { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; }
 .goal {
@@ -285,6 +313,11 @@ table.parts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .elev-hit { cursor: pointer; }
 .elev-hit:focus { outline: none; }
 .elev-hit:focus-visible { outline: none; }
+.elev-drag { cursor: grab; touch-action: none; }
+.elev-drag:active { cursor: grabbing; }
+.elev-drag-hit { fill: var(--color-heading); fill-opacity: 0.06; }
+.elev-drag:hover .elev-drag-hit, .elev-drag:focus-visible .elev-drag-hit { fill-opacity: 0.14; }
+.elev-drag:focus-visible { outline: none; }
 .elev-hit:focus-visible rect:last-of-type { stroke: var(--color-heading); stroke-width: 1.6; stroke-dasharray: 3 2; }
 .elev-hit:hover rect:last-of-type { stroke: var(--color-muted); stroke-width: 1; }
 

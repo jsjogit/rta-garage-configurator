@@ -27,12 +27,14 @@ Secondary: share-link created, design emailed, "talk to a designer" clicks.
    - 8 ft (96") · 9 ft (108") · 10 ft (120") · free input
    Required, because the line's talls and the 84" datum do not fit under an older 7-ft garage ceiling.
    Not a free-text measurement — it is the one dimension a customer can answer by looking up.
-2. **Obstructions** — optional, and deliberately coarse. Presets only (electrical panel, water heater,
-   window, side door, garage-door track zone, outlet) dropped onto a wall strip; no fine positioning,
-   no custom shapes. The solver models them fully as `{type, startX, width, height, bottomY}`, but the
-   UI never asks a customer to draw geometry. When a wall carries a clearance-bearing obstruction the
-   results show a "have a designer check this" path alongside the layouts — a designer is a better
-   answer than a complicated editor.
+2. **Obstructions** — optional. The customer adds a type (electrical panel, water heater, window,
+   side door; more than one of each is fine), which starts at a typical size and place, then enters
+   what they measured: inches from the left corner and width for everything, plus height and inches
+   off the floor for windows and panels. Doors and water heaters stand on the floor and keep their
+   default height. Each obstruction can also be dragged along the wall in the live drawing. The page
+   refuses to solve while one runs past the end of the wall or through the ceiling. No custom shapes.
+   When a wall carries a clearance-bearing obstruction the results still show a "have a designer
+   check this" path alongside the layouts.
 3. **Goal** — one of: `Workbench`, `Storage`, `HideTheMess`, `Balanced`.
    (No `budgetMax` in V1 — deferred to a later phase.)
 
@@ -53,7 +55,7 @@ For a ceiling under 36" that is `CeilingTooLow`. A ceiling under 84" still solve
 
 ## UI (Phase 1)
 - Step 1: wall length (3 quick-picks + free input) + ceiling height (3 quick-picks, 8 ft default)
-  → Step 2: drag obstruction chips onto a wall strip
+  → Step 2: add obstructions, type their measurements or drag them along the live drawing
   → Step 3: goal → Results.
 - Results: three cards side-by-side, each with an **SVG front elevation** (true proportions, gray
   slab fronts, black bar pulls, wood-tone counter), price, and "Add entire wall to cart".

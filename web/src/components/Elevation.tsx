@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import type { ObstructionDto, PlacedItemDto, LayoutDto } from '../api/types'
 
 /*
@@ -30,6 +31,8 @@ export interface ElevationProps {
   /** Index into layout.items, or null. Tapping a cabinet opens the side panel. */
   selected?: number | null
   onSelect?: (index: number | null) => void
+  /** Makes obstructions draggable along the wall. Called with the obstruction's index and new startX. */
+  onMoveObstruction?: (index: number, startX: number) => void
 }
 
 export function Elevation({
@@ -42,6 +45,7 @@ export function Elevation({
   compact = false,
   selected = null,
   onSelect,
+  onMoveObstruction,
 }: ElevationProps) {
   const padX = compact ? COMPACT_PAD.x : PAD_X
   const padTop = compact ? COMPACT_PAD.top : PAD_TOP
@@ -78,9 +82,19 @@ export function Elevation({
       <line x1={0} y1={toY(ceiling)} x2={wallLength} y2={toY(ceiling)} stroke="var(--color-rule)" strokeWidth="0.8" />
       <line x1={-padX / 2} y1={floor} x2={wallLength + padX / 2} y2={floor} stroke="var(--ink)" strokeWidth="1.6" />
 
-      {obstructions.map((o, i) => (
-        <Ghost key={`o${i}`} obstruction={o} toY={toY} />
-      ))}
+      {obstructions.map((o, i) =>
+        onMoveObstruction ? (
+          <DraggableGhost
+            key={`o${i}`}
+            obstruction={o}
+            toY={toY}
+            wallLength={wallLength}
+            onMove={(startX) => onMoveObstruction(i, startX)}
+          />
+        ) : (
+          <Ghost key={`o${i}`} obstruction={o} toY={toY} />
+        ),
+      )}
 
       {/* The datum: wall-cabinet tops and pantry tops both land here. Pointless on an empty wall. */}
       {layout.items.length > 0 && (
@@ -327,6 +341,87 @@ function Ghost({ obstruction, toY }: { obstruction: ObstructionDto; toY: (up: nu
           {label}
         </text>
       )}
+    </g>
+  )
+}
+
+/** Pointer position in wall inches. Browsers give us the SVG's own transform; jsdom only a box. */
+function wallX(svg: SVGSVGElement, clientX: number): number {
+  const ctm = typeof svg.getScreenCTM === 'function' ? svg.getScreenCTM() : null
+  if (ctm && typeof svg.createSVGPoint === 'function') {
+    const point = svg.createSVGPoint()
+    point.x = clientX
+    point.y = 0
+    return point.matrixTransform(ctm.inverse()).x
+  }
+
+  // preserveAspectRatio="xMidYMid meet": uniform scale, centred in the box.
+  const [vbX, , vbW, vbH] = svg.getAttribute('viewBox')!.split(' ').map(Number)
+  const box = svg.getBoundingClientRect()
+  const scale = Math.min(box.width / vbW, box.height / vbH)
+  return vbX + (clientX - box.left - (box.width - vbW * scale) / 2) / scale
+}
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
+
+/**
+ * An obstruction the customer can slide along the wall: drag it, or focus it and use the arrow keys
+ * (an inch a press, a foot with shift). Only the position along the wall moves; sizes are typed.
+ */
+function DraggableGhost({
+  obstruction,
+  toY,
+  wallLength,
+  onMove,
+}: {
+  obstruction: ObstructionDto
+  toY: (up: number) => number
+  wallLength: number
+  onMove: (startX: number) => void
+}) {
+  const grab = useRef<number | null>(null)
+  const max = Math.max(0, wallLength - obstruction.width)
+  const label = OBSTRUCTION_LABELS[obstruction.type] ?? spaceOut(obstruction.type)
+  const place = (startX: number) => onMove(clamp(Math.round(startX * 2) / 2, 0, max))
+
+  return (
+    <g
+      className="elev-drag"
+      role="slider"
+      tabIndex={0}
+      aria-label={`${label}, inches from the left corner. Drag or use the arrow keys to move it.`}
+      aria-valuemin={0}
+      aria-valuemax={max}
+      aria-valuenow={obstruction.startX}
+      onPointerDown={(event) => {
+        const svg = (event.currentTarget as SVGGElement).ownerSVGElement!
+        grab.current = wallX(svg, event.clientX) - obstruction.startX
+        ;(event.currentTarget as Element).setPointerCapture?.(event.pointerId)
+      }}
+      onPointerMove={(event) => {
+        if (grab.current === null) return
+        const svg = (event.currentTarget as SVGGElement).ownerSVGElement!
+        place(wallX(svg, event.clientX) - grab.current)
+      }}
+      onPointerUp={() => (grab.current = null)}
+      onPointerCancel={() => (grab.current = null)}
+      onKeyDown={(event) => {
+        const step = event.shiftKey ? 12 : 1
+        if (event.key === 'ArrowRight') place(obstruction.startX + step)
+        else if (event.key === 'ArrowLeft') place(obstruction.startX - step)
+        else return
+        event.preventDefault()
+      }}
+    >
+      {/* A filled hit area: the dashed outline alone is too thin to grab. */}
+      <rect
+        x={obstruction.startX}
+        y={toY(obstruction.bottomY + obstruction.height)}
+        width={obstruction.width}
+        height={obstruction.height}
+        className="elev-drag-hit"
+      />
+      <Ghost obstruction={obstruction} toY={toY} />
     </g>
   )
 }

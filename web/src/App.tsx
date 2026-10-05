@@ -158,6 +158,12 @@ export function App() {
             ceiling={draft.ceiling}
             obstructions={obstructionsFor(draft)}
             compact={pinned}
+            onMoveObstruction={(index, startX) =>
+              setDraft({
+                ...draft,
+                obstructions: draft.obstructions.map((o, i) => (i === index ? { ...o, startX } : o)),
+              })
+            }
           />
         ) : (
           <p className="stage-placeholder">Your wall will be drawn here once you add a length.</p>

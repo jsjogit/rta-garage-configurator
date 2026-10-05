@@ -88,6 +88,10 @@
 | 2026-10-05 | Sharing saves the wall the customer is looking at, and says which | The share bar always saved the recommended Standard wall, whatever card, tier or edits were on screen, so links, emails and designer hand-offs showed a different wall and price. It now saves the sheet last switched or edited (recommended by default), labels it ("Saving: Bigger workbench · Premiere"), and a code is only reused for the exact layout it saved. |
 | 2026-10-05 | A shared link opens as one wall, on its saved tier, with the inputs filled in | It said "Three ways to build it · 1 of 3", offered a tier switch that changed only the caption, and left the wall inputs blank. |
 | 2026-10-05 | Validator messages call a knee space "the knee space" | A knee space has no SKU, so "a 30\" gap between MV-PC3084 and ;" reached the customer. |
+| 2026-10-05 | Obstructions are measured and movable, superseding "presets only" (2026-10-02) | Joshua: a fixed-position chip made the section useless — a window placed at the wall's centre steers the layouts around a window that is not there. Customers now add an obstruction, type the tape-measure numbers (from the left corner, width; height and off the floor for windows and panels), or drag it along the live drawing. The designer path stays for clearance-bearing walls. |
+| 2026-10-05 | Doors and water heaters do not ask for a height | Both stand on the floor and block the full height a cabinet would use, so the two extra fields would only be a chance to type something wrong. |
+| 2026-10-05 | The page will not solve while an obstruction is off the wall or through the ceiling | The message says which one and why. Silently clamping it would solve a different wall from the one the customer described. |
+| 2026-10-05 | Dragging moves an obstruction along the wall only, snapped to half inches | Height and size stay typed: a free 2D drag on a 115px mobile strip would be more fiddle than help. Arrow keys move it an inch, shift-arrow a foot, so it is reachable without a mouse. |
 
 ## Needs Joshua
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a

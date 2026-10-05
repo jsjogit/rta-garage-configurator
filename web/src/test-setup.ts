@@ -14,3 +14,15 @@ if (!window.matchMedia) {
       dispatchEvent: () => false,
     }) as MediaQueryList
 }
+
+// jsdom has no PointerEvent, so fireEvent.pointerMove would drop clientX. A MouseEvent carries it.
+if (!('PointerEvent' in window)) {
+  class PointerEventPolyfill extends MouseEvent {
+    pointerId: number
+    constructor(type: string, init: PointerEventInit = {}) {
+      super(type, init)
+      this.pointerId = init.pointerId ?? 1
+    }
+  }
+  ;(window as unknown as { PointerEvent: typeof PointerEventPolyfill }).PointerEvent = PointerEventPolyfill
+}

@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { useState } from 'react'
@@ -43,24 +43,103 @@ describe('WallInputs', () => {
     expect(wallState().length).toBe(360)
   })
 
-  it('turns an obstruction chip into a real obstruction on the wall', async () => {
+  it('adds an obstruction at a typical size and place', async () => {
     const user = userEvent.setup()
     render(<Harness />)
 
     await user.click(screen.getByRole('button', { name: /single-car side wall/i }))
-    await user.click(screen.getByRole('button', { name: /electrical panel/i }))
+    await user.click(screen.getByRole('button', { name: /add electrical panel/i }))
 
     expect(wallState().obstructions).toEqual([
       { type: 'ElectricalPanel', startX: 180, width: 16, height: 30, bottomY: 48 },
     ])
   })
 
-  it('offers only presets, never a free-form obstruction editor', () => {
+  it('takes the measured distance from the left corner and the width', async () => {
+    const user = userEvent.setup()
     render(<Harness />)
 
-    const group = screen.getByRole('group', { name: /things on the wall/i })
-    expect(within(group).queryAllByRole('textbox')).toHaveLength(0)
-    expect(within(group).queryAllByRole('spinbutton')).toHaveLength(0)
+    await user.type(screen.getByLabelText(/wall length in inches/i), '186')
+    await user.click(screen.getByRole('button', { name: /add window/i }))
+
+    await user.clear(screen.getByLabelText(/window from left corner/i))
+    await user.type(screen.getByLabelText(/window from left corner/i), '20')
+    await user.clear(screen.getByLabelText(/window width/i))
+    await user.type(screen.getByLabelText(/window width/i), '48')
+
+    expect(wallState().obstructions[0]).toMatchObject({ type: 'Window', startX: 20, width: 48 })
+  })
+
+  it('asks how high a window or panel sits, but not a door or water heater', async () => {
+    const user = userEvent.setup()
+    render(<Harness />)
+
+    await user.type(screen.getByLabelText(/wall length in inches/i), '240')
+    await user.click(screen.getByRole('button', { name: /add window/i }))
+    await user.click(screen.getByRole('button', { name: /add side door/i }))
+
+    await user.clear(screen.getByLabelText(/window off the floor/i))
+    await user.type(screen.getByLabelText(/window off the floor/i), '44')
+    await user.clear(screen.getByLabelText(/window height/i))
+    await user.type(screen.getByLabelText(/window height/i), '30')
+
+    expect(wallState().obstructions[0]).toMatchObject({ bottomY: 44, height: 30 })
+    expect(screen.queryByLabelText(/side door off the floor/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/side door height/i)).not.toBeInTheDocument()
+  })
+
+  it('allows more than one of the same thing', async () => {
+    const user = userEvent.setup()
+    render(<Harness />)
+
+    await user.type(screen.getByLabelText(/wall length in inches/i), '360')
+    await user.click(screen.getByRole('button', { name: /add window/i }))
+    await user.click(screen.getByRole('button', { name: /add window/i }))
+
+    expect(wallState().obstructions).toHaveLength(2)
+    expect(screen.getByLabelText(/window 2 from left corner/i)).toBeInTheDocument()
+  })
+
+  it('removes an obstruction', async () => {
+    const user = userEvent.setup()
+    render(<Harness />)
+
+    await user.type(screen.getByLabelText(/wall length in inches/i), '240')
+    await user.click(screen.getByRole('button', { name: /add water heater/i }))
+    await user.click(screen.getByRole('button', { name: /remove water heater/i }))
+
+    expect(wallState().obstructions).toEqual([])
+  })
+
+  it('will not add an obstruction before there is a wall to put it on', () => {
+    render(<Harness />)
+
+    expect(screen.getByRole('button', { name: /add window/i })).toBeDisabled()
+  })
+
+  it('says when an obstruction runs past the end of the wall and holds the layouts back', async () => {
+    const user = userEvent.setup()
+    render(<Harness />)
+
+    await user.type(screen.getByLabelText(/wall length in inches/i), '120')
+    await user.click(screen.getByRole('button', { name: /add window/i }))
+    await user.clear(screen.getByLabelText(/window from left corner/i))
+    await user.type(screen.getByLabelText(/window from left corner/i), '100')
+
+    expect(screen.getByText(/runs past the end of the wall/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /max storage/i })).toBeDisabled()
+  })
+
+  it('says when a window would go through the ceiling', async () => {
+    const user = userEvent.setup()
+    render(<Harness />)
+
+    await user.type(screen.getByLabelText(/wall length in inches/i), '120')
+    await user.click(screen.getByRole('button', { name: /add window/i }))
+    await user.clear(screen.getByLabelText(/window off the floor/i))
+    await user.type(screen.getByLabelText(/window off the floor/i), '90')
+
+    expect(screen.getByText(/above the ceiling/i)).toBeInTheDocument()
   })
 
   it('will not ask for layouts until there is a wall length', () => {

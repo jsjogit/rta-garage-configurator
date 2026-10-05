@@ -1,5 +1,5 @@
-import { render } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { fireEvent, render } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
 import { Elevation, formatInches } from '../Elevation'
 import type { SolveResponse } from '../../api/types'
 
@@ -157,5 +157,64 @@ describe('compact mode', () => {
   it('leaves the datum off an empty wall', () => {
     const { container } = render(<Elevation layout={{ items: [] }} wallLength={240} ceiling={96} id="e" />)
     expect(container.textContent).not.toContain('datum')
+  })
+})
+
+describe('moving an obstruction', () => {
+  const window36 = { type: 'Window', startX: 60, width: 36, height: 24, bottomY: 40 }
+
+  function preview(onMove = vi.fn()) {
+    const utils = render(
+      <Elevation layout={{ items: [] }} wallLength={240} ceiling={96} obstructions={[window36]} id="t" onMoveObstruction={onMove} />,
+    )
+    const svg = utils.container.querySelector('svg')!
+    // jsdom does no layout: pretend the drawing is 520px wide so 2px of pointer = 1 inch of wall.
+    const [, , width, height] = svg.getAttribute('viewBox')!.split(' ').map(Number)
+    svg.getBoundingClientRect = () =>
+      ({ left: 0, top: 0, width: width * 2, height: height * 2, right: width * 2, bottom: height * 2, x: 0, y: 0, toJSON: () => ({}) })
+    return { ...utils, onMove, handle: utils.getByRole('slider', { name: /window/i }) }
+  }
+
+  it('is not draggable unless someone is listening', () => {
+    const { queryByRole } = render(
+      <Elevation layout={{ items: [] }} wallLength={240} ceiling={96} obstructions={[window36]} id="t" />,
+    )
+    expect(queryByRole('slider')).not.toBeInTheDocument()
+  })
+
+  it('slides along the wall when dragged', () => {
+    const { handle, onMove } = preview()
+
+    fireEvent.pointerDown(handle, { clientX: 200, pointerId: 1 })
+    fireEvent.pointerMove(handle, { clientX: 240, pointerId: 1 })
+
+    expect(onMove).toHaveBeenLastCalledWith(0, 80)
+  })
+
+  it('cannot be dragged off either end of the wall', () => {
+    const { handle, onMove } = preview()
+
+    fireEvent.pointerDown(handle, { clientX: 200, pointerId: 1 })
+    fireEvent.pointerMove(handle, { clientX: 2000, pointerId: 1 })
+    expect(onMove).toHaveBeenLastCalledWith(0, 204)
+
+    fireEvent.pointerMove(handle, { clientX: -2000, pointerId: 1 })
+    expect(onMove).toHaveBeenLastCalledWith(0, 0)
+  })
+
+  it('moves an inch per arrow press, a foot with shift', () => {
+    const { handle, onMove } = preview()
+
+    fireEvent.keyDown(handle, { key: 'ArrowRight' })
+    expect(onMove).toHaveBeenLastCalledWith(0, 61)
+
+    fireEvent.keyDown(handle, { key: 'ArrowLeft', shiftKey: true })
+    expect(onMove).toHaveBeenLastCalledWith(0, 48)
+  })
+
+  it('tells a screen reader where it is', () => {
+    const { handle } = preview()
+    expect(handle).toHaveAttribute('aria-valuenow', '60')
+    expect(handle).toHaveAttribute('aria-valuemax', '204')
   })
 })
