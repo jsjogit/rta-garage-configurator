@@ -47,7 +47,7 @@ describe('WallInputs', () => {
     const user = userEvent.setup()
     render(<Harness />)
 
-    await user.click(screen.getByRole('button', { name: /single-car side wall/i }))
+    await user.click(screen.getByRole('button', { name: /two-car back wall/i }))
     await user.click(screen.getByRole('button', { name: /add electrical panel/i }))
 
     expect(wallState().obstructions).toEqual([
@@ -160,15 +160,27 @@ describe('WallInputs', () => {
     expect(onSolve).toHaveBeenCalledWith('Storage')
   })
 
-  it('lights only the quick pick that was chosen, even when two share a length', async () => {
+  it('offers three different wall lengths as quick picks', async () => {
+    const user = userEvent.setup()
+    render(<Harness />)
+    const lengths: number[] = []
+
+    for (const name of [/single-car back wall/i, /two-car back wall/i, /three-car back wall/i]) {
+      await user.click(screen.getByRole('button', { name }))
+      lengths.push(wallState().length)
+    }
+
+    expect(lengths).toEqual([120, 240, 360])
+  })
+
+  it('lights only the quick pick that was chosen', async () => {
     const user = userEvent.setup()
     render(<Harness />)
 
     await user.click(screen.getByRole('button', { name: /two-car back wall/i }))
 
-    // Both presets are 20 feet; only the one tapped should read as selected.
     expect(screen.getByRole('button', { name: /two-car back wall/i })).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('button', { name: /single-car side wall/i })).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByRole('button', { name: /single-car back wall/i })).toHaveAttribute('aria-pressed', 'false')
   })
 
   it('typing a length clears the quick pick', async () => {

@@ -22,7 +22,7 @@ data/                          catalog.json, wall fixtures, nop product-id map
 
 ```bash
 dotnet test                                  # 451 Core + 108 API tests
-cd web && npm install && npm test            # 90 web tests
+cd web && npm install && npm test            # 91 web tests
 ```
 
 The full stack is three processes:

@@ -11,14 +11,14 @@ export interface WallDraft {
   ceiling: number
   obstructions: DraftObstruction[]
   goal: Goal | null
-  /** Which quick pick is lit. Two presets share 20', so length alone cannot tell them apart. */
+  /** Which quick pick is lit; cleared when someone types their own length. */
   preset: string | null
 }
 
 export const EMPTY_DRAFT: WallDraft = { length: 0, ceiling: 96, obstructions: [], goal: null, preset: null }
 
 const WALL_PRESETS = [
-  { label: 'Single-car side wall', inches: 240 },
+  { label: 'Single-car back wall', inches: 120 },
   { label: 'Two-car back wall', inches: 240 },
   { label: 'Three-car back wall', inches: 360 },
 ]
