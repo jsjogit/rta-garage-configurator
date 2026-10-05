@@ -99,6 +99,11 @@
 | 2026-10-05 | Reordering lives in the 2D editor, not in 3D | Dragging in 2D is a 1D problem we have already solved for obstructions; 3D drag means raycasting and constraint planes. Moves stay within their row and unbroken stretch, re-pack without gaps, and the API validator remains the authority. |
 | 2026-10-05 | `three` is added to web/ only, lazy-loaded | ~150 KB gzipped, fetched on the first "See it in 3D" so the main bundle does not grow. Core and the API gain nothing. |
 | 2026-10-05 | Phase 2 ships as optional versions: 1A (Phase 1), 1B reorder, 1C 3D, 2.0 all three | Joshua wants Phase 1's scope as tight as possible and is wary of the complexity in reorder and 3D. Each is its own branch built from 1A, so either can be dropped without touching the other. 2.0 is only the merge of the three plus the joint browser pass. |
+| 2026-10-05 | 1C: the 3D view opens at an angle (−22° round, 10° up); Front view squares it | Straight-on looks like the 2D drawing in grey; the angle is what makes it read as 3D at a glance. |
+| 2026-10-05 | 1C: the camera backs off until the counter's front edge is in the picture | Found in the browser: framing for a straight-on view cropped the near cabinets once the view swung round. Pinned by a perspective-projection test across 6–30 ft walls. |
+| 2026-10-05 | 1C: opening "Edit this wall" closes 3D | 3D is for looking; tapping, dragging and swapping happen on the drawing, where they are precise. |
+| 2026-10-05 | 1C: one unit cube scaled per box, one material per surface | A whole wall is a single geometry on the GPU, so memory does not grow with wall length. |
+| 2026-10-05 | 1C: the 3D chunk is ~136 KB gzipped and loads only on "See it in 3D"; the entry chunk is 57.3 KB | Measured on `v1c-3d`. `npm run check:bundle` fails CI if Three.js ever reaches the entry chunk or it passes 58,200 bytes. |
 
 ## Needs Joshua
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a
