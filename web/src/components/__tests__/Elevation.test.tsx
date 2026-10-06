@@ -270,6 +270,35 @@ describe('reordering in edit mode', () => {
     expect(onSelect).not.toHaveBeenCalled()
   })
 
+  it('still selects on the next tap after a touch drag, which sends no click', () => {
+    const { first, onSelect } = editable()
+
+    // A finger drag: browsers send no click when the finger moved.
+    fireEvent.pointerDown(first, { clientX: 44, pointerId: 1 })
+    fireEvent.pointerMove(first, { clientX: 104, pointerId: 1 })
+    fireEvent.pointerUp(first, { clientX: 104, pointerId: 1 })
+    // Then a plain tap.
+    fireEvent.pointerDown(first, { clientX: 44, pointerId: 2 })
+    fireEvent.pointerUp(first, { clientX: 44, pointerId: 2 })
+    fireEvent.click(first)
+
+    expect(onSelect).toHaveBeenCalledWith(0)
+  })
+
+  it('shows the neighbours making room while the drag is still going', () => {
+    const { first, getByRole } = editable()
+    const kneeX = () => getByRole('button', { name: /open knee space/i }).querySelector('rect')!.getAttribute('x')
+    expect(kneeX()).toBe('24')
+
+    fireEvent.pointerDown(first, { clientX: 44, pointerId: 1 })
+    fireEvent.pointerMove(first, { clientX: 104, pointerId: 1 }) // past the knee space's middle
+
+    expect(kneeX()).toBe('0')
+
+    fireEvent.pointerUp(first, { clientX: 104, pointerId: 1 })
+    expect(kneeX()).toBe('24') // the parent owns the real layout; the preview ends with the drag
+  })
+
   it('moves the focused cabinet with the arrow keys', () => {
     const { first, onReorder } = editable()
 
