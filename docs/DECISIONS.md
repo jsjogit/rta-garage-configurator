@@ -104,6 +104,7 @@
 | 2026-10-05 | 1B: elevation items are keyed by index, not position | The old key included x, so a moved cabinet was a new element and keyboard focus fell off it after every arrow press. |
 | 2026-10-05 | 1B: dragging uses `touch-action: pan-y` | A vertical swipe still scrolls the page on a phone; only a sideways drag reorders. |
 | 2026-10-05 | 1B: the edit hint mentions dragging | Found in the browser pass: "Tap a cabinet to swap or remove it" gave no hint that drag existed. |
+| 2026-10-05 | 1B: the drag previews the new order; neighbours make room before release | Final review: the spec asked for it and the first build only slid the dragged cabinet. The preview is the same `reorder()` the drop applies, so what you see is what you get. |
 
 ## Needs Joshua
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a

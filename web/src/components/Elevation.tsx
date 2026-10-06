@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import type { ObstructionDto, PlacedItemDto, LayoutDto } from '../api/types'
-import { stepsForDrag } from '../editor/reorder'
+import { reorder, stepsForDrag } from '../editor/reorder'
 
 /*
   A true-proportion front elevation, drawn the way the shop would draw it: everything is in inches,
@@ -58,8 +58,12 @@ export function Elevation({
   const toY = (up: number) => ceiling - up
 
   const floor = toY(0)
+  // While a cabinet is being dragged, draw the row as it would be if dropped here; the dragged
+  // cabinet itself follows the pointer. The real layout only changes when the parent applies the drop.
+  const [drag, setDrag] = useState<{ index: number; dx: number } | null>(null)
+  const shown = drag ? reorder(layout, drag.index, stepsForDrag(layout, drag.index, drag.dx)) : layout
   // Keep the original index so a tap maps back to the item the editor will change.
-  const ordered = layout.items
+  const ordered = shown.items
     .map((item, index) => ({ item, index }))
     .sort((a, b) => zOrder(a.item) - zOrder(b.item))
 
@@ -130,6 +134,8 @@ export function Elevation({
           onSelect={onSelect}
           onReorder={onReorder}
           stepsFor={(dx) => stepsForDrag(layout, index, dx)}
+          offset={drag?.index === index ? layout.items[index].x + drag.dx - shown.items[index].x : 0}
+          onDrag={(dx) => setDrag(dx === null ? null : { index, dx })}
         />
       ))}
 
@@ -156,6 +162,8 @@ function Item({
   onSelect,
   onReorder,
   stepsFor,
+  offset,
+  onDrag,
 }: {
   item: PlacedItemDto
   toY: (up: number) => number
@@ -165,8 +173,11 @@ function Item({
   onSelect?: (index: number | null) => void
   onReorder?: (index: number, steps: number) => void
   stepsFor: (dx: number) => number
+  /** How far to draw this item from where `item.x` puts it: non-zero only for the one being dragged. */
+  offset: number
+  /** The drag distance in inches as it happens, then null when it ends. */
+  onDrag: (dx: number | null) => void
 }) {
-  const [dx, setDx] = useState(0)
   const grab = useRef<{ start: number; dragged: boolean } | null>(null)
   const swallowClick = useRef(false)
   const y = toY(item.y + item.height)
@@ -183,9 +194,11 @@ function Item({
       aria-label={`${item.zone === 'KneeSpace' ? 'Open knee space' : item.sku}, ${item.width} inches wide`}
       aria-pressed={selected}
       className={onReorder ? 'elev-hit elev-movable' : 'elev-hit'}
-      transform={dx ? `translate(${dx} 0)` : undefined}
+      transform={offset ? `translate(${offset} 0)` : undefined}
       onPointerDown={(event) => {
         if (!onReorder) return
+        // A touch drag gets no click to clear this, so every new press starts fresh.
+        swallowClick.current = false
         grab.current = { start: wallX(svgOf(event.currentTarget), event.clientX), dragged: false }
         ;(event.currentTarget as Element).setPointerCapture?.(event.pointerId)
       }}
@@ -193,12 +206,12 @@ function Item({
         if (!grab.current) return
         const moved = wallX(svgOf(event.currentTarget), event.clientX) - grab.current.start
         if (Math.abs(moved) >= DRAG_THRESHOLD) grab.current.dragged = true
-        if (grab.current.dragged) setDx(moved)
+        if (grab.current.dragged) onDrag(moved)
       }}
       onPointerUp={(event) => {
         const drag = grab.current
         grab.current = null
-        setDx(0)
+        onDrag(null)
         if (!drag?.dragged || !onReorder) return
         swallowClick.current = true
         const steps = stepsFor(wallX(svgOf(event.currentTarget), event.clientX) - drag.start)
@@ -206,7 +219,7 @@ function Item({
       }}
       onPointerCancel={() => {
         grab.current = null
-        setDx(0)
+        onDrag(null)
       }}
       onClick={() => {
         if (swallowClick.current) {

@@ -330,17 +330,51 @@ describe('moving a cabinet', () => {
     expect(within(sheet).getByRole('button', { name: 'Move right' })).toBeEnabled()
   })
 
-  it('two quick moves end on the two-step wall, priced by the last answer', async () => {
+  it('two quick moves end on the two-step wall, priced by the last answer even if it arrives first', async () => {
+    // Hold every reprice until the test releases it, so both moves are in flight at once.
+    const held: { url: string; layout: { items: { x: number }[] }; release: (subtotal: number) => void }[] = []
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string, init?: RequestInit) => {
+        const body = init?.body ? JSON.parse(init.body as string) : undefined
+        calls.push({ url, body })
+        const json = (value: unknown) => ({ ok: true, status: 200, json: async () => value }) as Response
+        if (url === '/api/price' || url === '/api/validate') {
+          return new Promise<Response>((resolve) => {
+            held.push({
+              url,
+              layout: body.layout,
+              release: (subtotal) =>
+                resolve(
+                  url === '/api/validate'
+                    ? json({ violations: [] })
+                    : json({ layout: body.layout, lineItems: [], subtotalList: subtotal + 500, subtotalPromo: subtotal }),
+                ),
+            })
+          })
+        }
+        if (url.startsWith('/api/swaps/')) return Promise.resolve(json({ sku: 'MV-B24-F', options: [] }))
+        return Promise.resolve(json({}))
+      }),
+    )
     const user = userEvent.setup()
     render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
     const sheet = await selectFirstCabinet(user)
 
     await user.click(within(sheet).getByRole('button', { name: 'Move right' }))
     await user.click(within(sheet).getByRole('button', { name: 'Move right' }))
+    const prices = held.filter((h) => h.url === '/api/price')
+    expect(prices).toHaveLength(2)
+    expect(prices[1].layout.items[0].x).toBe(48)
 
-    await waitFor(() => expect(prices()).toHaveLength(2))
-    expect((prices()[1].body as Sent).layout.items[0].x).toBe(48)
-    expect(total(sheet)).toBe(money(1234))
+    // The second answer lands first, then the stale first one.
+    for (const h of held.filter((h) => h.url === '/api/validate')) h.release(0)
+    prices[1].release(2222)
+    await waitFor(() => expect(total(sheet)).toBe(money(2222)))
+    prices[0].release(1111)
+    await new Promise((resolve) => setTimeout(resolve, 20))
+
+    expect(total(sheet)).toBe(money(2222))
   })
 
   it('undo puts the cabinets back', async () => {
