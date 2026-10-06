@@ -114,6 +114,7 @@
 | 2026-10-06 | Legs are drawn at their lowest, 4" | Keeps every listed height, layout and price unchanged (box 30.5" base, 80" pantry). Pending vendor confirmation — see Needs Joshua. |
 | 2026-10-06 | Product images are static WebP files, never imported into the bundle | 42 files (96 and 320 px per SKU), 180 KB in all, loaded lazily with fixed dimensions; the page everyone loads grows only by the list of SKUs that have images. |
 | 2026-10-06 | The image build trims the white studio border and levels the countertop render for the wood texture | Rotated by the measured 28.1° grain angle (sharp rotates clockwise, so by −28.1°), trimmed to the slab, and cut from the middle of its top surface. Verified free of background. |
+| 2026-10-06 | Known: each 3D open leaves some JS heap behind | Found while reviewing 1D: a bare three.js r186 renderer created and disposed correctly still retains ~24 KB in Chrome, and the 3D view creates one per open. GPU resources are released (no WebGL-context warnings); the earlier "memory flat" check read per-renderer counters, which cannot show this. Effect is small (well under 1 MB after 20 opens here). Fix if the prototype is approved: one shared renderer per page. |
 
 ## Needs Joshua
 - **Is the listed 34.5" base height (84" pantry) measured with the legs at their lowest, 4"?** The legs
