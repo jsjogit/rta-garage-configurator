@@ -127,3 +127,22 @@ describe('frameCamera', () => {
     }
   })
 })
+
+describe('legs in 3D', () => {
+  it('raises a base box onto four legs that reach the floor', () => {
+    const boxes = one({ sku: 'MV-B24-F', x: 0, y: 0, width: 24, height: 34.5, depth: 24, zone: 'Base' })
+    const carcass = of(boxes, 'carcass')[0]
+    expect(carcass.y).toBeCloseTo(4, 9)
+    expect(carcass.h).toBeCloseTo(30.5, 9)
+    const legs = of(boxes, 'leg')
+    expect(legs).toHaveLength(4)
+    for (const leg of legs) {
+      expect(leg.y).toBe(0)
+      expect(leg.h).toBe(4)
+    }
+  })
+
+  it('gives wall cabinets no legs', () => {
+    expect(of(one({ sku: 'MV-W2430', x: 0, y: 54, width: 24, height: 30, depth: 12, zone: 'Wall' }), 'leg')).toHaveLength(0)
+  })
+})

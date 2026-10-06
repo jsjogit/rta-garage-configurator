@@ -1,6 +1,6 @@
 // web/src/three/buildScene.ts
 import type { LayoutDto, ObstructionDto, PlacedItemDto, WallDto } from '../api/types'
-import { fronts } from '../geometry/fronts'
+import { boxHeight, fronts, LEG, legPositions } from '../geometry/fronts'
 
 /*
   The 3D wall as plain boxes, with no Three.js in sight, so it can be tested without a GPU. Inches
@@ -8,7 +8,7 @@ import { fronts } from '../geometry/fronts'
   Wall3D.tsx is the only file that turns these into meshes.
 */
 
-export type MaterialKey = 'carcass' | 'front' | 'pull' | 'counter' | 'wall' | 'floor' | 'ghost'
+export type MaterialKey = 'carcass' | 'front' | 'pull' | 'counter' | 'wall' | 'floor' | 'ghost' | 'leg'
 
 /** An axis-aligned box. (x, y, z) is its min corner. */
 export interface Box {
@@ -52,12 +52,22 @@ function itemBoxes(item: PlacedItemDto): Box[] {
 
   // The carcass stops short of the front so the slab faces sit flush with the cabinet's full depth.
   const carcassDepth = item.depth - FRONT_THICKNESS
+  const lift = item.height - boxHeight(item) // the legs, or 0
   const { faces, pulls } = fronts(item, item.y + item.height, -1)
 
   return [
-    { material: 'carcass', ...whole, d: carcassDepth },
+    { material: 'carcass', x: item.x, y: item.y + lift, z: 0, w: item.width, h: boxHeight(item), d: carcassDepth },
     ...faces.map((f): Box => ({ material: 'front', x: f.x, y: f.y - f.height, z: carcassDepth, w: f.width, h: f.height, d: FRONT_THICKNESS })),
     ...pulls.map((p): Box => ({ material: 'pull', x: p.x, y: p.y - p.height, z: item.depth, w: p.width, h: p.height, d: PULL_PROUD })),
+    ...legPositions(item).map((leg): Box => ({
+      material: 'leg',
+      x: leg.x - LEG.sleeveDiameter / 2,
+      y: item.y,
+      z: leg.z - LEG.sleeveDiameter / 2,
+      w: LEG.sleeveDiameter,
+      h: LEG.height,
+      d: LEG.sleeveDiameter,
+    })),
   ]
 }
 

@@ -4,8 +4,9 @@
 import { readFileSync } from 'node:fs'
 import { gzipSync } from 'node:zlib'
 
-// 2.0 carries 1B and 1C together (~1.0 KB + ~1.1 KB): 56.2 KB at 6ef976d + 2.2 KB, approved by Joshua 2026-10-05.
-const LIMIT = 58_400
+// 2.0 = 1A + 1B + 1C. Joshua approved Phase 2 adding ~2.2 KB over 1A (2026-10-05). 1A is 57,214 bytes after
+// the render-accuracy work (was 56,184), so the limit moves with it: 58,400 + 1,030. See DECISIONS 2026-10-06.
+const LIMIT = 59_430
 
 const html = readFileSync(new URL('../dist/index.html', import.meta.url), 'utf8')
 const entry = html.match(/src="\/assets\/(index-[^"]+\.js)"/)?.[1]
