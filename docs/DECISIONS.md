@@ -106,8 +106,13 @@
 | 2026-10-05 | 1C: the 3D chunk is ~136 KB gzipped and loads only on "See it in 3D"; the entry chunk is 57.3 KB | Measured on `v1c-3d`. `npm run check:bundle` fails CI if Three.js ever reaches the entry chunk or it passes 58,200 bytes. |
 | 2026-10-05 | The 50 ms solver benchmark checks each case's median, not its average | Found on GitHub's first CI run: a shared runner stalled once and the slowest average read 61.7 ms; the same code passed on two other runs and a re-run. The requirement is unchanged — every fixture and goal under 50 ms — but a median of 15 timed solves ignores one-off machine stalls while a genuinely slow solver still fails. Locally the slowest median is ~10 ms. |
 | 2026-10-05 | The 50 ms solver target is checked on developer machines; CI only checks for a blown-up solver (250 ms) | The median alone did not fix CI: a later GitHub run measured a 69.4 ms median, the whole shared runner ~7x slower than a Mac (~10 ms). A fixed millisecond limit on shared hardware fails at random. Joshua chose to split it: 50 ms locally, 250 ms when `CI=true`. Follow-up: once the API is on Azure, measure real solve latency there — shared cloud hardware is closer to the CI runner than to a Mac, so the slowest 30 ft walls may land around 60–70 ms (still well inside a page round trip). |
+| 2026-10-06 | The manufacturer's 23 renders are the visual reference for the drawing and 3D | Joshua: cleared for web use and also going on the garage PDP cards. They show legs, drawer-over-door bases (B15, B24, B30), four-door pantries and pull positions the drawing gets wrong. Originals stay out of git; derived WebP copies are committed. Design: docs/superpowers/specs/2026-10-06-render-accuracy-and-3d-quality-design.md |
+| 2026-10-06 | Accuracy fixes land on `v1a`; render-quality 3D is a new optional version, 1D | Customers compare the drawing with store photos, so accuracy is core, not optional. The pop-up and modeled 3D build on 1C and can be dropped. |
 
 ## Needs Joshua
+- **Is the listed 34.5" base height (84" pantry) measured with the legs at their lowest, 4"?** The legs
+  adjust 4"–6.25". The drawing assumes 4", so the box is 30.5" (80" pantry) and every layout and price
+  is unchanged. If the listed height is at another setting, the box height changes; nothing else does.
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a
   table, then the page tells the customer "Sent. Check your inbox". Nothing sends mail and nothing
   notifies a designer. Before launch we need an email route (e.g. Azure Communication Services, or the

@@ -4,6 +4,7 @@ import { buildCart, track } from '../api/client'
 import { Elevation, formatInches } from './Elevation'
 import { Notices } from './Notices'
 import { money } from './Money'
+import { SkuImage } from './SkuImage'
 import { CabinetPanel } from './CabinetPanel'
 import { useWallEditor } from '../hooks/useWallEditor'
 import { hasWebGL } from '../three/support'
@@ -209,7 +210,10 @@ function Sheet({
               {priced.lineItems.map((line) => (
                 <tr key={line.sku}>
                   <td className="sku">{line.sku}</td>
-                  <td className="desc">{line.name}</td>
+                  <td className="desc">
+                    <SkuImage sku={line.sku} alt={line.name} size={96} />
+                    <span className="desc-name">{line.name}</span>
+                  </td>
                   <td className="num">{line.quantity}</td>
                   <td className="num">{money(line.unitPromo)}</td>
                   <td className="num">{money(line.extendedPromo)}</td>
