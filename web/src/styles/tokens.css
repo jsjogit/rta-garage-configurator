@@ -59,10 +59,12 @@
   --content-max: 1440px;
   --content-pad: 16px;
 
-  /* Product colours. Not brand chrome — these are what the cabinets look like. */
-  --slab: #b9bdc0;
-  --slab-edge: #9aa0a6;
+  /* Product colours, sampled from the manufacturer's renders (2026-10-06). Not brand chrome. */
+  --slab: #787a7b;
+  --slab-edge: #5f6264;
+  --steel: #c9ccce;
+  --steel-edge: #9da1a4;
   --ink: #15171a;
-  --wood: #b5793a;
-  --wood-deep: #8a5a28;
+  --wood: #dda06a;
+  --wood-deep: #b07a45;
 }

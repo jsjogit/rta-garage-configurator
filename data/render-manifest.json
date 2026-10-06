@@ -1,0 +1,27 @@
+{
+  "_meta": "Canonical catalog SKU -> manufacturer render in assets/reference/sku-renders (not in git). Rebuild with: cd web && npm run build:renders",
+  "renders": {
+    "MV-B15": "MV-B15 1 Door 1 Drawer_Left_RT.png",
+    "MV-B24": "MV-B24 2 Door_RT.png",
+    "MV-B24-F": "MV-B24-F 2 Door_RT.png",
+    "MV-B30": "MV-B30 2 Door 1 Drawer_RT.png",
+    "MV-B30-F": "MV-B30-F 2 Door_RT.png",
+    "MV-BWB15-PS": "MV-BWB15-PS_RT.png",
+    "MV-DB24-3": "MV-DB24-3_RT.png",
+    "MV-DB24-4": "MV-DB24-4_RT.png",
+    "MV-DB30-3": "MV-DB30-3_RT.png",
+    "MV-DB30-4": "MV-DB30-4_RT.png",
+    "MV-PC2484": "MV-PC2484_RT.png",
+    "MV-PC3084": "MV-PC3084_RT.png",
+    "MV-W1530": "MV-W1530-1 Door_RT.png",
+    "MV-W2415": "MV-W2415-2 Door_RT.png",
+    "MV-W2430": "MV-W2430 2 Door_RT.png",
+    "MV-W3030": "MV-W3030-2 Door_RT.png",
+    "IC-MW-W3015": "MV-W3015-2 Door_RT.png",
+    "MV-F384": "MV-F384_RT.png",
+    "MV-CTHW5025": "MV-CTHW5025_RT.png",
+    "MV-CTHW7425": "MV-CTHW7425_RT.png",
+    "MV-CTHW9825": "MV-CTHW9825_RT.png"
+  },
+  "texture": { "butcherBlock": { "from": "MV-CTHW9825_RT.png", "grainAngleDegrees": 28.1 } }
+}
