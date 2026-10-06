@@ -116,6 +116,33 @@ describe('Elevation', () => {
     expect(svg.textContent).not.toContain('outlet')
     expect(svg.querySelectorAll('[stroke-dasharray="4 3"]')).toHaveLength(1)
   })
+  it('stands base cabinets on stainless legs with the floor showing between them', () => {
+    const svg = svgFor('vignette-72')
+    const legs = [...svg.querySelectorAll('rect')].filter((r) => r.getAttribute('fill') === 'var(--steel)')
+    // Two MV-B24-F bases; the front pair of each, a sleeve and a foot per leg.
+    expect(legs).toHaveLength(8)
+    for (const leg of legs) expect(Number(leg.getAttribute('y')) + Number(leg.getAttribute('height'))).toBeLessThanOrEqual(96 + 1e-9)
+    const bodies = [...svg.querySelectorAll('rect')].filter(
+      (r) => r.getAttribute('fill') === 'var(--slab)' && Number(r.getAttribute('height')) === 30.5,
+    )
+    expect(bodies).toHaveLength(2) // the box stops 4" above the floor
+  })
+
+  it('draws a drawer over the doors of an MV-B15', () => {
+    const layout = { items: [{ sku: 'MV-B15', x: 0, y: 0, width: 15, height: 34.5, depth: 24, zone: 'Base' as const }] }
+    const { container } = render(<Elevation layout={layout} wallLength={15} ceiling={96} id="b15" />)
+    const pulls = [...container.querySelectorAll('rect')].filter((r) => r.getAttribute('fill') === 'var(--ink)')
+    expect(pulls).toHaveLength(2)
+    const [drawer, door] = pulls
+    expect(Number(drawer.getAttribute('width'))).toBeGreaterThan(Number(drawer.getAttribute('height'))) // level drawer pull
+    expect(Number(door.getAttribute('height'))).toBeGreaterThan(Number(door.getAttribute('width'))) // upright door pull
+  })
+
+  it('draws a pantry as four doors', () => {
+    const layout = { items: [{ sku: 'MV-PC3084', x: 0, y: 0, width: 30, height: 84, depth: 24, zone: 'Tall' as const }] }
+    const { container } = render(<Elevation layout={layout} wallLength={30} ceiling={96} id="pc" />)
+    expect([...container.querySelectorAll('rect')].filter((r) => r.getAttribute('fill') === 'var(--ink)')).toHaveLength(4)
+  })
 })
 
 describe('formatInches', () => {

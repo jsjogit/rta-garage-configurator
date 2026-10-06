@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import type { ObstructionDto, PlacedItemDto, LayoutDto } from '../api/types'
-import { fronts } from '../geometry/fronts'
+import { boxHeight, fronts, legRects } from '../geometry/fronts'
 
 /*
   A true-proportion front elevation, drawn the way the shop would draw it: everything is in inches,
@@ -231,10 +231,15 @@ function ItemBody({ item, toY, id }: { item: PlacedItemDto; toY: (up: number) =>
     )
   }
 
+  // The listed height includes the legs: the box stops short of the floor and the legs carry it.
+  const floorY = toY(item.y)
   return (
     <g>
-      <rect x={item.x} y={y} width={item.width} height={item.height} fill="var(--slab)" stroke="var(--slab-edge)" strokeWidth="0.5" />
+      <rect x={item.x} y={y} width={item.width} height={boxHeight(item)} fill="var(--slab)" stroke="var(--slab-edge)" strokeWidth="0.5" />
       <Fronts item={item} top={y} />
+      {legRects(item, floorY).map((leg, i) => (
+        <rect key={`leg${i}`} x={leg.x} y={leg.y} width={leg.width} height={leg.height} fill="var(--steel)" stroke="var(--steel-edge)" strokeWidth="0.2" />
+      ))}
     </g>
   )
 }
