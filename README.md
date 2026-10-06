@@ -22,7 +22,7 @@ data/                          catalog.json, wall fixtures, nop product-id map
 
 ```bash
 dotnet test                                  # 451 Core + 108 API tests
-cd web && npm install && npm test            # 139 web tests (2.0)
+cd web && npm install && npm test            # 175 web tests (2.0)
 ```
 
 The full stack is three processes:
@@ -59,13 +59,19 @@ Phase 2 ships as optional branches, each built from Phase 1 (decided 2026-10-05,
 
 | Branch | What it adds | Web tests |
 |---|---|---|
-| `v1a` | Phase 1 as reviewed | 91 |
-| `v1b-reorder` | Reordering in the editor: drag, arrow keys, Move left/right | 116 |
-| `v1c-3d` | "See it in 3D" — a view-only, lazily loaded Three.js view per layout | 114 |
-| `v2.0` | All three together | 139 |
+| `v1a` | Phase 1, plus the render-accurate drawing and product photos | 129 |
+| `v1b-reorder` | Reordering in the editor: drag, arrow keys, Move left/right | 156 |
+| `v1c-3d` | "See it in 3D" — a view-only, lazily loaded Three.js view per layout | 148 |
+| `v2.0` | 1A + 1B + 1C together | 175 |
+| `v1d-3d-quality` | 1C's 3D in a large pop-up, modeled to the manufacturer's renders (optional; not in 2.0) | 152 |
 
 1B and 1C do not depend on each other; either can be dropped. `npm run check:bundle` (on `v1c-3d` and
 `v2.0`) fails the build if the page everyone loads grows past budget or Three.js leaks into it.
+
+**Product images.** The parts list and cabinet panel show the manufacturer's renders. The originals
+(~280 MB) live in `assets/reference/sku-renders/` and are not in git; `data/render-manifest.json` maps
+each SKU to its file. After renders change, run `cd web && npm run build:renders` to regenerate
+`web/public/renders/*.webp` and `web/public/textures/butcher-block.webp`, then commit those.
 
 ## Deploying
 
