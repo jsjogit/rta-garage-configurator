@@ -1,5 +1,6 @@
 import type { Goal, ObstructionDto, WallDto } from '../api/types'
 import { formatInches } from './Elevation'
+import { NOT_ACTIVE_NOTE, PREVIEW } from '../preview/mode'
 
 /** Something on the wall, as the customer measured it. Inches from the left corner and the floor. */
 export interface DraftObstruction extends ObstructionDto {
@@ -173,6 +174,11 @@ export function WallInputs({
           <span className="unit">inches</span>
           {draft.length > 0 && <span className="feet">{formatInches(draft.length)}</span>}
         </div>
+        {PREVIEW && (
+          <p className="hint">
+            In this prototype, lengths from 6′ to 30′ work, and a typed length rounds to the nearest 6″.
+          </p>
+        )}
       </div>
 
       <div className="field">
@@ -202,8 +208,13 @@ export function WallInputs({
         </div>
       </div>
 
-      <div className="field">
+      <div className={PREVIEW ? 'field is-inactive' : 'field'} aria-disabled={PREVIEW || undefined}>
         <h3>Anything in the way?</h3>
+        {PREVIEW && (
+          <p className="inactive-note">
+            Visual only. {NOT_ACTIVE_NOTE}
+          </p>
+        )}
         <p className="hint">
           Add what is on this wall, then measure from the left corner to its nearest edge. You can also drag
           it along the drawing.
@@ -215,7 +226,7 @@ export function WallInputs({
               key={kind.type}
               className="chip"
               aria-label={`Add ${kind.label.toLowerCase()}`}
-              disabled={draft.length <= 0}
+              disabled={PREVIEW || draft.length <= 0}
               onClick={() => add(kind)}
             >
               + {kind.label}

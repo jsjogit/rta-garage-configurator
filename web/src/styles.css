@@ -380,3 +380,8 @@ table.parts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
   /* 100%, not 100vw: vw includes a classic (Windows) scrollbar, which would push Close under it. */
   .three-d-dialog { width: 100%; height: 100dvh; max-width: none; max-height: none; border-radius: 0; }
 }
+
+/* Prototype preview: features that need a server stay visible, greyed and inert, with a note. */
+.field.is-inactive > :not(h3):not(.inactive-note) { opacity: 0.45; pointer-events: none; }
+.inactive-note { font-size: 13px; color: var(--color-muted); font-style: italic; margin: 4px 0 0; }
+.linklike:disabled { color: var(--color-muted); text-decoration: none; cursor: default; opacity: 0.6; }

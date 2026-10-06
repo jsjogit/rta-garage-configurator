@@ -1,0 +1,4 @@
+
+# The shareable prototype bakes these from the running API (npm run build:preview).
+src/preview/generated/
+dist-preview/
