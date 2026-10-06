@@ -4,7 +4,7 @@
 import { readFileSync } from 'node:fs'
 import { gzipSync } from 'node:zlib'
 
-// 2.0 carries 1B and 1C together (~1.0 KB + ~1.1 KB): 56.2 KB at 6ef976d + 2.2 KB. See DECISIONS 2026-10-05.
+// 2.0 carries 1B and 1C together (~1.0 KB + ~1.1 KB): 56.2 KB at 6ef976d + 2.2 KB, approved by Joshua 2026-10-05.
 const LIMIT = 58_400
 
 const html = readFileSync(new URL('../dist/index.html', import.meta.url), 'utf8')

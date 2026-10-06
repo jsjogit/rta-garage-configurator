@@ -143,6 +143,7 @@ At prototype review, compare `cart_add_all` rates for sessions with and without 
 - **Performance:**
   - the main bundle stays within 2 KB gzipped of the Phase 2 starting point, 56.2 KB measured at
     `6ef976d` (limit 58,200 bytes; a CI step fails the build otherwise);
+    2.0 (1B + 1C together) may use 58,400 bytes — Joshua, 2026-10-05;
   - a 30 ft wall opens in 3D in under 1 s with Chrome's 4x CPU throttling at 390px;
   - no growth in `renderer.info.memory` geometries/textures after opening and closing 3D across all
     three cards and both tiers.

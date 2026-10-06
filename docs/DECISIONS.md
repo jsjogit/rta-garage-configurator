@@ -114,13 +114,9 @@
 | 2026-10-05 | 2.0 measured: a 30 ft wall opens in 3D in ~110–140 ms at 4× CPU throttling; GPU memory flat across six opens | One geometry, one internal texture, no WebGL contexts left behind, no browser warnings. The spec's targets were under 1 s and no growth. |
 | 2026-10-05 | 1B: the drag previews the new order; neighbours make room before release | Final review: the spec asked for it and the first build only slid the dragged cabinet. The preview is the same `reorder()` the drop applies, so what you see is what you get. |
 | 2026-10-05 | The 50 ms solver benchmark checks each case's median, not its average | Found on GitHub's first CI run: a shared runner stalled once and the slowest average read 61.7 ms; the same code passed on two other runs and a re-run. The requirement is unchanged — every fixture and goal under 50 ms — but a median of 15 timed solves ignores one-off machine stalls while a genuinely slow solver still fails. Locally the slowest median is ~10 ms. |
+| 2026-10-05 | 2.0's 58,400-byte budget is approved | Joshua: 2.0 may exceed the spec's 58,200 bytes by about 175 bytes (measured 58,373 with 1B and 1C combined). The 2 KB budget still holds for `v1c-3d` on its own. |
 
 ## Needs Joshua
-- **Phase 2 bundle budget: 58,400 or 58,200 bytes?** The approved spec allows the page everyone loads to
-  grow 2 KB (58,200 bytes gzipped). 1B and 1C each fit that alone; together, in 2.0, they come to 58,373
-  bytes. I raised 2.0's limit to 58,400 rather than trimming working code just to pass a number. If
-  you want the original 2 KB held, the trade is ~175 bytes of reorder or 3D code; say which and it is
-  a small change. `v1c-3d` on its own still holds 58,200.
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a
   table, then the page tells the customer "Sent. Check your inbox". Nothing sends mail and nothing
   notifies a designer. Before launch we need an email route (e.g. Azure Communication Services, or the
