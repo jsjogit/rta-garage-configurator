@@ -126,13 +126,17 @@
 | 2026-10-06 | The image build trims the white studio border and levels the countertop render for the wood texture | Rotated by the measured 28.1° grain angle (sharp rotates clockwise, so by −28.1°), trimmed to the slab, and cut from the middle of its top surface. Verified free of background. |
 | 2026-10-06 | Known: each 3D open leaves some JS heap behind | Found while reviewing 1D: a bare three.js r186 renderer created and disposed correctly still retains ~24 KB in Chrome, and the 3D view creates one per open. GPU resources are released (no WebGL-context warnings); the earlier "memory flat" check read per-renderer counters, which cannot show this. Effect is small (well under 1 MB after 20 opens here). Fix if the prototype is approved: one shared renderer per page. |
 | 2026-10-06 | Leg height confirmed; Phase 2 bundle rebase approved | Joshua: the listed 34.5" (84" pantry) is measured with the legs at their lowest, 4" — the drawing is right as built. Moving the Phase 2 bundle limits up by 1A's own +1,030 bytes (1C 59,230, 2.0 59,430) is fine. |
+| 2026-10-06 | The SKU → nopCommerce product-id map is in: `data/nop-product-ids.json` | Joshua supplied the store export (kept outside git at `assets/reference/sku-product-ids/garage.csv`; converted as-is, 25 ids, no duplicates). It covers 20 of the 21 SKUs the planner uses; `IC-MW-W3015` is the gap (see Needs Joshua). Extra store SKUs in the map are harmless — the API only looks up what a layout contains. |
 
 ## Needs Joshua
-- **The SKU → nopCommerce product id map.** *Owner: Joshua — in progress (2026-10-06).* This is the last thing between us and one-click add-to-cart.
-  I checked the storefront: the garage page links products by slug and exposes no integer ids, so I
-  cannot derive it. Whoever can export it from nop should drop a flat `{"MV-B24-F": 1234, ...}` into
-  `data/nop-product-ids.json` (see `data/nop-product-ids.README.md`). Until then the cart button tells
-  the customer we cannot add it automatically and offers a designer.
+- **Product id for `IC-MW-W3015`** (30" × 15" double-door wall cabinet — the bridge over a 30" knee space).
+  It is not in the store export, so any wall using it still says "we can't add this automatically".
+  It may be listed on the store under a different SKU (the export has no `MV-W3015`); one id closes it.
+- **The store sells 48", 72" and 96" butcher-block tops (MV-CTHW4825/7225/9625) that our catalog does not
+  have.** The planner only offers 50", 74" and 98" (cut to length). Should it also use the shorter ones?
+  They would cut less waste on some runs; it is a catalog and solver change, not a cart one.
+- **Store listing check:** the export names MV-DB30-3 "Base Drawer Cabinet - 24" W". The SKU and our
+  catalog say 30" wide, so the store's product title is probably wrong.
 - **Should water heaters get a side clearance?** `catalog.json` gives the electrical panel and side
   door clearances but the water heater none, so cabinets can butt straight up against one. Gas units
   usually want a few inches of air either side; ops should give us a number.
