@@ -99,6 +99,7 @@
 | 2026-10-05 | Reordering lives in the 2D editor, not in 3D | Dragging in 2D is a 1D problem we have already solved for obstructions; 3D drag means raycasting and constraint planes. Moves stay within their row and unbroken stretch, re-pack without gaps, and the API validator remains the authority. |
 | 2026-10-05 | `three` is added to web/ only, lazy-loaded | ~150 KB gzipped, fetched on the first "See it in 3D" so the main bundle does not grow. Core and the API gain nothing. |
 | 2026-10-05 | Phase 2 ships as optional versions: 1A (Phase 1), 1B reorder, 1C 3D, 2.0 all three | Joshua wants Phase 1's scope as tight as possible and is wary of the complexity in reorder and 3D. Each is its own branch built from 1A, so either can be dropped without touching the other. 2.0 is only the merge of the three plus the joint browser pass. |
+| 2026-10-05 | The 50 ms solver benchmark checks each case's median, not its average | Found on GitHub's first CI run: a shared runner stalled once and the slowest average read 61.7 ms; the same code passed on two other runs and a re-run. The requirement is unchanged — every fixture and goal under 50 ms — but a median of 15 timed solves ignores one-off machine stalls while a genuinely slow solver still fails. Locally the slowest median is ~10 ms. |
 
 ## Needs Joshua
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a
