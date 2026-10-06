@@ -67,4 +67,9 @@ only new edit is reordering cabinets, in the 2D editor. No stain toggle, no expo
 > Real-browser pass desktop + 390px, touch inside a scrolling page, view_3d_opened and
 > layout_reordered events, main-bundle size check in CI, memory check across cards and tiers, docs.
 
+### 1D — 3D quality (optional, `v1d-3d-quality`, built on 1C) — done 2026-10-06
+> The 3D view in a large pop-up, modeled to the manufacturer's renders: legs, bar pulls, softened
+> edges, laminate and butcher-block materials, studio lighting and shadows. Plan:
+> docs/superpowers/plans/2026-10-06-render-accuracy-and-3d-quality.md (Tasks 7–9).
+
 ## Phase 3 — AI edges (photo intake via Azure OpenAI vision, intent chat, deterministic render → style pass)
