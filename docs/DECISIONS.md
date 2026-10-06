@@ -114,6 +114,10 @@
 | 2026-10-06 | Legs are drawn at their lowest, 4" | Keeps every listed height, layout and price unchanged (box 30.5" base, 80" pantry). Pending vendor confirmation — see Needs Joshua. |
 | 2026-10-06 | Product images are static WebP files, never imported into the bundle | 42 files (96 and 320 px per SKU), 180 KB in all, loaded lazily with fixed dimensions; the page everyone loads grows only by the list of SKUs that have images. |
 | 2026-10-06 | The image build trims the white studio border and levels the countertop render for the wood texture | Rotated by the measured 28.1° grain angle (sharp rotates clockwise, so by −28.1°), trimmed to the slab, and cut from the middle of its top surface. Verified free of background. |
+| 2026-10-06 | 1D: "See it in 3D" opens a large pop-up instead of replacing the card's drawing | Native `<dialog>` portalled to `<body>`: ~90% of the screen on desktop, full-screen on phones, with the tier switch, total and Close. Esc, Close and a backdrop click close it; focus starts on Close and returns to "See it in 3D" a frame after closing (nothing behind an open modal can take focus). |
+| 2026-10-06 | 1D: parts modeled to the renders, still with no model files | Two-stage cylinder legs, U-shaped bar pulls (two posts and a grip), 1/16" softened edges on boxes and fronts. Plain shapes are instanced; softened boxes share one geometry per size. |
+| 2026-10-06 | 1D: lighting tuned side by side with the renders | Built-in studio-room ambient light (no HDR file) at 0.45, one shadow-casting key and a soft fill, ACES tone mapping at 0.85 exposure. Brighter washed the gray to silver; without the fill, shaded sides went black. The butcher block is the texture cut from the countertop render, warmed to its amber. |
+| 2026-10-06 | 1D measured | A 30 ft Storage wall opens in ~0.4 s at 4× CPU throttling; reopening a layout never grows GPU memory (22 geometries / 6 textures on repeat); the 3D chunk is 140.8 KB gzipped (+5 KB for the two add-ons); the entry chunk is unchanged at 58,559 bytes. |
 
 ## Needs Joshua
 - **Is the listed 34.5" base height (84" pantry) measured with the legs at their lowest, 4"?** The legs
