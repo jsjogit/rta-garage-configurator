@@ -22,7 +22,9 @@ describe('buildScene', () => {
   it('gives a 3-drawer base three fronts and three pulls', () => {
     const boxes = one({ sku: 'MV-DB24-3', x: 0, y: 0, width: 24, height: 34.5, depth: 24, zone: 'Base' })
     expect(of(boxes, 'front')).toHaveLength(3)
-    expect(of(boxes, 'pull')).toHaveLength(3)
+    // Each bar pull is two posts and a grip; count the grips, which stand clear of the posts.
+    const front = Math.max(...of(boxes, 'front').map((f) => f.z + f.d))
+    expect(of(boxes, 'pull').filter((p) => p.z > front + 0.1)).toHaveLength(3)
   })
 
   it('stands every pull proud of its own cabinet’s fronts', () => {
@@ -135,14 +137,40 @@ describe('legs in 3D', () => {
     expect(carcass.y).toBeCloseTo(4, 9)
     expect(carcass.h).toBeCloseTo(30.5, 9)
     const legs = of(boxes, 'leg')
-    expect(legs).toHaveLength(4)
+    expect(legs).toHaveLength(8) // four legs, sleeve and foot each
     for (const leg of legs) {
-      expect(leg.y).toBe(0)
-      expect(leg.h).toBe(4)
+      expect(leg.y).toBeGreaterThanOrEqual(0)
+      expect(leg.y + leg.h).toBeLessThanOrEqual(4 + 1e-9)
     }
   })
 
   it('gives wall cabinets no legs', () => {
     expect(of(one({ sku: 'MV-W2430', x: 0, y: 54, width: 24, height: 30, depth: 12, zone: 'Wall' }), 'leg')).toHaveLength(0)
+  })
+})
+
+describe('modeled to the renders', () => {
+  const base = { sku: 'MV-B24-F', x: 0, y: 0, width: 24, height: 34.5, depth: 24, zone: 'Base' as const }
+
+  it('builds each leg as a sleeve over a slimmer foot', () => {
+    const legs = of(one(base), 'leg')
+    expect(legs).toHaveLength(8)
+    for (const leg of legs) expect(leg.shape).toBe('cylinder')
+    const widths = [...new Set(legs.map((l) => l.w))].sort()
+    expect(widths).toHaveLength(2)
+  })
+
+  it('builds each bar pull as two posts and a grip standing off the door', () => {
+    const boxes = one(base)
+    const pulls = of(boxes, 'pull')
+    expect(pulls).toHaveLength(2 * 3) // a pair of doors
+    const faceFront = Math.max(...of(boxes, 'front').map((f) => f.z + f.d))
+    const grips = pulls.filter((p) => p.z > faceFront + 0.1)
+    expect(grips).toHaveLength(2)
+  })
+
+  it('softens the edges of boxes and fronts', () => {
+    const boxes = one(base)
+    for (const b of [...of(boxes, 'carcass'), ...of(boxes, 'front')]) expect(b.shape).toBe('rounded')
   })
 })
