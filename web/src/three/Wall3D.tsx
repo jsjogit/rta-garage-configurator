@@ -98,7 +98,11 @@ export default function Wall3D({ layout, wall }: { layout: LayoutDto; wall: Wall
     }
 
     const camera = new THREE.PerspectiveCamera(FOV, 1, 1, 10000)
+    // Set first thing in cleanup: the wood texture can finish loading after the view has closed, and
+    // must not draw on a renderer that has already been torn down.
+    let disposed = false
     const render = () => {
+      if (disposed) return
       renderer.render(scene, camera)
       el.dataset.geometries = String(renderer.info.memory.geometries)
       el.dataset.textures = String(renderer.info.memory.textures)
@@ -191,6 +195,7 @@ export default function Wall3D({ layout, wall }: { layout: LayoutDto; wall: Wall
     observer.observe(el)
 
     return () => {
+      disposed = true
       observer.disconnect()
       controls.removeEventListener('change', render)
       controls.dispose()
