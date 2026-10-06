@@ -15,10 +15,12 @@ const FOV = 35
 const OPENING_ANGLE = { azimuthDeg: -22, elevationDeg: 10 }
 
 const MATERIALS: Record<MaterialKey, THREE.MeshStandardMaterialParameters> = {
-  carcass: { color: 0x9aa0a6, roughness: 0.85 },
-  front: { color: 0xb9bdc0, roughness: 0.6 },
+  // Sampled from the manufacturer's renders (2026-10-06).
+  carcass: { color: 0x6f7273, roughness: 0.8 },
+  front: { color: 0x787a7b, roughness: 0.7 },
   pull: { color: 0x15171a, roughness: 0.4, metalness: 0.2 },
-  counter: { color: 0xb5793a, roughness: 0.7 },
+  counter: { color: 0xdda06a, roughness: 0.7 },
+  leg: { color: 0xc9ccce, roughness: 0.3, metalness: 0.8 },
   wall: { color: 0xf4f4f2, roughness: 1 },
   floor: { color: 0xdcdbd6, roughness: 1 },
   ghost: { color: 0x9aa3ad, roughness: 1, transparent: true, opacity: 0.22, depthWrite: false },

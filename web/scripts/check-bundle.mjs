@@ -4,7 +4,9 @@
 import { readFileSync } from 'node:fs'
 import { gzipSync } from 'node:zlib'
 
-const LIMIT = 58_200 // bytes gzipped: 56.2 KB at 6ef976d + 2 KB
+// Phase 2 may add 2 KB to the entry chunk of 1A. 1A is 57,214 bytes after the render-accuracy work
+// (it was 56,184 at 6ef976d), so 57,214 + 2,000 rounds to the same allowance as before: +1,030 on both.
+const LIMIT = 59_230
 
 const html = readFileSync(new URL('../dist/index.html', import.meta.url), 'utf8')
 const entry = html.match(/src="\/assets\/(index-[^"]+\.js)"/)?.[1]
