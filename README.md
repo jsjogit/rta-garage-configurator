@@ -56,6 +56,21 @@ API payload. See `web/README.md` for the full list of demo fixtures.
 each SKU to its file. After renders change, run `cd web && npm run build:renders` to regenerate
 `web/public/renders/*.webp` and `web/public/textures/butcher-block.webp`, then commit those.
 
+## Shareable prototype (no hosting)
+
+`v1d-preview` builds the planner as one self-contained HTML file that can be shared as a private link
+(e.g. a Claude Artifact) without Azure:
+
+```bash
+# with the API running locally (see above)
+cd web && npm run build:preview      # bakes 784 real walls from the API, then builds dist-preview/index.html
+```
+
+It carries real solver answers for every wall from 6′ to 30′ in 6″ steps, ceilings of 7, 8, 9 and
+10 ft, and all four goals; a typed length rounds to the nearest 6″. Obstructions, editing, sharing,
+email, designer requests and add to cart are visible but inactive, each with a note. The normal build
+is unaffected — the baked data only exists in `--mode preview`.
+
 ## Deploying
 
 ### One-time setup

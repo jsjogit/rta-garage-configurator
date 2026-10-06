@@ -10,6 +10,7 @@ import { useWallEditor } from '../hooks/useWallEditor'
 import { hasWebGL } from '../three/support'
 import { ThreeBoundary } from '../three/ThreeBoundary'
 import { ThreeDDialog } from './ThreeDDialog'
+import { NOT_ACTIVE_NOTE, PREVIEW } from '../preview/mode'
 
 // Three.js arrives only when someone asks for it; it never touches the main bundle.
 const Wall3D = lazy(() => import('../three/Wall3D'))
@@ -270,6 +271,7 @@ function Sheet({
               <button
                 type="button"
                 className="linklike"
+                disabled={PREVIEW}
                 onClick={() => {
                   setEditing((on) => !on)
                   setSelected(null)
@@ -368,9 +370,10 @@ function AddToCart({
 
   return (
     <>
-      <button type="button" className="btn accent" disabled={blocked || working} onClick={add}>
+      <button type="button" className="btn accent" disabled={PREVIEW || blocked || working} onClick={add}>
         {blocked ? 'Fix the wall first' : working ? 'Adding…' : 'Add all to cart'}
       </button>
+      {PREVIEW && <p className="inactive-note">Add to cart and editing: {NOT_ACTIVE_NOTE.toLowerCase()}</p>}
       {problem && (
         <p className="edited-note" role="status">
           {problem}

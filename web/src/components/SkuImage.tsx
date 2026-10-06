@@ -1,5 +1,6 @@
 // web/src/components/SkuImage.tsx
 import available from '../renders/available.json'
+import { assetUrl } from '../preview/assets'
 
 const HAS_IMAGE = new Set<string>(available)
 
@@ -10,7 +11,7 @@ export function SkuImage({ sku, alt, size }: { sku: string; alt: string; size: 9
   return (
     <img
       className={`sku-image sku-image-${size}`}
-      src={`${import.meta.env.BASE_URL}renders/${sku}-${size}.webp`}
+      src={assetUrl(`renders/${sku}-${size}.webp`)}
       alt={alt}
       width={shown}
       height={shown}

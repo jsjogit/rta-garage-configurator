@@ -18,8 +18,13 @@ export interface SolveInput {
 
 export class ApiError extends Error {}
 
+import { PREVIEW } from '../preview/mode'
+
 /** Calls POST /api/solve. The dev server proxies /api to the Functions host on 7071. */
 export async function solve(input: SolveInput, signal?: AbortSignal): Promise<SolveResponse> {
+  // The shareable prototype answers from solver results baked into the page; it has no API.
+  if (PREVIEW) return (await import('../preview/load')).previewSolve(input)
+
   const response = await fetch('/api/solve', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -97,6 +102,7 @@ export function captureLead(lead: {
 
 /** Funnel steps from SPEC.md. Fire and forget: telemetry must never block or break the page. */
 export function track(name: FunnelEventName, configId?: string | null, properties?: Record<string, string>): void {
+  if (PREVIEW) return // no API to send to; and a prototype's clicks are not funnel data
   try {
     const body = JSON.stringify({ name, configId: configId ?? null, properties: properties ?? null })
 

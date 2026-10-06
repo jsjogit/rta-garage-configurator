@@ -6,6 +6,7 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import type { LayoutDto, WallDto } from '../api/types'
 import { buildScene, frameCamera, type Box, type MaterialKey } from './buildScene'
+import { assetUrl } from '../preview/assets'
 
 /*
   The only file in the app that touches Three.js. Everything it draws comes from buildScene(), which
@@ -109,7 +110,7 @@ export default function Wall3D({ layout, wall }: { layout: LayoutDto; wall: Wall
     }
 
     // Butcher block cut from the manufacturer's countertop render (web/scripts/build-renders.mjs).
-    const wood = new THREE.TextureLoader().load(`${import.meta.env.BASE_URL}textures/butcher-block.webp`, render)
+    const wood = new THREE.TextureLoader().load(assetUrl('textures/butcher-block.webp'), render)
     wood.wrapS = wood.wrapT = THREE.RepeatWrapping
     wood.colorSpace = THREE.SRGBColorSpace
     wood.repeat.set(4, 1)

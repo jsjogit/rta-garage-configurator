@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { captureLead, saveDesign, track } from '../api/client'
+import { NOT_ACTIVE_NOTE, PREVIEW } from '../preview/mode'
 import type { Goal, LayoutDto, WallDto } from '../api/types'
 
 export const DESIGN_PATH = '/garage/design'
@@ -88,18 +89,19 @@ export function ShareBar({
 
   return (
     <section className="sharebar">
-      {describing && <p className="edited-note">Saving: {describing}</p>}
+      {describing && !PREVIEW && <p className="edited-note">Saving: {describing}</p>}
       <div className="row">
-        <button type="button" className="btn ghost" onClick={share} disabled={busy}>
+        <button type="button" className="btn ghost" onClick={share} disabled={PREVIEW || busy}>
           {link ? 'Copy share link' : 'Save & copy link'}
         </button>
-        <button type="button" className="btn ghost" onClick={() => setKind('EmailMe')} disabled={busy}>
+        <button type="button" className="btn ghost" onClick={() => setKind('EmailMe')} disabled={PREVIEW || busy}>
           Email me this
         </button>
-        <button type="button" className="btn ghost" onClick={() => setKind('DesignerHelp')} disabled={busy}>
+        <button type="button" className="btn ghost" onClick={() => setKind('DesignerHelp')} disabled={PREVIEW || busy}>
           Have a designer tweak it
         </button>
       </div>
+      {PREVIEW && <p className="inactive-note">Sharing, email and designer requests: {NOT_ACTIVE_NOTE.toLowerCase()}</p>}
 
       {link && <p className="edited-note">Your design code is {link.split('/').pop()}.</p>}
 

@@ -6,6 +6,8 @@ import { LivePreview } from './components/LivePreview'
 import { Results, type ActiveWall } from './components/Results'
 import { ShareBar, DESIGN_PATH } from './components/ShareBar'
 import { demoFixture } from './demo'
+import { PREVIEW } from './preview/mode'
+import { snapCeiling, snapLength } from './preview/codec'
 
 function configIdFromPath(): string | null {
   const match = window.location.pathname.match(new RegExp(`^${DESIGN_PATH}/([A-Z0-9]{6})$`))
@@ -58,7 +60,12 @@ export function App() {
   }, [])
 
   const run = async (chosenGoal: Goal) => {
-    const nextWall = wallFor({ ...draft, goal: chosenGoal })
+    // The prototype only knows the walls it baked: snap to them, and show the customer the wall used.
+    const asked = PREVIEW
+      ? { ...draft, length: snapLength(draft.length), ceiling: snapCeiling(draft.ceiling), obstructions: [] }
+      : draft
+    if (PREVIEW) setDraft({ ...asked, goal: chosenGoal, preset: asked.length === draft.length ? draft.preset : null })
+    const nextWall = wallFor({ ...asked, goal: chosenGoal })
 
     setBusy(true)
     setError(null)
