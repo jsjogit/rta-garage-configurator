@@ -3,6 +3,7 @@ import { swaps as fetchSwaps } from '../api/client'
 import type { PlacedItemDto, PricedLayoutDto, SwapOptionDto } from '../api/types'
 import { inches } from './Elevation'
 import { money } from './Money'
+import { SkuImage } from './SkuImage'
 
 /**
  * What you get when you tap a cabinet: what it is, what it costs, what else fits in the same hole,
@@ -51,6 +52,7 @@ export function CabinetPanel({
   return (
     <div className="editor" role="region" aria-label="Selected cabinet">
       <div>
+        {!isKnee && <SkuImage sku={item.sku} alt={line?.name ?? item.sku} size={320} />}
         <h4>{isKnee ? 'Open knee space' : item.sku}</h4>
         <p className="dims">
           {inches(item.width)} wide · {inches(item.height)} tall
@@ -71,6 +73,7 @@ export function CabinetPanel({
                 className="swap"
                 onClick={() => onSwap(index, option.sku, option.name)}
               >
+                <SkuImage sku={option.sku} alt={option.name} size={96} />
                 <span>{option.sku || 'Open knee space'}</span>
                 <span className="delta">{option.name}</span>
               </button>
