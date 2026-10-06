@@ -22,7 +22,7 @@ data/                          catalog.json, wall fixtures, nop product-id map
 
 ```bash
 dotnet test                                  # 451 Core + 108 API tests
-cd web && npm install && npm test            # 91 web tests
+cd web && npm install && npm test            # 129 web tests
 ```
 
 The full stack is three processes:
@@ -50,6 +50,11 @@ If the `azurite` link is not executable, run it as `node ~/.local/lib/node_modul
 
 The UI alone works without any of this — `http://localhost:5173/?demo=vignette-72` renders a stored
 API payload. See `web/README.md` for the full list of demo fixtures.
+
+**Product images.** The parts list and cabinet panel show the manufacturer's renders. The originals
+(~280 MB) live in `assets/reference/sku-renders/` and are not in git; `data/render-manifest.json` maps
+each SKU to its file. After renders change, run `cd web && npm run build:renders` to regenerate
+`web/public/renders/*.webp` and `web/public/textures/butcher-block.webp`, then commit those.
 
 ## Deploying
 
