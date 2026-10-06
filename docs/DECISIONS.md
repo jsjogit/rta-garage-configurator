@@ -128,11 +128,11 @@
 | 2026-10-06 | Leg height confirmed; Phase 2 bundle rebase approved | Joshua: the listed 34.5" (84" pantry) is measured with the legs at their lowest, 4" — the drawing is right as built. Moving the Phase 2 bundle limits up by 1A's own +1,030 bytes (1C 59,230, 2.0 59,430) is fine. |
 
 ## Needs Joshua
-- **"Email me this" does not send an email.** The API stores the request (and designer requests) in a
-  table, then the page tells the customer "Sent. Check your inbox". Nothing sends mail and nothing
-  notifies a designer. Before launch we need an email route (e.g. Azure Communication Services, or the
-  ESP RTA already uses) and somewhere designer requests land that a person actually watches. Until
-  then the copy is a promise we are not keeping.
+- **The SKU → nopCommerce product id map.** *Owner: Joshua — in progress (2026-10-06).* This is the last thing between us and one-click add-to-cart.
+  I checked the storefront: the garage page links products by slug and exposes no integer ids, so I
+  cannot derive it. Whoever can export it from nop should drop a flat `{"MV-B24-F": 1234, ...}` into
+  `data/nop-product-ids.json` (see `data/nop-product-ids.README.md`). Until then the cart button tells
+  the customer we cannot add it automatically and offers a designer.
 - **Should water heaters get a side clearance?** `catalog.json` gives the electrical panel and side
   door clearances but the water heater none, so cabinets can butt straight up against one. Gas units
   usually want a few inches of air either side; ops should give us a number.
@@ -141,15 +141,6 @@
   collect a number and ignore it. Wiring it properly is solver work — a hard reject above the budget
   plus rebalanced scoring so budget-constrained walls still rank sensibly — not a UI change. Say the
   word and it is a session.
-- **Where should the wizard actually be served from?** Add-to-cart only completes when the page shares
-  an origin with the store, so hosting it inside nopCommerce is the route that makes the cart work
-  end to end; a Static Web App is the better preview and staging environment. README has the three
-  options. This is the decision that determines whether Phase 1 can close the loop.
-- **The SKU → nopCommerce product id map.** This is the last thing between us and one-click add-to-cart.
-  I checked the storefront: the garage page links products by slug and exposes no integer ids, so I
-  cannot derive it. Whoever can export it from nop should drop a flat `{"MV-B24-F": 1234, ...}` into
-  `data/nop-product-ids.json` (see `data/nop-product-ids.README.md`). Until then the cart button tells
-  the customer we cannot add it automatically and offers a designer.
 - **Is the 15" bridge width-matched to the knee space, or can a 30"-wide IC-MW-W3015 span a 24" knee
   space?** We currently require a width match (W2415 over a 24" knee, IC-MW-W3015 over a 30" knee),
   which is what the vendor vignette shows. If a wider bridge is allowed the solver gains layouts on
@@ -160,7 +151,18 @@
   (Lower stakes now: walls with clearance obstructions route to a designer, so the numbers decide what
   we show, not whether a customer is left alone with the problem.)
 
-## For me to work out (not Joshua)
-- Whether `/addproducttocart/catalog/{id}/1/{qty}` needs an anti-forgery token on RTA's fork. The web
+## Needs Hiten (technical lead)
+Integration questions for after prototype approval. Joshua's working assumption is noted where one exists.
+- **Where should the wizard actually be served from?** *Owner: Hiten, with Joshua.* Joshua's working assumption (2026-10-06): Azure, integrated with the nopCommerce site so the planner sits inside the existing UI and uses its add-to-cart as seamlessly as possible; Hiten decides where and how. Add-to-cart only completes when the page shares
+  an origin with the store, so hosting it inside nopCommerce is the route that makes the cart work
+  end to end; a Static Web App is the better preview and staging environment. README has the three
+  options. This is the decision that determines whether Phase 1 can close the loop.
+- **Hiten to confirm:** whether `/addproducttocart/catalog/{id}/1/{qty}` needs an anti-forgery token on RTA's fork. The web
   app is same-origin with the storefront in Phase 1, so the session cookie rides along; if the fork
   requires a token, the hand-off needs to carry one. Testable as soon as a product id exists.
+  Joshua's assumption (2026-10-06): no token is required.
+- **"Email me this" does not send an email.** *Owner: Hiten — to solve once the prototype and concept are approved (Joshua, 2026-10-06).* The API stores the request (and designer requests) in a
+  table, then the page tells the customer "Sent. Check your inbox". Nothing sends mail and nothing
+  notifies a designer. Before launch we need an email route (e.g. Azure Communication Services, or the
+  ESP RTA already uses) and somewhere designer requests land that a person actually watches. Until
+  then the copy is a promise we are not keeping.
