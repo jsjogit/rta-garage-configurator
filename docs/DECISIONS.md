@@ -104,6 +104,7 @@
 | 2026-10-05 | 1C: opening "Edit this wall" closes 3D | 3D is for looking; tapping, dragging and swapping happen on the drawing, where they are precise. |
 | 2026-10-05 | 1C: one unit cube scaled per box, one material per surface | A whole wall is a single geometry on the GPU, so memory does not grow with wall length. |
 | 2026-10-05 | 1C: the 3D chunk is ~136 KB gzipped and loads only on "See it in 3D"; the entry chunk is 57.3 KB | Measured on `v1c-3d`. `npm run check:bundle` fails CI if Three.js ever reaches the entry chunk or it passes 58,200 bytes. |
+| 2026-10-05 | The 50 ms solver benchmark checks each case's median, not its average | Found on GitHub's first CI run: a shared runner stalled once and the slowest average read 61.7 ms; the same code passed on two other runs and a re-run. The requirement is unchanged — every fixture and goal under 50 ms — but a median of 15 timed solves ignores one-off machine stalls while a genuinely slow solver still fails. Locally the slowest median is ~10 ms. |
 
 ## Needs Joshua
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a

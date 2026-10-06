@@ -19,28 +19,34 @@ public class SolverPerformanceTests
             solver.Solve(WallFixtures.Get(id), goal, prices);
         }
 
+        // The median of many single solves, per case. A shared CI machine stalls now and then; one stall
+        // inflates an average and fails the build, but a median only moves if the solver itself is slow.
+        const int Runs = 15;
         var slowest = 0.0;
         var slowestCase = string.Empty;
 
         foreach (var (id, goal) in cases)
         {
             var wall = WallFixtures.Get(id);
-            var stopwatch = Stopwatch.StartNew();
+            var times = new double[Runs];
 
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < Runs; i++)
             {
+                var stopwatch = Stopwatch.StartNew();
                 solver.Solve(wall, goal, prices);
+                times[i] = stopwatch.Elapsed.TotalMilliseconds;
             }
 
-            var perSolve = stopwatch.Elapsed.TotalMilliseconds / 10;
+            Array.Sort(times);
+            var median = times[Runs / 2];
 
-            if (perSolve > slowest)
+            if (median > slowest)
             {
-                slowest = perSolve;
+                slowest = median;
                 slowestCase = $"{id}/{goal}";
             }
         }
 
-        slowest.ShouldBeLessThan(50.0, $"slowest solve was {slowestCase} at {slowest:F1}ms");
+        slowest.ShouldBeLessThan(50.0, $"slowest case was {slowestCase} at a median of {slowest:F1}ms");
     }
 }
