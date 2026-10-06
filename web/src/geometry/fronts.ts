@@ -2,20 +2,90 @@
 import type { PlacedItemDto } from '../api/types'
 
 /*
-  A cabinet's fronts — door or drawer faces and their bar pulls — as plain rectangles in inches. The
-  SVG elevation and the 3D scene both draw from this, so the two views cannot disagree about how a
-  cabinet is built.
+  How each cabinet is built, as plain rectangles in inches, matched to the manufacturer's renders
+  (assets/reference/sku-renders, measured 2026-10-06). The SVG elevation and the 3D scene both draw
+  from this, so the two views cannot disagree about doors, drawers, pulls or legs.
 */
 
 export const REVEAL = 0.75 // gap between adjacent fronts
-export const PULL = { length: 0.45, thickness: 1.1 } // bar pull: fraction of face, inches thick
+
+/** Matte black square bar pull (MV-BP36570FB render). Inches. */
+export const PULL = { length: 5, thickness: 0.6, edgeInset: 1.5, endInset: 2 }
+
+/** Stainless adjustable legs, drawn at their lowest setting: 4" (they adjust to 6.25"). */
+export const LEG = { height: 4, inset: 1.5, sleeveDiameter: 1.5, footDiameter: 1.1, sleeveShare: 0.55 }
+
+/** The drawer over the doors of MV-B15, MV-B24, MV-B30 and MV-BWB15-PS. */
+const TOP_DRAWER = 6
+/** 3-drawer bases are graduated: short on top, deepest at the bottom (MV-DB24-3, MV-DB30-3). */
+const THREE_DRAWER_SHARES = [0.22, 0.34, 0.44]
+/** Pantries: a short upper pair over a tall lower pair (MV-PC2484, MV-PC3084). */
+const PANTRY_UPPER_SHARE = 0.4
 
 export interface Rect {
   x: number
-  /** The edge nearest `top`: the upper edge, in whichever direction the caller's y runs. */
+  /** The edge nearest `top` (or `floor`), in whichever direction the caller's y runs. */
   y: number
   width: number
   height: number
+}
+
+export type FrontLayout = 'drawers' | 'drawerOverDoor' | 'drawerOverPair' | 'pair' | 'single' | 'pantry'
+
+export function hasLegs(item: PlacedItemDto): boolean {
+  return item.zone === 'Base' || item.zone === 'Tall'
+}
+
+/** The box itself; the listed height includes the legs. */
+export function boxHeight(item: PlacedItemDto): number {
+  return item.height - (hasLegs(item) ? LEG.height : 0)
+}
+
+/** Which front arrangement a cabinet has, from its zone and SKU pattern. New SKUs: extend here. */
+export function frontLayoutOf(item: PlacedItemDto): FrontLayout {
+  if (drawerCount(item.sku) > 0) return 'drawers'
+  if (item.zone === 'Tall') return 'pantry'
+  const pair = item.width >= 24
+  if (item.zone === 'Base' && !item.sku.endsWith('-F')) return pair ? 'drawerOverPair' : 'drawerOverDoor'
+  return pair ? 'pair' : 'single'
+}
+
+export function drawerCount(sku: string): number {
+  const match = sku.match(/-DB\d+-(\d)$/)
+  return match ? Number(match[1]) : 0
+}
+
+type PullAt = 'top' | 'bottom' | 'centre'
+interface Row {
+  fixed?: number
+  share?: number
+  kind: 'drawer' | 'doors'
+  leaves: 1 | 2
+  pull: PullAt
+}
+
+function rowsFor(item: PlacedItemDto): Row[] {
+  const leaves = item.width >= 24 ? 2 : 1
+  switch (frontLayoutOf(item)) {
+    case 'drawers': {
+      const n = drawerCount(item.sku)
+      const shares = n === 3 ? THREE_DRAWER_SHARES : Array<number>(n).fill(1 / n)
+      return shares.map((share) => ({ share, kind: 'drawer', leaves: 1, pull: 'centre' }))
+    }
+    case 'drawerOverDoor':
+    case 'drawerOverPair':
+      return [
+        { fixed: TOP_DRAWER, kind: 'drawer', leaves: 1, pull: 'centre' },
+        { share: 1, kind: 'doors', leaves, pull: 'top' },
+      ]
+    case 'pantry':
+      return [
+        { share: PANTRY_UPPER_SHARE, kind: 'doors', leaves, pull: 'bottom' },
+        { share: 1 - PANTRY_UPPER_SHARE, kind: 'doors', leaves, pull: 'top' },
+      ]
+    default:
+      return [{ share: 1, kind: 'doors', leaves, pull: item.zone === 'Wall' ? 'bottom' : 'top' }]
+  }
 }
 
 /**
@@ -23,51 +93,66 @@ export interface Rect {
  * page (SVG) and -1 when it grows up from the floor (3D). faces[i] and pulls[i] belong together.
  */
 export function fronts(item: PlacedItemDto, top: number, down: 1 | -1 = 1): { faces: Rect[]; pulls: Rect[] } {
-  const drawers = drawerCount(item.sku)
+  const rows = rowsFor(item)
+  const span = boxHeight(item) - REVEAL * (rows.length + 1)
+  const flexible = span - rows.reduce((sum, row) => sum + (row.fixed ?? 0), 0)
   const faces: Rect[] = []
   const pulls: Rect[] = []
 
-  if (drawers > 0) {
-    const each = (item.height - REVEAL * (drawers + 1)) / drawers
+  let depth = REVEAL // distance below the top edge
+  for (const row of rows) {
+    const height = row.fixed ?? (row.share ?? 0) * flexible
+    const leafWidth = (item.width - REVEAL * (row.leaves + 1)) / row.leaves
 
-    for (let i = 0; i < drawers; i++) {
-      const y = top + down * REVEAL + down * i * (each + REVEAL)
-      faces.push({ x: item.x + REVEAL, y, width: item.width - REVEAL * 2, height: each })
-      pulls.push({
-        x: item.x + item.width / 2 - (item.width * PULL.length) / 2,
-        y: y + down * (each / 2) - down * (PULL.thickness / 2),
-        width: item.width * PULL.length,
-        height: PULL.thickness,
-      })
+    for (let leaf = 0; leaf < row.leaves; leaf++) {
+      const x = item.x + REVEAL + leaf * (leafWidth + REVEAL)
+      faces.push({ x, y: top + down * depth, width: leafWidth, height })
+      pulls.push(pullFor(row, leaf, x, leafWidth, depth, height, top, down))
     }
-    return { faces, pulls }
-  }
-
-  // A pair of doors from 24" up, otherwise a single door. Pulls sit at the opening edge.
-  const pair = item.width >= 24
-  const faceWidth = pair ? (item.width - REVEAL * 3) / 2 : item.width - REVEAL * 2
-  const faceHeight = item.height - REVEAL * 2
-  const pullHeight = Math.min(faceHeight * 0.4, 10)
-
-  for (let i = 0; i < (pair ? 2 : 1); i++) {
-    const x = item.x + REVEAL + i * (faceWidth + REVEAL)
-    // Inner edge for a pair, the right edge for a single door.
-    const pullX = pair ? (i === 0 ? x + faceWidth - 2.2 : x + 1.1) : x + faceWidth - 2.2
-    faces.push({ x, y: top + down * REVEAL, width: faceWidth, height: faceHeight })
-    pulls.push({
-      x: pullX,
-      y: top + down * (item.height / 2) - down * (pullHeight / 2),
-      width: PULL.thickness,
-      height: pullHeight,
-    })
+    depth += height + REVEAL
   }
   return { faces, pulls }
 }
 
-export function drawerCount(sku: string): number {
-  if (sku.includes('-DB') || sku.startsWith('MV-DB')) {
-    const match = sku.match(/-(\d)$/)
-    return match ? Number(match[1]) : 3
+function pullFor(row: Row, leaf: number, x: number, width: number, depth: number, height: number, top: number, down: 1 | -1): Rect {
+  if (row.kind === 'drawer') {
+    return {
+      x: x + width / 2 - PULL.length / 2,
+      y: top + down * (depth + height / 2 - PULL.thickness / 2),
+      width: PULL.length,
+      height: PULL.thickness,
+    }
   }
-  return sku.includes('BWB') ? 1 : 0
+
+  // Doors open at the meeting edges of a pair, or on the right of a single door (hinged left, as rendered).
+  const opening = row.leaves === 2 && leaf === 1 ? x + PULL.edgeInset : x + width - PULL.edgeInset
+  const length = Math.min(PULL.length, height - 2 * PULL.endInset)
+  const from =
+    row.pull === 'top'
+      ? depth + PULL.endInset
+      : row.pull === 'bottom'
+        ? depth + height - PULL.endInset - length
+        : depth + height / 2 - length / 2
+
+  return { x: opening - PULL.thickness / 2, y: top + down * from, width: PULL.thickness, height: length }
+}
+
+/** Leg centres seen from above: x along the wall, z out from the wall face. Four per floor cabinet. */
+export function legPositions(item: PlacedItemDto): { x: number; z: number }[] {
+  if (!hasLegs(item)) return []
+  const r = LEG.sleeveDiameter / 2
+  const xs = [item.x + LEG.inset + r, item.x + item.width - LEG.inset - r]
+  const zs = [LEG.inset + r, item.depth - LEG.inset - r]
+  return zs.flatMap((z) => xs.map((x) => ({ x, z })))
+}
+
+/** The front pair of legs as drawn in elevation: a sleeve, then a slimmer foot, for each. */
+export function legRects(item: PlacedItemDto, floor: number, down: 1 | -1 = 1): Rect[] {
+  const sleeve = LEG.height * LEG.sleeveShare
+  return legPositions(item)
+    .filter((leg) => leg.z > item.depth / 2)
+    .flatMap((leg) => [
+      { x: leg.x - LEG.sleeveDiameter / 2, y: floor - down * LEG.height, width: LEG.sleeveDiameter, height: sleeve },
+      { x: leg.x - LEG.footDiameter / 2, y: floor - down * (LEG.height - sleeve), width: LEG.footDiameter, height: LEG.height - sleeve },
+    ])
 }
