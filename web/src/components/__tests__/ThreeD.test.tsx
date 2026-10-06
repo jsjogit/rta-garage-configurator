@@ -38,39 +38,54 @@ const firstSheet = () => screen.getAllByRole('article')[0]
 const show = (response: SolveResponse = solved) =>
   render(<Results response={response} wall={wall} onStartOver={vi.fn()} />)
 
+const dialog = () => screen.getByRole('dialog')
+
 describe('See it in 3D', () => {
-  it('swaps the drawing for the 3D view inside the same card', async () => {
+  it('opens a large pop-up and leaves the drawing in the card', async () => {
     const user = userEvent.setup()
     show()
 
     await user.click(within(firstSheet()).getByRole('button', { name: 'See it in 3D' }))
 
-    expect(await within(firstSheet()).findByTestId('wall3d')).toBeInTheDocument()
-    expect(within(firstSheet()).queryByRole('img', { name: /front elevation/i })).not.toBeInTheDocument()
-    expect(within(firstSheet()).getByRole('button', { name: 'Back to the drawing' })).toBeInTheDocument()
-  })
-
-  it('follows the tier switch while open', async () => {
-    const user = userEvent.setup()
-    show()
-    await user.click(within(firstSheet()).getByRole('button', { name: 'See it in 3D' }))
-    await within(firstSheet()).findByTestId('wall3d')
-
-    await user.click(within(firstSheet()).getByRole('button', { name: /premiere/i }))
-
-    expect(within(firstSheet()).getByTestId('wall3d').dataset.skus).toContain('MV-DB24')
-  })
-
-  it('closes when someone starts editing, because 3D is for looking', async () => {
-    const user = userEvent.setup()
-    show()
-    await user.click(within(firstSheet()).getByRole('button', { name: 'See it in 3D' }))
-    await within(firstSheet()).findByTestId('wall3d')
-
-    await user.click(within(firstSheet()).getByRole('button', { name: /edit this wall/i }))
-
-    expect(within(firstSheet()).queryByTestId('wall3d')).not.toBeInTheDocument()
+    expect(await within(dialog()).findByTestId('wall3d')).toBeInTheDocument()
     expect(within(firstSheet()).getByRole('img', { name: /front elevation/i })).toBeInTheDocument()
+    expect(within(dialog()).getByRole('heading', { name: /recommended/i })).toBeInTheDocument()
+  })
+
+  it('switches tier from inside the pop-up, and the card follows', async () => {
+    const user = userEvent.setup()
+    show()
+    await user.click(within(firstSheet()).getByRole('button', { name: 'See it in 3D' }))
+    await within(dialog()).findByTestId('wall3d')
+
+    await user.click(within(dialog()).getByRole('button', { name: /premiere/i }))
+
+    expect(within(dialog()).getByTestId('wall3d').dataset.skus).toContain('MV-DB24')
+    expect(within(firstSheet()).getByRole('button', { name: /premiere/i })).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('closes from its close button and gives focus back to the button that opened it', async () => {
+    const user = userEvent.setup()
+    show()
+    const opener = within(firstSheet()).getByRole('button', { name: 'See it in 3D' })
+    await user.click(opener)
+    await within(dialog()).findByTestId('wall3d')
+
+    await user.click(within(dialog()).getByRole('button', { name: /close/i }))
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(opener).toHaveFocus()
+  })
+
+  it('closes on Escape', async () => {
+    const user = userEvent.setup()
+    show()
+    await user.click(within(firstSheet()).getByRole('button', { name: 'See it in 3D' }))
+    await within(dialog()).findByTestId('wall3d')
+
+    await user.keyboard('{Escape}')
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
   it('is not offered without WebGL', () => {
@@ -79,7 +94,7 @@ describe('See it in 3D', () => {
     expect(within(firstSheet()).queryByRole('button', { name: 'See it in 3D' })).not.toBeInTheDocument()
   })
 
-  it('falls back to the drawing with a note if the 3D view fails', async () => {
+  it('closes with a note in the card if the 3D view fails', async () => {
     state.explode = true
     vi.spyOn(console, 'error').mockImplementation(() => undefined)
     const user = userEvent.setup()
@@ -88,26 +103,28 @@ describe('See it in 3D', () => {
     await user.click(within(firstSheet()).getByRole('button', { name: 'See it in 3D' }))
 
     expect(await within(firstSheet()).findByText('We couldn’t show this wall in 3D on this device.')).toBeInTheDocument()
-    expect(within(firstSheet()).getByRole('img', { name: /front elevation/i })).toBeInTheDocument()
-    expect(within(firstSheet()).queryByRole('button', { name: 'See it in 3D' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
-  it('works on a shared design too', async () => {
+  it('works on a shared design, with no tier switch to fake', async () => {
     const user = userEvent.setup()
     const saved = solved.options[0].premiere
     show({ options: [{ label: 'Your saved wall', standard: saved, premiere: saved }], failure: null, notices: [] })
 
     await user.click(within(firstSheet()).getByRole('button', { name: 'See it in 3D' }))
 
-    expect((await within(firstSheet()).findByTestId('wall3d')).dataset.skus).toContain('MV-DB24')
+    expect((await within(dialog()).findByTestId('wall3d')).dataset.skus).toContain('MV-DB24')
+    expect(within(dialog()).queryByRole('group', { name: /cabinet tier/i })).not.toBeInTheDocument()
   })
 
-  it('records opening 3D in the funnel', async () => {
+  it('records the pop-up in the funnel', async () => {
     const user = userEvent.setup()
     show()
 
     await user.click(within(firstSheet()).getByRole('button', { name: 'See it in 3D' }))
 
-    expect(events).toContainEqual(expect.objectContaining({ name: 'view_3d_opened', properties: { rank: '0', tier: 'Standard' } }))
+    expect(events).toContainEqual(
+      expect.objectContaining({ name: 'view_3d_opened', properties: { rank: '0', tier: 'Standard', surface: 'dialog' } }),
+    )
   })
 })

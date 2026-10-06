@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import type { LayoutDto, LayoutOptionDto, SolveResponse, Tier, WallDto } from '../api/types'
 import { buildCart, track } from '../api/client'
 import { Elevation, formatInches } from './Elevation'
@@ -9,6 +9,7 @@ import { CabinetPanel } from './CabinetPanel'
 import { useWallEditor } from '../hooks/useWallEditor'
 import { hasWebGL } from '../three/support'
 import { ThreeBoundary } from '../three/ThreeBoundary'
+import { ThreeDDialog } from './ThreeDDialog'
 
 // Three.js arrives only when someone asks for it; it never touches the main bundle.
 const Wall3D = lazy(() => import('../three/Wall3D'))
@@ -111,6 +112,7 @@ function Sheet({
   const [webgl] = useState(hasWebGL)
   const [threeD, setThreeD] = useState(false)
   const [threeDFailed, setThreeDFailed] = useState(false)
+  const opener = useRef<HTMLButtonElement>(null)
   const chosen = tier === 'Standard' ? option.standard : option.premiere
   const editor = useWallEditor(chosen, wall, configId)
   const priced = editor.priced
@@ -123,6 +125,24 @@ function Sheet({
     onActiveChange?.({ label: option.label, tier, layout: editor.layout, edited: editor.edited })
   }, [onActiveChange, option.label, tier, editor.layout, editor.edited])
 
+  const tierButtons = (
+    <div className="tier-switch" role="group" aria-label="Cabinet tier">
+      {(['Standard', 'Premiere'] as Tier[]).map((name) => (
+        <button
+          type="button"
+          key={name}
+          aria-pressed={tier === name}
+          onClick={() => {
+            setTier(name)
+            onTouch()
+          }}
+        >
+          {name}
+        </button>
+      ))}
+    </div>
+  )
+
   return (
     <article className="sheet" data-rank={rank}>
       <header className="sheet-head">
@@ -132,7 +152,46 @@ function Sheet({
 
       <div className="sheet-body">
         <div className="drawing">
-          {threeD && !threeDFailed ? (
+          <Elevation
+            layout={editor.layout}
+            wallLength={wall.length}
+            ceiling={wall.ceiling}
+            obstructions={wall.obstructions ?? []}
+            id={`sheet-${rank}-${tier.toLowerCase()}`}
+            selected={editing ? selected : null}
+            onSelect={editing ? setSelected : undefined}
+          />
+
+          {threeDFailed && (
+            <p className="dims" role="status">
+              We couldn’t show this wall in 3D on this device.
+            </p>
+          )}
+
+          {webgl && !threeDFailed && (
+            <button
+              ref={opener}
+              type="button"
+              className="linklike"
+              onClick={() => {
+                track('view_3d_opened', configId, { rank: String(rank), tier, surface: 'dialog' })
+                setThreeD(true)
+              }}
+            >
+              See it in 3D
+            </button>
+          )}
+
+          <ThreeDDialog
+            open={threeD && !threeDFailed}
+            onClose={() => {
+              setThreeD(false)
+              opener.current?.focus()
+            }}
+            title={option.label}
+            total={money(priced.subtotalPromo)}
+            tierSwitch={fixedTier ? null : tierButtons}
+          >
             <ThreeBoundary
               onError={() => {
                 setThreeDFailed(true)
@@ -143,57 +202,11 @@ function Sheet({
                 <Wall3D layout={editor.layout} wall={wall} />
               </Suspense>
             </ThreeBoundary>
-          ) : (
-            <Elevation
-              layout={editor.layout}
-              wallLength={wall.length}
-              ceiling={wall.ceiling}
-              obstructions={wall.obstructions ?? []}
-              id={`sheet-${rank}-${tier.toLowerCase()}`}
-              selected={editing ? selected : null}
-              onSelect={editing ? setSelected : undefined}
-            />
-          )}
-
-          {threeDFailed && (
-            <p className="dims" role="status">
-              We couldn’t show this wall in 3D on this device.
-            </p>
-          )}
-
-          {webgl && !threeDFailed && !editing && (
-            <button
-              type="button"
-              className="linklike"
-              aria-pressed={threeD}
-              onClick={() => {
-                if (!threeD) track('view_3d_opened', configId, { rank: String(rank), tier })
-                setThreeD(!threeD)
-              }}
-            >
-              {threeD ? 'Back to the drawing' : 'See it in 3D'}
-            </button>
-          )}
+          </ThreeDDialog>
         </div>
 
         <div className="parts">
-          {!fixedTier && (
-            <div className="tier-switch" role="group" aria-label="Cabinet tier">
-              {(['Standard', 'Premiere'] as Tier[]).map((name) => (
-                <button
-                  type="button"
-                  key={name}
-                  aria-pressed={tier === name}
-                  onClick={() => {
-                    setTier(name)
-                    onTouch()
-                  }}
-                >
-                  {name}
-                </button>
-              ))}
-            </div>
-          )}
+          {!fixedTier && tierButtons}
           <p className="tier-note">{TIER_NOTES[tier]}</p>
 
           <table className="parts-table">

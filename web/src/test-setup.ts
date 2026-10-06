@@ -30,3 +30,14 @@ if (!('PointerEvent' in window)) {
 // jsdom has no canvas backend and logs "Not implemented" for getContext. Answer like a browser
 // without WebGL would.
 HTMLCanvasElement.prototype.getContext = (() => null) as typeof HTMLCanvasElement.prototype.getContext
+
+// jsdom implements <dialog> but not showModal/close. Enough of both for components to work.
+if (typeof HTMLDialogElement !== 'undefined' && !HTMLDialogElement.prototype.showModal) {
+  HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
+    this.setAttribute('open', '')
+  }
+  HTMLDialogElement.prototype.close = function (this: HTMLDialogElement) {
+    this.removeAttribute('open')
+    this.dispatchEvent(new Event('close'))
+  }
+}

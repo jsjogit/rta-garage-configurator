@@ -72,7 +72,7 @@ export default function Wall3D({ layout, wall }: { layout: LayoutDto; wall: Wall
 
     const resize = () => {
       const width = el.clientWidth || 600
-      const height = Math.round(width * 0.62)
+      const height = el.clientHeight > 0 ? el.clientHeight : Math.round(width * 0.62)
       renderer.setSize(width, height)
       camera.aspect = width / height
       camera.updateProjectionMatrix()
