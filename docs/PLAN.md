@@ -52,6 +52,7 @@ Goal: confidence to buy. View-only plain Three.js, built from the same layout da
 only new edit is reordering cabinets, in the 2D editor. No stain toggle, no export, no AR.
 
 ### Session 8 — Reorder in the 2D editor
+> **Status 2026-10-06:** built, but needs a redesign before adoption — moving a pantry into a counter run collides with the counter and uppers. See DECISIONS 2026-10-06. Parked for V2.
 > Read the Phase 2 design spec. Add web/src/editor/reorder.ts (row + unbroken-stretch rules, re-pack
 > from the stretch's left edge, fillers and counters fixed), useWallEditor.move, drag-to-reorder in
 > edit mode, Move left/right in CabinetPanel, arrow keys. One drop = one validate + price round trip.
