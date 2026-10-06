@@ -53,6 +53,8 @@ jobs:
       - run: npx tsc -b
       - run: npm test
       - run: npm run build
+      # Phase 2 budget: the page everyone loads grows by at most 2 KB; Three.js stays lazy.
+      - run: npm run check:bundle
 
   infra:
     name: infrastructure

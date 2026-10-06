@@ -355,6 +355,11 @@ table.parts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
   .results { scroll-behavior: smooth; }
 }
 
+/* The 3D view sits where the drawing was, same width, with Front view tucked in its corner. */
+.wall3d { position: relative; }
+.wall3d-canvas canvas { display: block; width: 100%; height: auto; border-radius: 6px; touch-action: none; }
+.wall3d-front { position: absolute; right: 8px; top: 8px; min-height: 36px; padding: 6px 12px; font-size: 14px; background: #fff; }
+
 /* Manufacturer renders beside each SKU: small in the parts table, larger in the cabinet panel. */
 .sku-image { display: block; object-fit: contain; background: #fff; border-radius: 4px; }
 .parts-table .desc .sku-image { float: left; margin: 0 10px 2px 0; }
