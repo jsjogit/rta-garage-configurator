@@ -111,15 +111,13 @@
 | 2026-10-06 | Phase 2 bundle budgets move up by 1A's own growth (+1,030 bytes) | The render-accuracy work grew 1A's entry chunk from 56,184 to 57,214 bytes, and every version inherits it. The budget exists to cap what Phase 2 adds over 1A, so it now measures from 1A as it is: 1C 59,230 (was 58,200), 2.0 59,430 (was 58,400, Joshua's +2.2 KB). Phase 2's own allowance is unchanged. |
 | 2026-10-06 | The drawing follows the renders: legs, drawer-over-door bases, four-door pantries, pulls by position | One description in `web/src/geometry/fronts.ts` drives the SVG (and the 3D view on 1C/1D). Front layout comes from zone and SKU pattern (`frontLayoutOf`), so a new SKU is a one-line change there. |
 | 2026-10-06 | Measured constants live in `fronts.ts`, each commented with the render it came from | Top drawer 6"; 3-drawer shares 0.22/0.34/0.44; pantry upper share 0.4; pull 5" × 0.6", 1.5" from the opening edge, 2" from the door end; legs 4" (lowest setting), 1.5" inset, Ø1.5" sleeve over Ø1.1" foot. |
-| 2026-10-06 | Legs are drawn at their lowest, 4" | Keeps every listed height, layout and price unchanged (box 30.5" base, 80" pantry). Pending vendor confirmation — see Needs Joshua. |
+| 2026-10-06 | Legs are drawn at their lowest, 4" | Keeps every listed height, layout and price unchanged (box 30.5" base, 80" pantry). Confirmed by Joshua 2026-10-06: the listed 34.5" is measured at the lowest leg setting. |
 | 2026-10-06 | Product images are static WebP files, never imported into the bundle | 42 files (96 and 320 px per SKU), 180 KB in all, loaded lazily with fixed dimensions; the page everyone loads grows only by the list of SKUs that have images. |
 | 2026-10-06 | The image build trims the white studio border and levels the countertop render for the wood texture | Rotated by the measured 28.1° grain angle (sharp rotates clockwise, so by −28.1°), trimmed to the slab, and cut from the middle of its top surface. Verified free of background. |
 | 2026-10-06 | Known: each 3D open leaves some JS heap behind | Found while reviewing 1D: a bare three.js r186 renderer created and disposed correctly still retains ~24 KB in Chrome, and the 3D view creates one per open. GPU resources are released (no WebGL-context warnings); the earlier "memory flat" check read per-renderer counters, which cannot show this. Effect is small (well under 1 MB after 20 opens here). Fix if the prototype is approved: one shared renderer per page. |
+| 2026-10-06 | Leg height confirmed; Phase 2 bundle rebase approved | Joshua: the listed 34.5" (84" pantry) is measured with the legs at their lowest, 4" — the drawing is right as built. Moving the Phase 2 bundle limits up by 1A's own +1,030 bytes (1C 59,230, 2.0 59,430) is fine. |
 
 ## Needs Joshua
-- **Is the listed 34.5" base height (84" pantry) measured with the legs at their lowest, 4"?** The legs
-  adjust 4"–6.25". The drawing assumes 4", so the box is 30.5" (80" pantry) and every layout and price
-  is unchanged. If the listed height is at another setting, the box height changes; nothing else does.
 - **"Email me this" does not send an email.** The API stores the request (and designer requests) in a
   table, then the page tells the customer "Sent. Check your inbox". Nothing sends mail and nothing
   notifies a designer. Before launch we need an email route (e.g. Azure Communication Services, or the
