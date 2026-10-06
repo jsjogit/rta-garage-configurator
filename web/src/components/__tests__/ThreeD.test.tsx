@@ -1,5 +1,5 @@
 // web/src/components/__tests__/ThreeD.test.tsx
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Results } from '../Results'
@@ -74,7 +74,8 @@ describe('See it in 3D', () => {
     await user.click(within(dialog()).getByRole('button', { name: /close/i }))
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-    expect(opener).toHaveFocus()
+    // Focus goes back a frame later, once the modal has closed: nothing behind an open modal can take it.
+    await waitFor(() => expect(opener).toHaveFocus())
   })
 
   it('closes on Escape', async () => {

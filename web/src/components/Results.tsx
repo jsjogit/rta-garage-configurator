@@ -186,7 +186,8 @@ function Sheet({
             open={threeD && !threeDFailed}
             onClose={() => {
               setThreeD(false)
-              opener.current?.focus()
+              // Everything behind an open modal is inert, so focus can only go back once it has closed.
+              requestAnimationFrame(() => opener.current?.focus())
             }}
             title={option.label}
             total={money(priced.subtotalPromo)}
