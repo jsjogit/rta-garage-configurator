@@ -173,11 +173,12 @@ public sealed partial class WallSolver
 
     /// <summary>
     /// Which slot becomes the open knee space: a 24" or 30" module nearest the middle, never the
-    /// first or last, so the counter always lands on a cabinet at both ends.
+    /// first or last, so the counter always lands on a cabinet at both ends. None when the run is
+    /// longer than any countertop: it will stand bare, and a knee space needs a counter over it.
     /// </summary>
-    private static int KneeSlot(List<decimal> run, Policy policy)
+    private int KneeSlot(List<decimal> run, Policy policy)
     {
-        if (!policy.WantKneeSpace || !policy.WantCounter || run.Count < 3)
+        if (!policy.WantKneeSpace || !policy.WantCounter || run.Count < 3 || run.Sum() > Constants.MaxCounterRunWidth)
         {
             return -1;
         }

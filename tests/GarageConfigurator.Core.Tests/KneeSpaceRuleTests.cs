@@ -123,6 +123,20 @@ public class KneeSpaceRuleTests
     }
 
     [Fact]
+    public void A_knee_space_sits_under_a_countertop()
+    {
+        // Found on a 20 ft "A bit of both" wall: a 120" run had no top long enough, so it was left
+        // bare with an open gap in the middle and a bridge hung over nothing to work at.
+        var layout = Layout(
+            Base("MV-B30-F", 0m, 30m),
+            Knee(30m, 30m),
+            Base("MV-B30-F", 60m, 30m));
+
+        Validator.Validate(layout, new Wall(90m, 96m)).Codes()
+            .ShouldContain(ViolationCode.KneeSpaceWithoutCounter);
+    }
+
+    [Fact]
     public void A_knee_space_carries_no_sku_because_it_is_not_a_product()
     {
         var layout = Layout(
