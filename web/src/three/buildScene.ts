@@ -13,6 +13,8 @@ export type MaterialKey = 'carcass' | 'front' | 'pull' | 'counter' | 'wall' | 'f
 /** An axis-aligned box. (x, y, z) is its min corner. */
 export interface Box {
   material: MaterialKey
+  /** Default 'box'. 'rounded' softens the edges; 'cylinder' uses w (= d) as its diameter. */
+  shape?: 'box' | 'rounded' | 'cylinder'
   x: number
   y: number
   z: number
@@ -22,7 +24,6 @@ export interface Box {
 }
 
 const FRONT_THICKNESS = 0.75
-const PULL_PROUD = 1 // how far a bar pull stands off its front
 const ROOM_MARGIN = 24 // wall and floor run a little past the cabinets either side
 const FLOOR_DEPTH = 60
 const GHOST_DEPTH: Record<string, number> = { WaterHeater: 22 }
@@ -54,21 +55,38 @@ function itemBoxes(item: PlacedItemDto): Box[] {
   const carcassDepth = item.depth - FRONT_THICKNESS
   const lift = item.height - boxHeight(item) // the legs, or 0
   const { faces, pulls } = fronts(item, item.y + item.height, -1)
+  const sleeve = LEG.height * LEG.sleeveShare
 
   return [
-    { material: 'carcass', x: item.x, y: item.y + lift, z: 0, w: item.width, h: boxHeight(item), d: carcassDepth },
-    ...faces.map((f): Box => ({ material: 'front', x: f.x, y: f.y - f.height, z: carcassDepth, w: f.width, h: f.height, d: FRONT_THICKNESS })),
-    ...pulls.map((p): Box => ({ material: 'pull', x: p.x, y: p.y - p.height, z: item.depth, w: p.width, h: p.height, d: PULL_PROUD })),
-    ...legPositions(item).map((leg): Box => ({
-      material: 'leg',
-      x: leg.x - LEG.sleeveDiameter / 2,
-      y: item.y,
-      z: leg.z - LEG.sleeveDiameter / 2,
-      w: LEG.sleeveDiameter,
-      h: LEG.height,
-      d: LEG.sleeveDiameter,
-    })),
+    { material: 'carcass', shape: 'rounded', x: item.x, y: item.y + lift, z: 0, w: item.width, h: boxHeight(item), d: carcassDepth },
+    ...faces.map((f): Box => ({ material: 'front', shape: 'rounded', x: f.x, y: f.y - f.height, z: carcassDepth, w: f.width, h: f.height, d: FRONT_THICKNESS })),
+    ...pulls.flatMap((p) => barPull(p, item.depth)),
+    ...legPositions(item).flatMap((leg): Box[] => [
+      // Foot on the floor, the wider sleeve above it (MV-B24-F render).
+      { material: 'leg', shape: 'cylinder', x: leg.x - LEG.footDiameter / 2, y: item.y, z: leg.z - LEG.footDiameter / 2, w: LEG.footDiameter, h: LEG.height - sleeve, d: LEG.footDiameter },
+      { material: 'leg', shape: 'cylinder', x: leg.x - LEG.sleeveDiameter / 2, y: item.y + LEG.height - sleeve, z: leg.z - LEG.sleeveDiameter / 2, w: LEG.sleeveDiameter, h: sleeve, d: LEG.sleeveDiameter },
+    ]),
   ]
+}
+
+const POST = 0.4 // square post section, inches
+const GRIP_STANDOFF = 1 // how far the grip stands off the door
+
+/** A U-shaped square bar pull (MV-BP36570FB render): two posts into the door and a grip across them. */
+function barPull(p: { x: number; y: number; width: number; height: number }, faceZ: number): Box[] {
+  const bottom = p.y - p.height
+  const vertical = p.height > p.width
+  const posts: Box[] = vertical
+    ? [
+        { material: 'pull', x: p.x, y: p.y - POST, z: faceZ, w: p.width, h: POST, d: GRIP_STANDOFF },
+        { material: 'pull', x: p.x, y: bottom, z: faceZ, w: p.width, h: POST, d: GRIP_STANDOFF },
+      ]
+    : [
+        { material: 'pull', x: p.x, y: bottom, z: faceZ, w: POST, h: p.height, d: GRIP_STANDOFF },
+        { material: 'pull', x: p.x + p.width - POST, y: bottom, z: faceZ, w: POST, h: p.height, d: GRIP_STANDOFF },
+      ]
+  const grip: Box = { material: 'pull', x: p.x, y: bottom, z: faceZ + GRIP_STANDOFF, w: p.width, h: p.height, d: POST }
+  return [...posts, grip]
 }
 
 export interface CameraFrame {
@@ -78,7 +96,7 @@ export interface CameraFrame {
 }
 
 const FRAME_MARGIN = 1.12
-const CABINET_REACH = 25 // the counter's front edge, the nearest thing to the camera
+const CABINET_REACH = 26 // the counter front, and the bar pulls on the bases just past it
 
 /**
  * Where to put a camera with this vertical field of view and aspect ratio so the whole wall, floor
