@@ -35,7 +35,7 @@ Secondary: share-link created, design emailed, "talk to a designer" clicks.
    refuses to solve while one runs past the end of the wall or through the ceiling. No custom shapes.
    When a wall carries a clearance-bearing obstruction the results still show a "have a designer
    check this" path alongside the layouts.
-3. **Goal** — one of: `Workbench`, `Storage`, `HideTheMess`, `Balanced`.
+3. **Goal** — one of: `Workbench`, `Storage`, `Balanced`. (`HideTheMess` is still accepted by the API but no longer offered; see DECISIONS.md 2026-10-27.)
    (No `budgetMax` in V1 — deferred to a later phase.)
 
 ## Output
