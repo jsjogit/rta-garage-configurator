@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { swaps as fetchSwaps } from '../api/client'
 import type { PlacedItemDto, PricedLayoutDto, SwapOptionDto } from '../api/types'
 import { inches } from './Elevation'
@@ -31,6 +31,7 @@ export function CabinetPanel({
   canMoveRight: boolean
 }) {
   const [options, setOptions] = useState<SwapOptionDto[] | null>(null)
+  const panel = useRef<HTMLDivElement>(null)
   const [failed, setFailed] = useState(false)
   const isKnee = item.zone === 'KneeSpace'
   const line = priced.lineItems.find((l) => l.sku === item.sku)
@@ -55,8 +56,14 @@ export function CabinetPanel({
     }
   }, [item.sku, isKnee])
 
+  // The panel opens below the parts table, often off screen; scroll just far enough to show it.
+  useEffect(() => {
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    panel.current?.scrollIntoView({ block: 'nearest', behavior: still ? 'auto' : 'smooth' })
+  }, [index])
+
   return (
-    <div className="editor" role="region" aria-label="Selected cabinet">
+    <div ref={panel} className="editor" role="region" aria-label="Selected cabinet">
       <div>
         {!isKnee && <SkuImage sku={item.sku} alt={line?.name ?? item.sku} size={320} />}
         <h4>{isKnee ? 'Open knee space' : item.sku}</h4>
