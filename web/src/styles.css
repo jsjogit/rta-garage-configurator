@@ -360,5 +360,10 @@ table.parts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .parts-table .desc .sku-image { float: left; margin: 0 10px 2px 0; }
 /* Its own block beside the photo, so the description never wraps underneath it. */
 .parts-table .desc-name { display: block; overflow: hidden; }
+/* On a phone the column is too narrow to share: the photo goes above and the name wraps whole words. */
+@media (max-width: 599px) {
+  .parts-table .desc .sku-image { float: none; margin: 0 0 4px; }
+  .parts-table .desc-name { overflow: visible; }
+}
 .editor .sku-image-320 { float: right; margin: 0 0 8px 12px; border: 1px solid var(--color-rule); }
 .editor .swap .sku-image { width: 32px; height: 32px; }
