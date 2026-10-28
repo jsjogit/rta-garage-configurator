@@ -85,10 +85,10 @@ export function obstructionProblem(o: ObstructionDto, length: number, ceiling: n
   return null
 }
 
+// HideTheMess is not offered: it drew nearly the same wall as Max storage. The API still accepts it.
 const GOALS: { value: Goal; name: string; blurb: string }[] = [
   { value: 'Workbench', name: 'Workbench', blurb: 'Counter to work on, drawers where you stand.' },
   { value: 'Storage', name: 'Max storage', blurb: 'Tall cabinets, as much enclosed space as fits.' },
-  { value: 'HideTheMess', name: 'Hide the mess', blurb: 'Doors front to back. Nothing on show.' },
   { value: 'Balanced', name: 'A bit of both', blurb: 'A bench in the middle, storage either side.' },
 ]
 
