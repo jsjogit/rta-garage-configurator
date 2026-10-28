@@ -216,12 +216,21 @@ public sealed class LayoutValidator
 
     /// <summary>
     /// A knee space is a cabinet-module gap someone can sit in: 24" or 30" wide, one per run, with a
-    /// base cabinet on each side so the counter has something to land on.
+    /// base cabinet on each side so the counter has something to land on — and a counter over it.
     /// </summary>
     private void ValidateKneeSpaces(Layout layout, List<Violation> violations)
     {
+        var counters = layout.Items.Where(i => i.Zone == Zone.Counter).ToList();
+
         foreach (var knee in layout.Items.Where(i => i.Zone == Zone.KneeSpace))
         {
+            if (!counters.Any(c => c.X <= knee.X && knee.Right <= c.Right))
+            {
+                violations.Add(new Violation(
+                    ViolationCode.KneeSpaceWithoutCounter,
+                    "A knee space is somewhere to sit at the counter — it needs a countertop over it."));
+            }
+
             if (knee.Width != 24m && knee.Width != 30m)
             {
                 violations.Add(new Violation(

@@ -37,6 +37,7 @@ public enum ViolationCode
     KneeSpaceWrongWidth,
     KneeSpaceAtRunEnd,
     TooManyKneeSpaces,
+    KneeSpaceWithoutCounter,
     KneeSpaceMustHaveNoSku,
 
     // Obstructions

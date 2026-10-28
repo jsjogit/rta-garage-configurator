@@ -64,6 +64,26 @@ public class KneeSpaceSolverTests
         }
     }
 
+    [Theory]
+    [InlineData(Goal.Workbench)]
+    [InlineData(Goal.Balanced)]
+    public void Every_knee_space_the_solver_leaves_is_under_a_countertop(Goal goal)
+    {
+        // 240" Balanced was the wall that broke: its last run grew past the widest top.
+        for (var length = 72m; length <= 360m; length += 6m)
+        {
+            foreach (var layout in Solve(goal, length).Options.SelectMany(o => o.Tiers))
+            {
+                foreach (var knee in layout.Items.Where(i => i.Zone == Zone.KneeSpace))
+                {
+                    layout.Items.ShouldContain(
+                        i => i.Zone == Zone.Counter && i.X <= knee.X && knee.Right <= i.Right,
+                        $"{goal} at {length}\": the knee space at {knee.X}\" has no countertop over it");
+                }
+            }
+        }
+    }
+
     [Fact]
     public void Storage_never_gives_up_wall_length_to_a_knee_space()
     {
