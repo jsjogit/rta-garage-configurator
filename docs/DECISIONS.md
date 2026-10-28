@@ -173,3 +173,4 @@
   on `demo-2.0-1d`). The back end Hiten describes serves either; the difference is the front-end shell
   (a page vs. a script mounted on the category page and loaded on click) and where share links land
   (`/garage-cabinets?design=K7M2QX` instead of `/garage/design/K7M2QX`).
+| 2026-10-28 | Swapping an upper takes the option's height and depth, not just its SKU | A 30" upper swapped for its 15" option kept drawing and validating as 30", so the swap looked like it did nothing. Uppers keep their top on the 84" datum (or their bottom, if stacked on another upper). |
