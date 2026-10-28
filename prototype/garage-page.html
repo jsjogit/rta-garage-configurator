@@ -131,11 +131,6 @@
   .drawer-head small { color: var(--muted); }
   .drawer-close { margin-left: auto; border: 1px solid #c9ced6; background: var(--surface); border-radius: 999px; padding: 8px 16px; cursor: pointer; font-weight: 600; color: var(--navy); }
   .drawer iframe { flex: 1; width: 100%; border: 0; }
-  .offline { display: none; flex: 1; padding: 40px 28px; color: var(--muted); }
-  .offline b { color: var(--navy); }
-  .offline code { background: var(--page); padding: 2px 6px; border-radius: 4px; }
-  .drawer.down iframe { display: none; }
-  .drawer.down .offline { display: block; }
 
   /* On a phone it is the whole screen, sliding up like a native sheet. */
   @media (max-width: 700px) {
@@ -242,10 +237,6 @@
     </div>
     <!-- Loaded on first open, then kept, so closing and reopening keeps the customer's wall. -->
     <iframe id="planner" title="Garage wall planner"></iframe>
-    <div class="offline">
-      <p><b>The planner isn’t running.</b></p>
-      <p>Start the local demo stack (three tabs: Azurite, <code>func start</code>, <code>npx vite preview --port 4173</code>), then close and reopen this panel.</p>
-    </div>
   </aside>
 
 <script>
@@ -254,20 +245,12 @@
   const frame = document.getElementById('planner')
   let opener = null
 
-  async function open(e) {
+  function open(e) {
     opener = e.currentTarget
     document.body.classList.add('open')
     drawer.querySelector('.drawer-close').focus()
-
-    if (frame.src) return
-    try {
-      // Opaque response is fine: we only need to know something is listening.
-      await fetch(PLANNER, { mode: 'no-cors' })
-      drawer.classList.remove('down')
-      frame.src = PLANNER
-    } catch {
-      drawer.classList.add('down')
-    }
+    // Loaded once and kept. If the demo stack is down, the browser shows its own "can't connect" page.
+    if (!frame.src) frame.src = PLANNER
   }
 
   function close() {
