@@ -132,6 +132,8 @@ a { color: var(--color-link); }
   cursor: pointer;
   display: grid;
   gap: 2px;
+  /* Cards in a row stretch to the tallest; keep every title on the same line. */
+  align-content: start;
   min-height: 44px;
 }
 .goal:hover:not([disabled]) { border-color: var(--color-heading); }
