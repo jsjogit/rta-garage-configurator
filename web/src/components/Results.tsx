@@ -232,8 +232,8 @@ function Sheet({
           item={editor.layout.items[selected]}
           index={selected}
           priced={priced}
-          onSwap={(index, sku, name) => {
-            editor.swap(index, sku, name)
+          onSwap={(index, option) => {
+            editor.swap(index, option)
             onTouch()
             setSelected(null)
           }}

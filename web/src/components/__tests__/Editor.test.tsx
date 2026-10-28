@@ -29,6 +29,13 @@ function stubFetch({ violations = [], subtotal = 1234, cartReady = true, unmappe
 
       const json = (value: unknown) => ({ ok: true, status: 200, json: async () => value }) as Response
 
+      if (url === '/api/swaps/MV-W2430') {
+        return json({
+          sku: 'MV-W2430',
+          options: [{ sku: 'MV-W2415', name: 'Double Door Wall Cabinet', zone: 'Wall', width: 24, height: 15, depth: 12 }],
+        })
+      }
+
       if (url.startsWith('/api/swaps/')) {
         return json({
           sku: 'MV-B24-F',
@@ -136,6 +143,28 @@ describe('editing a wall', () => {
     const sheet = await selectFirstCabinet(user)
 
     await waitFor(() => expect(within(sheet).getByRole('button', { name: /MV-DB24-4/ })).toBeInTheDocument())
+  })
+
+  it('swaps an upper for a shorter one and keeps its top on the datum line', async () => {
+    // Found in the demo: picking the 15" option for a 30" upper changed the SKU but not the size,
+    // so the drawing never moved and the swap looked like it had not happened.
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+
+    const sheet = await startEditing(user)
+    await user.click(within(sheet).getAllByRole('button', { name: /MV-W2430, 24 inches wide/i })[0])
+    const panel = within(sheet).getByRole('region', { name: /selected cabinet/i })
+    await waitFor(() => within(panel).getByRole('button', { name: /MV-W2415/ }))
+    await user.click(within(panel).getByRole('button', { name: /MV-W2415/ }))
+
+    await waitFor(() => expect(calls.some((c) => c.url === '/api/validate')).toBe(true))
+    const sent = calls.find((c) => c.url === '/api/validate')!.body as {
+      layout: { items: { sku: string; x: number; y: number; height: number; depth: number }[] }
+    }
+    const upper = sent.layout.items.find((i) => i.sku === 'MV-W2415' && i.x === 0)!
+    expect(upper.height).toBe(15)
+    expect(upper.depth).toBe(12)
+    expect(upper.y + upper.height).toBe(84)
   })
 
   it('re-validates and re-prices through the API after a swap', async () => {

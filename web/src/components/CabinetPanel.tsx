@@ -20,7 +20,7 @@ export function CabinetPanel({
   item: PlacedItemDto
   index: number
   priced: PricedLayoutDto
-  onSwap: (index: number, sku: string, name: string) => void
+  onSwap: (index: number, option: SwapOptionDto) => void
   onRemove: (index: number) => void
   onClose: () => void
 }) {
@@ -79,7 +79,7 @@ export function CabinetPanel({
                 type="button"
                 key={option.sku || 'knee'}
                 className="swap"
-                onClick={() => onSwap(index, option.sku, option.name)}
+                onClick={() => onSwap(index, option)}
               >
                 <SkuImage sku={option.sku} alt={option.name} size={96} />
                 <span>{option.sku || 'Open knee space'}</span>

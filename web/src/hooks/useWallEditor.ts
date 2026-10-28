@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { price as priceLayout, track, validate } from '../api/client'
-import type { LayoutDto, PricedLayoutDto, ViolationDto, WallDto } from '../api/types'
+import type { LayoutDto, PlacedItemDto, PricedLayoutDto, SwapOptionDto, ViolationDto, WallDto } from '../api/types'
 
 export interface WallEditor {
   layout: LayoutDto
@@ -8,7 +8,7 @@ export interface WallEditor {
   violations: ViolationDto[]
   checking: boolean
   edited: boolean
-  swap: (index: number, sku: string, name: string) => void
+  swap: (index: number, option: SwapOptionDto) => void
   remove: (index: number) => void
   reset: () => void
 }
@@ -75,16 +75,12 @@ export function useWallEditor(
   }, [layout, wall, original.layout])
 
   const swap = useCallback(
-    (index: number, sku: string, name: string) => {
+    (index: number, option: SwapOptionDto) => {
       setLayout((current) => ({
         ...current,
-        items: current.items.map((item, i) =>
-          i === index
-            ? { ...item, sku, zone: sku === '' ? 'KneeSpace' : item.zone === 'KneeSpace' ? 'Base' : item.zone }
-            : item,
-        ),
+        items: current.items.map((item, i) => (i === index ? swapped(item, option, current.items) : item)),
       }))
-      track('layout_edited', configId, { change: 'swap', to: sku || name })
+      track('layout_edited', configId, { change: 'swap', to: option.sku || option.name })
     },
     [configId],
   )
@@ -104,4 +100,16 @@ export function useWallEditor(
   }, [original])
 
   return { layout, priced, violations, checking, edited, swap, remove, reset }
+}
+
+/**
+ * The replacement takes the option's size, not just its SKU: a 30" upper swapped for its 15" bridge
+ * would otherwise keep drawing, validating and quoting as 30" tall. An upper keeps its top on the
+ * datum line, unless it is stacked on another upper, where it keeps its bottom instead.
+ */
+function swapped(item: PlacedItemDto, option: SwapOptionDto, items: PlacedItemDto[]): PlacedItemDto {
+  const stacked = items.some((other) => other !== item && other.zone === 'Wall' && other.y + other.height === item.y)
+  const y = item.zone === 'Wall' && !stacked ? item.y + item.height - option.height : item.y
+
+  return { ...item, sku: option.sku, zone: option.zone, height: option.height, depth: option.depth, y }
 }
