@@ -17,10 +17,11 @@ export interface WallDraft {
 
 export const EMPTY_DRAFT: WallDraft = { length: 0, ceiling: 96, obstructions: [], goal: null, preset: null }
 
+// Short enough for one row beside the results on a laptop; the hint says they are back walls.
 const WALL_PRESETS = [
-  { label: 'Single-car back wall', inches: 144 },
-  { label: 'Two-car back wall', inches: 240 },
-  { label: 'Three-car back wall', inches: 360 },
+  { label: 'Single-car', inches: 144 },
+  { label: 'Two-car', inches: 240 },
+  { label: 'Three-car', inches: 360 },
 ]
 
 const CEILINGS = [
@@ -140,7 +141,7 @@ export function WallInputs({
     <section className="inputs" aria-label="Your wall">
       <div className="field">
         <h3>How big is the wall?</h3>
-        <p className="hint">Measure corner to corner. Between sizes? Round down.</p>
+        <p className="hint">Measure corner to corner, or pick a garage back wall. Between sizes? Round down.</p>
 
         <div className="chips" role="group" aria-label="Common walls">
           {WALL_PRESETS.map((preset) => (
