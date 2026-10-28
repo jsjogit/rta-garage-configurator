@@ -113,6 +113,10 @@ describe('editing a wall', () => {
 
     expect(scrolled).toHaveBeenCalledWith({ block: 'nearest', behavior: 'smooth' })
     expect(scrolled.mock.contexts.at(-1)).toBe(panel)
+
+    // The swaps load after the panel opens and make it taller; it scrolls again so they show too.
+    await within(panel).findByText('MV-DB24-4')
+    expect(scrolled.mock.calls.length).toBeGreaterThanOrEqual(2)
   })
 
   it('names the knee space rather than showing an empty SKU', async () => {
