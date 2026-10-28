@@ -45,7 +45,16 @@ a { color: var(--color-link); }
 
 @media (min-width: 1024px) {
   .planner { grid-template-columns: 40fr 60fr; gap: 32px; }
-  .planner > .inputs { position: sticky; top: 16px; }
+  /* Pinned, but never taller than the window: if the inputs outgrow it (several obstructions, a short
+     laptop screen) they scroll on their own rather than running off the bottom out of reach. */
+  .planner > .inputs {
+    position: sticky;
+    top: 16px;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 2px 6px 2px 2px; /* room for focus rings and the scrollbar */
+  }
 }
 
 /* ---- inputs ------------------------------------------------------------ */
@@ -371,3 +380,19 @@ table.parts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 }
 .editor .sku-image-320 { float: right; margin: 0 0 8px 12px; border: 1px solid var(--color-rule); }
 .editor .swap .sku-image { width: 32px; height: 32px; }
+
+/* Desktop: the inputs sit beside the results and have to fit a laptop window (~650–790px tall).
+   Touch sizes stay below 1024px, where the inputs stack and scroll with the page. */
+@media (min-width: 1024px) {
+  .inputs { gap: 14px; }
+  .field { gap: 6px; }
+  .field > h3 { font-size: 16px; }
+  .field .hint { font-size: 13px; }
+  .chips { gap: 6px; }
+  .chip { font-size: 14px; padding: 7px 12px; min-height: 36px; }
+  .measure input { padding: 7px 10px; min-height: 36px; font-size: 15px; }
+  .obstruction { padding: 10px 12px; gap: 8px; }
+  .measure-field input { padding: 6px 8px; min-height: 34px; font-size: 15px; }
+  .goal { padding: 9px 12px; }
+  .goal span { font-size: 13px; }
+}
