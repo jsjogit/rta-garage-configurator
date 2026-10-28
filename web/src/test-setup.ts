@@ -26,3 +26,8 @@ if (!('PointerEvent' in window)) {
   }
   ;(window as unknown as { PointerEvent: typeof PointerEventPolyfill }).PointerEvent = PointerEventPolyfill
 }
+
+// jsdom does not lay anything out, so it has no scrollIntoView.
+if (!Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = () => undefined
+}

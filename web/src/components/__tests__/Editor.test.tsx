@@ -101,6 +101,20 @@ describe('editing a wall', () => {
     expect(sheet).toHaveTextContent(/24\u2033 wide · 34.5\u2033 tall/)
   })
 
+  it('brings the panel into view when a cabinet is tapped', async () => {
+    // Joshua: on desktop the panel opened below the parts table, so the next step was off screen.
+    const scrolled = vi.fn()
+    Element.prototype.scrollIntoView = scrolled
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+
+    const sheet = await selectFirstCabinet(user)
+    const panel = within(sheet).getByRole('region', { name: /selected cabinet/i })
+
+    expect(scrolled).toHaveBeenCalledWith({ block: 'nearest', behavior: 'smooth' })
+    expect(scrolled.mock.contexts.at(-1)).toBe(panel)
+  })
+
   it('names the knee space rather than showing an empty SKU', async () => {
     const user = userEvent.setup()
     render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
