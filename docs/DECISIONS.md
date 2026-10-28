@@ -130,6 +130,7 @@
 | 2026-10-06 | Countertops stay 50", 74" and 98" only | Joshua: those are the lengths RTA sells today. The store export's 48"/72"/96" tops (MV-CTHW4825/7225/9625) are excluded from the catalog and from `data/nop-product-ids.json`, which now holds only the 20 planner SKUs it can map (the 6-piece set and the sample door were dropped too). |
 | 2026-10-06 | MV-DB30-3's store title ("24" W") is a typo | Joshua confirmed: it is a 30" drawer base, as the SKU and catalog say. A store-content fix, not a planner one. |
 | 2026-10-27 | Every knee space sits under a countertop; the validator now enforces it (`KneeSpaceWithoutCounter`) | Found preparing the stakeholder demo: on a 20 ft "A bit of both" wall the solver's last base run grew to 120", longer than the 98" top, so it stood bare with an open knee space and a bridge hung over nothing. SOLVER_RULES already said the counter spans the knee space; nothing checked it. The solver also no longer puts a knee space in a run no top can cover. Golden files for `single-car-clean` and `water-heater` change; both walls still get three options. |
+| 2026-10-27 | Tapping a cabinet scrolls its panel into view | Joshua: on desktop the swap/remove panel opened below the parts table, off screen, so the customer was left guessing what came next. It scrolls just far enough to show the panel (`block: 'nearest'`), so the drawing stays in view where it fits; no animation under reduced motion. |
 
 ## Needs Joshua
 - **Product id for `IC-MW-W3015`** (30" × 15" double-door wall cabinet — the bridge over a 30" knee space).

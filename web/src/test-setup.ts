@@ -30,3 +30,8 @@ if (!('PointerEvent' in window)) {
 // jsdom has no canvas backend and logs "Not implemented" for getContext. Answer like a browser
 // without WebGL would.
 HTMLCanvasElement.prototype.getContext = (() => null) as typeof HTMLCanvasElement.prototype.getContext
+
+// jsdom does not lay anything out, so it has no scrollIntoView.
+if (!Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = () => undefined
+}
