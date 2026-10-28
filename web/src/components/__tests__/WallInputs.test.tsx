@@ -47,7 +47,7 @@ describe('WallInputs', () => {
     const user = userEvent.setup()
     render(<Harness />)
 
-    await user.click(screen.getByRole('button', { name: /three-car back wall/i }))
+    await user.click(screen.getByRole('button', { name: /three-car/i }))
 
     expect(wallState().length).toBe(360)
   })
@@ -56,7 +56,7 @@ describe('WallInputs', () => {
     const user = userEvent.setup()
     render(<Harness />)
 
-    await user.click(screen.getByRole('button', { name: /two-car back wall/i }))
+    await user.click(screen.getByRole('button', { name: /two-car/i }))
     await user.click(screen.getByRole('button', { name: /add electrical panel/i }))
 
     expect(wallState().obstructions).toEqual([
@@ -163,7 +163,7 @@ describe('WallInputs', () => {
     const onSolve = vi.fn()
     render(<Harness onSolve={onSolve} />)
 
-    await user.click(screen.getByRole('button', { name: /two-car back wall/i }))
+    await user.click(screen.getByRole('button', { name: /two-car/i }))
     await user.click(screen.getByRole('button', { name: /max storage/i }))
 
     expect(onSolve).toHaveBeenCalledWith('Storage')
@@ -174,7 +174,7 @@ describe('WallInputs', () => {
     render(<Harness />)
     const lengths: number[] = []
 
-    for (const name of [/single-car back wall/i, /two-car back wall/i, /three-car back wall/i]) {
+    for (const name of [/single-car/i, /two-car/i, /three-car/i]) {
       await user.click(screen.getByRole('button', { name }))
       lengths.push(wallState().length)
     }
@@ -186,21 +186,21 @@ describe('WallInputs', () => {
     const user = userEvent.setup()
     render(<Harness />)
 
-    await user.click(screen.getByRole('button', { name: /two-car back wall/i }))
+    await user.click(screen.getByRole('button', { name: /two-car/i }))
 
-    expect(screen.getByRole('button', { name: /two-car back wall/i })).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('button', { name: /single-car back wall/i })).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByRole('button', { name: /two-car/i })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: /single-car/i })).toHaveAttribute('aria-pressed', 'false')
   })
 
   it('typing a length clears the quick pick', async () => {
     const user = userEvent.setup()
     render(<Harness />)
 
-    await user.click(screen.getByRole('button', { name: /three-car back wall/i }))
+    await user.click(screen.getByRole('button', { name: /three-car/i }))
     await user.clear(screen.getByLabelText(/wall length in inches/i))
     await user.type(screen.getByLabelText(/wall length in inches/i), '200')
 
-    expect(screen.getByRole('button', { name: /three-car back wall/i })).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByRole('button', { name: /three-car/i })).toHaveAttribute('aria-pressed', 'false')
     expect(wallState().length).toBe(200)
   })
 
