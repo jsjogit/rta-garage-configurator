@@ -139,6 +139,9 @@
 | 2026-10-27 | Every knee space sits under a countertop; the validator now enforces it (`KneeSpaceWithoutCounter`) | Found preparing the stakeholder demo: on a 20 ft "A bit of both" wall the solver's last base run grew to 120", longer than the 98" top, so it stood bare with an open knee space and a bridge hung over nothing. SOLVER_RULES already said the counter spans the knee space; nothing checked it. The solver also no longer puts a knee space in a run no top can cover. Golden files for `single-car-clean` and `water-heater` change; both walls still get three options. |
 | 2026-10-27 | Tapping a cabinet scrolls its panel into view | Joshua: on desktop the swap/remove panel opened below the parts table, off screen, so the customer was left guessing what came next. It scrolls just far enough to show the panel (`block: 'nearest'`), so the drawing stays in view where it fits; no animation under reduced motion. |
 | 2026-10-27 | The goal picker offers three goals: Workbench, Max storage, A bit of both | Joshua: "Hide the mess" and "Max storage" drew nearly identical walls, so the fourth choice added a decision without adding a difference. Removed from the page only; Core and the API still accept `HideTheMess`, so a saved design that used it still opens. The three sit in one row from 600px up and stack on a phone. |
+| 2026-10-27 | The planner is built inside nopCommerce, not on Azure Functions (Hiten) | The cart lives in nop's session cookie, so the planner must run on the store's domain. The React build is served from a nop page; validate, price, swaps, design, cart, lead and solve become thin nop controller actions over Core; saved designs go in a new table in the store database. It ships through the store's existing pipeline, so the Functions app, the Bicep files and the GitHub Actions deploy are retired once the move lands. The Core/API split already fits this: Core has no I/O, the endpoints are thin. |
+| 2026-10-27 | Add-to-cart becomes one all-or-nothing "add wall to cart" endpoint, with an anti-forgery token (Hiten) | Today's `/addproducttocart/catalog/{id}/1/{qty}` takes no token (Joshua's assumption was right), but it silently redirects to the product page for any product with attributes or a minimum quantity, which can leave half a wall in the cart. The new endpoint checks every line first, adds all or nothing, groups the lines as one wall in the cart, and requires a token that nop puts on the page. The web app's per-item loop is replaced when this exists. |
+| 2026-10-27 | Leads and email use the store's existing systems (Hiten) | "Email me this" and designer requests become Lead records under a new "Garage Planner" lead type, and mail goes through nop's message templates and email queue, as the Kitchen Design Tool's leads do. Two templates: the customer email (parts list and design link) and an internal notification for designer requests. This closes the "Sent. Check your inbox" promise. |
 
 ## Needs Joshua
 - **Product id for `IC-MW-W3015`** (30" × 15" double-door wall cabinet — the bridge over a 30" knee space).
@@ -163,17 +166,9 @@
   we show, not whether a customer is left alone with the problem.)
 
 ## Needs Hiten (technical lead)
-Integration questions for after prototype approval. Joshua's working assumption is noted where one exists.
-- **Where should the wizard actually be served from?** *Owner: Hiten, with Joshua.* Joshua's working assumption (2026-10-06): Azure, integrated with the nopCommerce site so the planner sits inside the existing UI and uses its add-to-cart as seamlessly as possible; Hiten decides where and how. Add-to-cart only completes when the page shares
-  an origin with the store, so hosting it inside nopCommerce is the route that makes the cart work
-  end to end; a Static Web App is the better preview and staging environment. README has the three
-  options. This is the decision that determines whether Phase 1 can close the loop.
-- **Hiten to confirm:** whether `/addproducttocart/catalog/{id}/1/{qty}` needs an anti-forgery token on RTA's fork. The web
-  app is same-origin with the storefront in Phase 1, so the session cookie rides along; if the fork
-  requires a token, the hand-off needs to carry one. Testable as soon as a product id exists.
-  Joshua's assumption (2026-10-06): no token is required.
-- **"Email me this" does not send an email.** *Owner: Hiten — to solve once the prototype and concept are approved (Joshua, 2026-10-06).* The API stores the request (and designer requests) in a
-  table, then the page tells the customer "Sent. Check your inbox". Nothing sends mail and nothing
-  notifies a designer. Before launch we need an email route (e.g. Azure Communication Services, or the
-  ESP RTA already uses) and somewhere designer requests land that a person actually watches. Until
-  then the copy is a promise we are not keeping.
+- **Where in the store does the planner appear?** *Joshua with Hiten.* Hiten's plan serves it from its own nop page,
+  `/garage/design`, with the normal header and footer. Joshua wants no standalone page: a section on
+  `/garage-cabinets` above "Start shopping now" whose CTA opens a slide-out (see `prototype/garage-page.html`
+  on `demo-2.0-1d`). The back end Hiten describes serves either; the difference is the front-end shell
+  (a page vs. a script mounted on the category page and loaded on click) and where share links land
+  (`/garage-cabinets?design=K7M2QX` instead of `/garage/design/K7M2QX`).
