@@ -57,10 +57,11 @@ export function CabinetPanel({
   }, [item.sku, isKnee])
 
   // The panel opens below the parts table, often off screen; scroll just far enough to show it.
+  // Again once the swaps arrive, since they make the panel several hundred pixels taller.
   useEffect(() => {
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     panel.current?.scrollIntoView({ block: 'nearest', behavior: still ? 'auto' : 'smooth' })
-  }, [index])
+  }, [index, options])
 
   return (
     <div ref={panel} className="editor" role="region" aria-label="Selected cabinet">
