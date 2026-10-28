@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { useState } from 'react'
@@ -25,6 +25,15 @@ describe('WallInputs', () => {
     expect(screen.getByRole('group', { name: /things on the wall/i })).toBeInTheDocument()
     expect(screen.getByRole('group', { name: /^goal$/i })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /^continue$/i })).not.toBeInTheDocument()
+  })
+
+  it('offers three goals; "Hide the mess" is gone', () => {
+    // Joshua: Hide the mess and Max storage drew nearly the same wall.
+    render(<Harness />)
+
+    const goals = within(screen.getByRole('group', { name: /^goal$/i })).getAllByRole('button')
+
+    expect(goals.map((b) => b.querySelector('strong')?.textContent)).toEqual(['Workbench', 'Max storage', 'A bit of both'])
   })
 
   it('asks for the ceiling rather than assuming one', () => {

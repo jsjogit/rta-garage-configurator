@@ -119,7 +119,9 @@ a { color: var(--color-link); }
 }
 .field-error { color: var(--color-error, #a33a2c); font-size: 14px; margin: 0; }
 
-.goals { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; }
+/* Three goals: one row where they fit, stacked on a phone. */
+.goals { display: grid; gap: 8px; grid-template-columns: 1fr; }
+@media (min-width: 600px) { .goals { grid-template-columns: repeat(3, 1fr); } }
 .goal {
   font-family: inherit;
   text-align: left;
