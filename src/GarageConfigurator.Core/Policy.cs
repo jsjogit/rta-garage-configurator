@@ -44,7 +44,13 @@ internal static class Policies
             }
         };
 
-        return policies
+        // A window or door over one end can rule out a tower there, and a layout with one tower too
+        // many is thrown out whole. Storage tries every count down to none so it never loses the rest.
+        var expanded = goal == Goal.Storage
+            ? policies.SelectMany(p => Enumerable.Range(0, p.MaxTalls + 1).Reverse().Select(n => p with { MaxTalls = n }))
+            : policies;
+
+        return expanded
             .Select(p => p with
             {
                 MaxTalls = tallsAllowed ? p.MaxTalls : 0,

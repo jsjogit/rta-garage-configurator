@@ -305,332 +305,6 @@
               "zone": "Tall"
             },
             {
-              "sku": "MV-B24-F",
-              "x": 90,
-              "y": 0,
-              "width": 24,
-              "height": 34.5,
-              "depth": 24,
-              "zone": "Base"
-            },
-            {
-              "sku": "MV-B24-F",
-              "x": 114,
-              "y": 0,
-              "width": 24,
-              "height": 34.5,
-              "depth": 24,
-              "zone": "Base"
-            },
-            {
-              "sku": "MV-B24-F",
-              "x": 138,
-              "y": 0,
-              "width": 24,
-              "height": 34.5,
-              "depth": 24,
-              "zone": "Base"
-            },
-            {
-              "sku": "MV-W2430",
-              "x": 90,
-              "y": 54,
-              "width": 24,
-              "height": 30,
-              "depth": 12,
-              "zone": "Wall"
-            },
-            {
-              "sku": "MV-W2430",
-              "x": 114,
-              "y": 54,
-              "width": 24,
-              "height": 30,
-              "depth": 12,
-              "zone": "Wall"
-            },
-            {
-              "sku": "MV-W2430",
-              "x": 138,
-              "y": 54,
-              "width": 24,
-              "height": 30,
-              "depth": 12,
-              "zone": "Wall"
-            },
-            {
-              "sku": "MV-PC3084",
-              "x": 162,
-              "y": 0,
-              "width": 30,
-              "height": 84,
-              "depth": 24,
-              "zone": "Tall"
-            },
-            {
-              "sku": "MV-PC2484",
-              "x": 192,
-              "y": 0,
-              "width": 24,
-              "height": 84,
-              "depth": 24,
-              "zone": "Tall"
-            },
-            {
-              "sku": "MV-PC2484",
-              "x": 216,
-              "y": 0,
-              "width": 24,
-              "height": 84,
-              "depth": 24,
-              "zone": "Tall"
-            }
-          ],
-          "label": "Another option",
-          "configId": null,
-          "tier": "Standard"
-        },
-        "lineItems": [
-          {
-            "sku": "MV-PC3084",
-            "name": "Double Door Pantry Cabinet",
-            "quantity": 4,
-            "unitList": 1534.50,
-            "unitPromo": 1150.88,
-            "extendedList": 6138.00,
-            "extendedPromo": 4603.52
-          },
-          {
-            "sku": "MV-B24-F",
-            "name": "Full Height Door Base Cabinet",
-            "quantity": 3,
-            "unitList": 683.10,
-            "unitPromo": 512.32,
-            "extendedList": 2049.30,
-            "extendedPromo": 1536.96
-          },
-          {
-            "sku": "MV-W2430",
-            "name": "Double Door Wall Cabinet",
-            "quantity": 3,
-            "unitList": 310.86,
-            "unitPromo": 233.14,
-            "extendedList": 932.58,
-            "extendedPromo": 699.42
-          },
-          {
-            "sku": "MV-PC2484",
-            "name": "Double Door Pantry Cabinet",
-            "quantity": 2,
-            "unitList": 1267.20,
-            "unitPromo": 950.40,
-            "extendedList": 2534.40,
-            "extendedPromo": 1900.80
-          }
-        ],
-        "subtotalList": 11654.28,
-        "subtotalPromo": 8740.70
-      },
-      "premiere": {
-        "layout": {
-          "items": [
-            {
-              "sku": "MV-PC3084",
-              "x": 0,
-              "y": 0,
-              "width": 30,
-              "height": 84,
-              "depth": 24,
-              "zone": "Tall"
-            },
-            {
-              "sku": "MV-PC3084",
-              "x": 30,
-              "y": 0,
-              "width": 30,
-              "height": 84,
-              "depth": 24,
-              "zone": "Tall"
-            },
-            {
-              "sku": "MV-PC3084",
-              "x": 60,
-              "y": 0,
-              "width": 30,
-              "height": 84,
-              "depth": 24,
-              "zone": "Tall"
-            },
-            {
-              "sku": "MV-DB24-3",
-              "x": 90,
-              "y": 0,
-              "width": 24,
-              "height": 34.5,
-              "depth": 24,
-              "zone": "Base"
-            },
-            {
-              "sku": "MV-DB24-4",
-              "x": 114,
-              "y": 0,
-              "width": 24,
-              "height": 34.5,
-              "depth": 24,
-              "zone": "Base"
-            },
-            {
-              "sku": "MV-DB24-4",
-              "x": 138,
-              "y": 0,
-              "width": 24,
-              "height": 34.5,
-              "depth": 24,
-              "zone": "Base"
-            },
-            {
-              "sku": "MV-W2430",
-              "x": 90,
-              "y": 54,
-              "width": 24,
-              "height": 30,
-              "depth": 12,
-              "zone": "Wall"
-            },
-            {
-              "sku": "MV-W2430",
-              "x": 114,
-              "y": 54,
-              "width": 24,
-              "height": 30,
-              "depth": 12,
-              "zone": "Wall"
-            },
-            {
-              "sku": "MV-W2430",
-              "x": 138,
-              "y": 54,
-              "width": 24,
-              "height": 30,
-              "depth": 12,
-              "zone": "Wall"
-            },
-            {
-              "sku": "MV-PC3084",
-              "x": 162,
-              "y": 0,
-              "width": 30,
-              "height": 84,
-              "depth": 24,
-              "zone": "Tall"
-            },
-            {
-              "sku": "MV-PC2484",
-              "x": 192,
-              "y": 0,
-              "width": 24,
-              "height": 84,
-              "depth": 24,
-              "zone": "Tall"
-            },
-            {
-              "sku": "MV-PC2484",
-              "x": 216,
-              "y": 0,
-              "width": 24,
-              "height": 84,
-              "depth": 24,
-              "zone": "Tall"
-            }
-          ],
-          "label": "Another option",
-          "configId": null,
-          "tier": "Premiere"
-        },
-        "lineItems": [
-          {
-            "sku": "MV-PC3084",
-            "name": "Double Door Pantry Cabinet",
-            "quantity": 4,
-            "unitList": 1534.50,
-            "unitPromo": 1150.88,
-            "extendedList": 6138.00,
-            "extendedPromo": 4603.52
-          },
-          {
-            "sku": "MV-DB24-3",
-            "name": "3-Drawer Base Cabinet",
-            "quantity": 1,
-            "unitList": 1017.72,
-            "unitPromo": 763.29,
-            "extendedList": 1017.72,
-            "extendedPromo": 763.29
-          },
-          {
-            "sku": "MV-DB24-4",
-            "name": "4-Drawer Base Cabinet",
-            "quantity": 2,
-            "unitList": 1092.96,
-            "unitPromo": 819.72,
-            "extendedList": 2185.92,
-            "extendedPromo": 1639.44
-          },
-          {
-            "sku": "MV-W2430",
-            "name": "Double Door Wall Cabinet",
-            "quantity": 3,
-            "unitList": 310.86,
-            "unitPromo": 233.14,
-            "extendedList": 932.58,
-            "extendedPromo": 699.42
-          },
-          {
-            "sku": "MV-PC2484",
-            "name": "Double Door Pantry Cabinet",
-            "quantity": 2,
-            "unitList": 1267.20,
-            "unitPromo": 950.40,
-            "extendedList": 2534.40,
-            "extendedPromo": 1900.80
-          }
-        ],
-        "subtotalList": 12808.62,
-        "subtotalPromo": 9606.47
-      }
-    },
-    {
-      "label": "A different mix",
-      "standard": {
-        "layout": {
-          "items": [
-            {
-              "sku": "MV-PC3084",
-              "x": 0,
-              "y": 0,
-              "width": 30,
-              "height": 84,
-              "depth": 24,
-              "zone": "Tall"
-            },
-            {
-              "sku": "MV-PC3084",
-              "x": 30,
-              "y": 0,
-              "width": 30,
-              "height": 84,
-              "depth": 24,
-              "zone": "Tall"
-            },
-            {
-              "sku": "MV-PC3084",
-              "x": 60,
-              "y": 0,
-              "width": 30,
-              "height": 84,
-              "depth": 24,
-              "zone": "Tall"
-            },
-            {
               "sku": "MV-B30-F",
               "x": 90,
               "y": 0,
@@ -712,7 +386,7 @@
               "zone": "Tall"
             }
           ],
-          "label": "A different mix",
+          "label": "Another option",
           "configId": null,
           "tier": "Standard"
         },
@@ -878,7 +552,7 @@
               "zone": "Tall"
             }
           ],
-          "label": "A different mix",
+          "label": "Another option",
           "configId": null,
           "tier": "Premiere"
         },
@@ -931,6 +605,341 @@
         ],
         "subtotalList": 12588.84,
         "subtotalPromo": 9441.67
+      }
+    },
+    {
+      "label": "A different mix",
+      "standard": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-PC3084",
+              "x": 0,
+              "y": 0,
+              "width": 30,
+              "height": 84,
+              "depth": 24,
+              "zone": "Tall"
+            },
+            {
+              "sku": "MV-PC3084",
+              "x": 30,
+              "y": 0,
+              "width": 30,
+              "height": 84,
+              "depth": 24,
+              "zone": "Tall"
+            },
+            {
+              "sku": "MV-PC3084",
+              "x": 60,
+              "y": 0,
+              "width": 30,
+              "height": 84,
+              "depth": 24,
+              "zone": "Tall"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 90,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 105,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 120,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 135,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 90,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 105,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 120,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 135,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-PC3084",
+              "x": 150,
+              "y": 0,
+              "width": 30,
+              "height": 84,
+              "depth": 24,
+              "zone": "Tall"
+            },
+            {
+              "sku": "MV-PC3084",
+              "x": 180,
+              "y": 0,
+              "width": 30,
+              "height": 84,
+              "depth": 24,
+              "zone": "Tall"
+            },
+            {
+              "sku": "MV-PC3084",
+              "x": 210,
+              "y": 0,
+              "width": 30,
+              "height": 84,
+              "depth": 24,
+              "zone": "Tall"
+            }
+          ],
+          "label": "A different mix",
+          "configId": null,
+          "tier": "Standard"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
+            "quantity": 6,
+            "unitList": 1534.50,
+            "unitPromo": 1150.88,
+            "extendedList": 9207.00,
+            "extendedPromo": 6905.28
+          },
+          {
+            "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
+            "quantity": 4,
+            "unitList": 685.08,
+            "unitPromo": 513.81,
+            "extendedList": 2740.32,
+            "extendedPromo": 2055.24
+          },
+          {
+            "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
+            "quantity": 4,
+            "unitList": 211.86,
+            "unitPromo": 158.90,
+            "extendedList": 847.44,
+            "extendedPromo": 635.60
+          }
+        ],
+        "subtotalList": 12794.76,
+        "subtotalPromo": 9596.12
+      },
+      "premiere": {
+        "layout": {
+          "items": [
+            {
+              "sku": "MV-PC3084",
+              "x": 0,
+              "y": 0,
+              "width": 30,
+              "height": 84,
+              "depth": 24,
+              "zone": "Tall"
+            },
+            {
+              "sku": "MV-PC3084",
+              "x": 30,
+              "y": 0,
+              "width": 30,
+              "height": 84,
+              "depth": 24,
+              "zone": "Tall"
+            },
+            {
+              "sku": "MV-PC3084",
+              "x": 60,
+              "y": 0,
+              "width": 30,
+              "height": 84,
+              "depth": 24,
+              "zone": "Tall"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 90,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 105,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 120,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 135,
+              "y": 0,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 90,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 105,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 120,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 135,
+              "y": 54,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-PC3084",
+              "x": 150,
+              "y": 0,
+              "width": 30,
+              "height": 84,
+              "depth": 24,
+              "zone": "Tall"
+            },
+            {
+              "sku": "MV-PC3084",
+              "x": 180,
+              "y": 0,
+              "width": 30,
+              "height": 84,
+              "depth": 24,
+              "zone": "Tall"
+            },
+            {
+              "sku": "MV-PC3084",
+              "x": 210,
+              "y": 0,
+              "width": 30,
+              "height": 84,
+              "depth": 24,
+              "zone": "Tall"
+            }
+          ],
+          "label": "A different mix",
+          "configId": null,
+          "tier": "Premiere"
+        },
+        "lineItems": [
+          {
+            "sku": "MV-PC3084",
+            "name": "Double Door Pantry Cabinet",
+            "quantity": 6,
+            "unitList": 1534.50,
+            "unitPromo": 1150.88,
+            "extendedList": 9207.00,
+            "extendedPromo": 6905.28
+          },
+          {
+            "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
+            "quantity": 4,
+            "unitList": 685.08,
+            "unitPromo": 513.81,
+            "extendedList": 2740.32,
+            "extendedPromo": 2055.24
+          },
+          {
+            "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
+            "quantity": 4,
+            "unitList": 211.86,
+            "unitPromo": 158.90,
+            "extendedList": 847.44,
+            "extendedPromo": 635.60
+          }
+        ],
+        "subtotalList": 12794.76,
+        "subtotalPromo": 9596.12
       }
     }
   ],

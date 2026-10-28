@@ -109,7 +109,9 @@ counter, same wall cabinets. Only the base cabinets and therefore the price diff
 ## Goal heuristics (scoring, higher = better)
 - **Workbench:** maximise counter length, require ≥1 DB in the run, prefer DB24-4/DB30-4 nearest centre,
   walls above counter for tool storage, talls at ends.
-- **Storage:** maximise cubic storage per dollar; favour talls and 30"-wide units; counters optional.
+- **Storage:** maximise total enclosed cubic storage (not per dollar); 30"-wide units and price only break near-ties;
+  counters optional. Try every tall count, so an obstruction that blocks one tower never costs the rest.
+  No other goal's layout for the same wall may hold more storage than Storage's recommended one.
 - **HideTheMess:** favour full-height doors (B-F) and talls; minimise open counter; fill the wall end-to-end.
 - **Balanced:** one workbench run (72 or 96) centred, flanked by talls; walls above counter.
 - Universal bonus: a knee space with a **width-matched 15" wall bridge** above it is strongly preferred —

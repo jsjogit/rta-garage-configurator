@@ -7,8 +7,7 @@ public sealed partial class WallSolver
     private const decimal WorkbenchUpperCabinet = 3m;
     private const decimal KneeSpaceWithBridge = 50m;
     private const decimal WideUpperOverKneeSpace = 40m;
-    private const decimal StorageCubicFeetPerDollar = 12000m;
-    private const decimal StorageTall = 8m;
+    private const decimal StorageCubicFoot = 100m;
     private const decimal StorageWideBox = 2m;
     private const decimal HiddenTall = 12m;
     private const decimal HiddenOpenCounterInch = 0.5m;
@@ -29,7 +28,7 @@ public sealed partial class WallSolver
         var score = goal switch
         {
             Goal.Workbench => ScoreWorkbench(layout, counterLength),
-            Goal.Storage => ScoreStorage(layout, cubicFeet, price),
+            Goal.Storage => ScoreStorage(layout, cubicFeet),
             Goal.HideTheMess => ScoreHidden(layout, counterLength, fillRatio),
             _ => ScoreBalanced(layout, counterLength, fillRatio)
         };
@@ -50,13 +49,16 @@ public sealed partial class WallSolver
         return (counterLength * WorkbenchCounterInch) + (uppers * WorkbenchUpperCabinet);
     }
 
-    private static decimal ScoreStorage(Layout layout, decimal cubicFeet, decimal price)
+    /// <summary>
+    /// The card promises "as much enclosed space as fits", so total space leads, not space per dollar:
+    /// per dollar, a row of cheap bases beat pantries and another goal ended up out-storing this one.
+    /// Weighted so a cubic foot outweighs the width bonus and penalties; those only settle near-ties.
+    /// </summary>
+    private static decimal ScoreStorage(Layout layout, decimal cubicFeet)
     {
-        var perDollar = price == 0m ? 0m : cubicFeet / price * StorageCubicFeetPerDollar;
-        var talls = layout.Items.Count(i => i.Zone == Zone.Tall);
         var wideBoxes = layout.Items.Count(i => i.Width == 30m);
 
-        return perDollar + (talls * StorageTall) + (wideBoxes * StorageWideBox);
+        return (cubicFeet * StorageCubicFoot) + (wideBoxes * StorageWideBox);
     }
 
     private static decimal ScoreHidden(Layout layout, decimal counterLength, decimal fillRatio)

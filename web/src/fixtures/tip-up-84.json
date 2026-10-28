@@ -838,46 +838,55 @@
               "zone": "Base"
             },
             {
-              "sku": "MV-B24-F",
+              "sku": "MV-B30-F",
               "x": 120,
               "y": 0,
-              "width": 24,
+              "width": 30,
               "height": 34.5,
               "depth": 24,
               "zone": "Base"
             },
             {
-              "sku": "MV-B24-F",
-              "x": 144,
+              "sku": "MV-B30-F",
+              "x": 150,
               "y": 0,
-              "width": 24,
+              "width": 30,
               "height": 34.5,
               "depth": 24,
               "zone": "Base"
             },
             {
-              "sku": "MV-B24-F",
-              "x": 168,
+              "sku": "MV-B15",
+              "x": 180,
               "y": 0,
-              "width": 24,
+              "width": 15,
               "height": 34.5,
               "depth": 24,
               "zone": "Base"
             },
             {
-              "sku": "MV-B24-F",
-              "x": 192,
+              "sku": "MV-B15",
+              "x": 195,
               "y": 0,
-              "width": 24,
+              "width": 15,
               "height": 34.5,
               "depth": 24,
               "zone": "Base"
             },
             {
-              "sku": "MV-B24-F",
-              "x": 216,
+              "sku": "MV-B15",
+              "x": 210,
               "y": 0,
-              "width": 24,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 225,
+              "y": 0,
+              "width": 15,
               "height": 34.5,
               "depth": 24,
               "zone": "Base"
@@ -919,46 +928,55 @@
               "zone": "Wall"
             },
             {
-              "sku": "MV-W2430",
+              "sku": "MV-W3030",
               "x": 120,
               "y": 54,
-              "width": 24,
+              "width": 30,
               "height": 30,
               "depth": 12,
               "zone": "Wall"
             },
             {
-              "sku": "MV-W2430",
-              "x": 144,
+              "sku": "MV-W3030",
+              "x": 150,
               "y": 54,
-              "width": 24,
+              "width": 30,
               "height": 30,
               "depth": 12,
               "zone": "Wall"
             },
             {
-              "sku": "MV-W2430",
-              "x": 168,
+              "sku": "MV-W1530",
+              "x": 180,
               "y": 54,
-              "width": 24,
+              "width": 15,
               "height": 30,
               "depth": 12,
               "zone": "Wall"
             },
             {
-              "sku": "MV-W2430",
-              "x": 192,
+              "sku": "MV-W1530",
+              "x": 195,
               "y": 54,
-              "width": 24,
+              "width": 15,
               "height": 30,
               "depth": 12,
               "zone": "Wall"
             },
             {
-              "sku": "MV-W2430",
-              "x": 216,
+              "sku": "MV-W1530",
+              "x": 210,
               "y": 54,
-              "width": 24,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 225,
+              "y": 54,
+              "width": 15,
               "height": 30,
               "depth": 12,
               "zone": "Wall"
@@ -972,42 +990,42 @@
           {
             "sku": "MV-B30-F",
             "name": "Full Height Door Base Cabinet",
-            "quantity": 4,
+            "quantity": 6,
             "unitList": 883.08,
             "unitPromo": 662.31,
-            "extendedList": 3532.32,
-            "extendedPromo": 2649.24
+            "extendedList": 5298.48,
+            "extendedPromo": 3973.86
           },
           {
-            "sku": "MV-B24-F",
-            "name": "Full Height Door Base Cabinet",
-            "quantity": 5,
-            "unitList": 683.10,
-            "unitPromo": 512.32,
-            "extendedList": 3415.50,
-            "extendedPromo": 2561.60
+            "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
+            "quantity": 4,
+            "unitList": 685.08,
+            "unitPromo": 513.81,
+            "extendedList": 2740.32,
+            "extendedPromo": 2055.24
           },
           {
             "sku": "MV-W3030",
             "name": "Double Door Wall Cabinet",
-            "quantity": 4,
+            "quantity": 6,
             "unitList": 348.48,
             "unitPromo": 261.36,
-            "extendedList": 1393.92,
-            "extendedPromo": 1045.44
+            "extendedList": 2090.88,
+            "extendedPromo": 1568.16
           },
           {
-            "sku": "MV-W2430",
-            "name": "Double Door Wall Cabinet",
-            "quantity": 5,
-            "unitList": 310.86,
-            "unitPromo": 233.14,
-            "extendedList": 1554.30,
-            "extendedPromo": 1165.70
+            "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
+            "quantity": 4,
+            "unitList": 211.86,
+            "unitPromo": 158.90,
+            "extendedList": 847.44,
+            "extendedPromo": 635.60
           }
         ],
-        "subtotalList": 9896.04,
-        "subtotalPromo": 7421.98
+        "subtotalList": 10977.12,
+        "subtotalPromo": 8232.86
       },
       "premiere": {
         "layout": {
@@ -1049,46 +1067,55 @@
               "zone": "Base"
             },
             {
-              "sku": "MV-DB24-4",
+              "sku": "MV-DB30-4",
               "x": 120,
               "y": 0,
-              "width": 24,
+              "width": 30,
               "height": 34.5,
               "depth": 24,
               "zone": "Base"
             },
             {
-              "sku": "MV-DB24-4",
-              "x": 144,
+              "sku": "MV-DB30-4",
+              "x": 150,
               "y": 0,
-              "width": 24,
+              "width": 30,
               "height": 34.5,
               "depth": 24,
               "zone": "Base"
             },
             {
-              "sku": "MV-DB24-4",
-              "x": 168,
+              "sku": "MV-B15",
+              "x": 180,
               "y": 0,
-              "width": 24,
+              "width": 15,
               "height": 34.5,
               "depth": 24,
               "zone": "Base"
             },
             {
-              "sku": "MV-DB24-4",
-              "x": 192,
+              "sku": "MV-B15",
+              "x": 195,
               "y": 0,
-              "width": 24,
+              "width": 15,
               "height": 34.5,
               "depth": 24,
               "zone": "Base"
             },
             {
-              "sku": "MV-DB24-4",
-              "x": 216,
+              "sku": "MV-B15",
+              "x": 210,
               "y": 0,
-              "width": 24,
+              "width": 15,
+              "height": 34.5,
+              "depth": 24,
+              "zone": "Base"
+            },
+            {
+              "sku": "MV-B15",
+              "x": 225,
+              "y": 0,
+              "width": 15,
               "height": 34.5,
               "depth": 24,
               "zone": "Base"
@@ -1130,46 +1157,55 @@
               "zone": "Wall"
             },
             {
-              "sku": "MV-W2430",
+              "sku": "MV-W3030",
               "x": 120,
               "y": 54,
-              "width": 24,
+              "width": 30,
               "height": 30,
               "depth": 12,
               "zone": "Wall"
             },
             {
-              "sku": "MV-W2430",
-              "x": 144,
+              "sku": "MV-W3030",
+              "x": 150,
               "y": 54,
-              "width": 24,
+              "width": 30,
               "height": 30,
               "depth": 12,
               "zone": "Wall"
             },
             {
-              "sku": "MV-W2430",
-              "x": 168,
+              "sku": "MV-W1530",
+              "x": 180,
               "y": 54,
-              "width": 24,
+              "width": 15,
               "height": 30,
               "depth": 12,
               "zone": "Wall"
             },
             {
-              "sku": "MV-W2430",
-              "x": 192,
+              "sku": "MV-W1530",
+              "x": 195,
               "y": 54,
-              "width": 24,
+              "width": 15,
               "height": 30,
               "depth": 12,
               "zone": "Wall"
             },
             {
-              "sku": "MV-W2430",
-              "x": 216,
+              "sku": "MV-W1530",
+              "x": 210,
               "y": 54,
-              "width": 24,
+              "width": 15,
+              "height": 30,
+              "depth": 12,
+              "zone": "Wall"
+            },
+            {
+              "sku": "MV-W1530",
+              "x": 225,
+              "y": 54,
+              "width": 15,
               "height": 30,
               "depth": 12,
               "zone": "Wall"
@@ -1192,42 +1228,42 @@
           {
             "sku": "MV-DB30-4",
             "name": "4-Drawer Base Cabinet",
-            "quantity": 3,
+            "quantity": 5,
             "unitList": 1326.60,
             "unitPromo": 994.95,
-            "extendedList": 3979.80,
-            "extendedPromo": 2984.85
+            "extendedList": 6633.00,
+            "extendedPromo": 4974.75
           },
           {
-            "sku": "MV-DB24-4",
-            "name": "4-Drawer Base Cabinet",
-            "quantity": 5,
-            "unitList": 1092.96,
-            "unitPromo": 819.72,
-            "extendedList": 5464.80,
-            "extendedPromo": 4098.60
+            "sku": "MV-B15",
+            "name": "Single Door Base Cabinet",
+            "quantity": 4,
+            "unitList": 685.08,
+            "unitPromo": 513.81,
+            "extendedList": 2740.32,
+            "extendedPromo": 2055.24
           },
           {
             "sku": "MV-W3030",
             "name": "Double Door Wall Cabinet",
-            "quantity": 4,
+            "quantity": 6,
             "unitList": 348.48,
             "unitPromo": 261.36,
-            "extendedList": 1393.92,
-            "extendedPromo": 1045.44
+            "extendedList": 2090.88,
+            "extendedPromo": 1568.16
           },
           {
-            "sku": "MV-W2430",
-            "name": "Double Door Wall Cabinet",
-            "quantity": 5,
-            "unitList": 310.86,
-            "unitPromo": 233.14,
-            "extendedList": 1554.30,
-            "extendedPromo": 1165.70
+            "sku": "MV-W1530",
+            "name": "Single Door Wall Cabinet",
+            "quantity": 4,
+            "unitList": 211.86,
+            "unitPromo": 158.90,
+            "extendedList": 847.44,
+            "extendedPromo": 635.60
           }
         ],
-        "subtotalList": 13632.30,
-        "subtotalPromo": 10224.20
+        "subtotalList": 13551.12,
+        "subtotalPromo": 10163.36
       }
     }
   ],
