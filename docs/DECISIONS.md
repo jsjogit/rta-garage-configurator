@@ -166,10 +166,10 @@
   (Lower stakes now: walls with clearance obstructions route to a designer, so the numbers decide what
   we show, not whether a customer is left alone with the problem.)
 
-- **Approve the demo build's bundle size?** `demo-2.0-1d`'s entry chunk measures 59,822 bytes gzipped against
-  `check:bundle`'s 59,430 (+392): 1D's pop-up put it 261 over on 2026-10-27, and the 2026-10-28/29 fixes added
-  131 more. That was fine for a demo branch; now that the build is approved it is the reference for the nop work. No PR is open, so nothing is red today, but CI runs `check:bundle` on every pull request and
-  will fail one from this branch. Either approve +400 bytes or we trim.
+- **Approve the demo build's bundle size?** `demo-2.0-1d`'s entry chunk measures 59,848 bytes gzipped against
+  `check:bundle`'s 59,430 (+418): 1D's pop-up put it 261 over on 2026-10-27, and the 2026-10-28/29 fixes added
+  157 more. That was fine for a demo branch; now that the build is approved it is the reference for the nop work. No PR is open, so nothing is red today, but CI runs `check:bundle` on every pull request and
+  will fail one from this branch. Either approve +450 bytes or we trim.
 
 ## Needs Hiten (technical lead)
 - **Where in the store does the planner appear?** *Joshua with Hiten.* Hiten's plan serves it from its own nop page,
