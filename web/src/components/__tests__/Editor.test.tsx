@@ -228,6 +228,22 @@ describe('editing a wall', () => {
     await waitFor(() => expect(within(sheet).getByRole('button', { name: /fix the wall first/i })).toBeDisabled())
   })
 
+  it('can still finish editing after a swap, keeping the edit', async () => {
+    // Found in the demo: after a swap only "undo my changes" was offered, so the wall could not be
+    // finished — and the 3D view only comes back once editing is done.
+    const user = userEvent.setup()
+    render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)
+
+    const sheet = await selectFirstCabinet(user)
+    await waitFor(() => within(sheet).getByRole('button', { name: /MV-DB24-4/ }))
+    await user.click(within(sheet).getByRole('button', { name: /MV-DB24-4/ }))
+    await user.click(within(sheet).getByRole('button', { name: /done editing/i }))
+
+    expect(within(sheet).getByRole('button', { name: /edit this wall/i })).toBeInTheDocument()
+    expect(within(sheet).getByRole('button', { name: /undo my changes/i })).toBeInTheDocument()
+    expect(within(sheet).queryByRole('region', { name: /selected cabinet/i })).not.toBeInTheDocument()
+  })
+
   it('can undo an edit and go back to the layout we suggested', async () => {
     const user = userEvent.setup()
     render(<Results response={vignette as SolveResponse} wall={wall} onStartOver={vi.fn()} />)

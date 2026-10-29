@@ -204,24 +204,25 @@ function Sheet({
           <div className="sheet-actions">
             <AddToCart layout={editor.layout} configId={configId} blocked={blocked} rank={rank} />
 
-            {editor.edited ? (
+            {/* The way out of editing never goes away: an edited wall still has to be finished to be seen. */}
+            <button
+              type="button"
+              className={editing ? 'btn ghost' : 'linklike'}
+              onClick={() => {
+                setEditing((on) => !on)
+                setSelected(null)
+              }}
+            >
+              {editing ? 'Done editing' : 'Edit this wall'}
+            </button>
+
+            {editor.edited && (
               <p className="edited-note">
                 Edited{editor.checking ? ' · checking…' : ''} ·{' '}
                 <button type="button" className="linklike" onClick={editor.reset}>
                   undo my changes
                 </button>
               </p>
-            ) : (
-              <button
-                type="button"
-                className="linklike"
-                onClick={() => {
-                  setEditing((on) => !on)
-                  setSelected(null)
-                }}
-              >
-                {editing ? 'Done editing' : 'Edit this wall'}
-              </button>
             )}
           </div>
         </div>
