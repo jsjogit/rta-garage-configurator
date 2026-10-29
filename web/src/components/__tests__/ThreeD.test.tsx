@@ -89,6 +89,38 @@ describe('See it in 3D', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
+  it('comes back with the edited wall once editing is done', async () => {
+    // Found in the demo: after a change, the only way out of editing was to undo it, so 3D was gone.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string, init?: RequestInit) => {
+        const body = init?.body ? JSON.parse(init.body as string) : {}
+        const value =
+          url === '/api/validate'
+            ? { violations: [] }
+            : url === '/api/price'
+              ? { layout: body.layout, lineItems: [], subtotalList: 0, subtotalPromo: 0 }
+              : { options: [] }
+        return { ok: true, status: 200, json: async () => value } as Response
+      }),
+    )
+    const user = userEvent.setup()
+    show()
+    const sheet = firstSheet()
+
+    await user.click(within(sheet).getByRole('button', { name: /edit this wall/i }))
+    expect(within(sheet).queryByRole('button', { name: /see it in 3d/i })).not.toBeInTheDocument()
+    expect(within(sheet).getByText(/done editing to see your wall in 3d/i)).toBeInTheDocument()
+
+    await user.click(within(sheet).getAllByRole('button', { name: /MV-W2430, 24 inches wide/i })[0])
+    await user.click(within(sheet).getByRole('button', { name: /^remove$/i }))
+    await user.click(within(sheet).getByRole('button', { name: /done editing/i }))
+    await user.click(within(sheet).getByRole('button', { name: /see it in 3d/i }))
+
+    const skus = (await within(dialog()).findByTestId('wall3d')).dataset.skus!.split(',')
+    expect(skus.filter((sku) => sku === 'MV-W2430')).toHaveLength(1)
+  })
+
   it('is not offered without WebGL', () => {
     state.webgl = false
     show()

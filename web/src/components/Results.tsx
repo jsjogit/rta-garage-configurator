@@ -318,7 +318,10 @@ function Sheet({
 
       {editing && selected === null && (
         <div className="editor">
-          <p className="dims">Tap a cabinet to swap or remove it, or drag one along its row to reorder.</p>
+          <p className="dims">
+            Tap a cabinet to swap or remove it, or drag one along its row to reorder.
+            {webgl && !threeDFailed && ' Choose Done editing to see your wall in 3D.'}
+          </p>
         </div>
       )}
     </article>
