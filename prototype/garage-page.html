@@ -5,219 +5,320 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Garage Page Planner Prototype</title>
 <!--
-  Clickable prototype for the stakeholder demo: the garage category page with a new planner section
-  above "Start shopping now". The slide-out runs the real planner from the local demo stack
-  (http://localhost:4173 — see the README's "Running it locally"). Not a copy of the live page:
-  only enough of it to show where the section sits. Not for production.
+  Clickable prototype for the stakeholder demo: the live /garage-cabinets page, mirrored closely enough
+  that the only new things on it are the two planner entry points (a card between the 6-piece set and
+  the sample door, and a feature block in the "Invisible Difference" style). Photos load from the live
+  store; the slide-out runs the real planner from the local demo stack (http://localhost:4173).
+  Not for production: in nop these become two small partials on the existing page.
 -->
+<link rel="stylesheet" href="https://use.typekit.net/cei3mta.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text&family=Mulish:wght@400;600;700&display=swap">
 <style>
+  /* Values copied from the live page's CSS so the new pieces sit in without a seam. */
   :root {
-    --navy: #12223b;
-    --ink: #1f2a37;
-    --muted: #5b6573;
-    --rule: #e3e6ea;
-    --surface: #ffffff;
-    --page: #f6f7f8;
-    --wood: #e3dccb;
-    --wood-deep: #b98c4e;
-    --accent: #12223b;
+    --serif: "freight-display-pro", "FreightDisp Pro", "Libre Caslon Text", Georgia, serif;
+    --sans: "mulish-variable", "Mulish", sans-serif;
+    --text: #000;
+    --body: #4a4a4a;
+    --muted: #747474;
+    --caption: #5f5f5f;
+    --rule: #d6d6d6;
+    --sand: #e3dbcb;
+    --sand-hover: #d8cdb6;
+    --stone: #f6f5f3;
+    --dark: #2f3532;
+    --dark-hover: #404f4a;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--surface); line-height: 1.45; }
+  body { font-family: var(--sans); color: var(--text); background: #fff; font-size: 16px; line-height: 1.5; }
   img { display: block; max-width: 100%; }
-  button { font: inherit; }
-  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+  button { font: inherit; cursor: pointer; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid #7aa7ff; outline-offset: 2px; }
 
   .proto-flag { background: #fff4d6; color: #6b4e00; font-size: 13px; text-align: center; padding: 6px 12px; border-bottom: 1px solid #f0dfa8; }
+  .new-pill { display: inline-block; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: var(--dark); color: #fff; border-radius: 3px; padding: 2px 6px; vertical-align: middle; margin-right: 8px; position: relative; top: -2px; }
 
-  /* ---- store chrome (stand-in) ---- */
-  .store-head { border-bottom: 1px solid var(--rule); }
-  .store-head .wrap { display: flex; align-items: center; gap: 28px; height: 64px; }
-  .store-name { font-weight: 800; letter-spacing: 0.02em; color: var(--navy); font-size: 18px; }
-  .store-nav { display: flex; gap: 20px; font-size: 14px; color: var(--muted); }
-  .store-nav b { color: var(--navy); }
-  .store-cart { margin-left: auto; font-size: 14px; color: var(--navy); }
-  @media (max-width: 700px) { .store-nav { display: none; } }
+  /* ---- store chrome (simplified) ---- */
+  .store-head { border-bottom: 1px solid #ececec; }
+  .store-head .in { max-width: 1440px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 32px; height: 72px; }
+  .logo { font-family: var(--serif); font-size: 24px; letter-spacing: 0.01em; }
+  .nav { display: flex; gap: 24px; font-size: 15px; color: #333; }
+  .nav b { font-weight: 700; }
+  .head-right { margin-left: auto; display: flex; gap: 20px; font-size: 14px; }
+  @media (max-width: 900px) { .nav { display: none; } }
 
-  /* ---- hero (stand-in) ---- */
-  .hero { background: var(--page); }
-  .hero .wrap { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: center; padding-top: 36px; padding-bottom: 36px; }
-  .hero h1 { font-size: 36px; line-height: 1.15; margin: 0 0 10px; color: var(--navy); }
-  .hero p { margin: 0 0 8px; color: var(--muted); }
-  .hero .price { font-size: 18px; color: var(--ink); }
-  .hero .price .save { color: var(--wood-deep); font-weight: 700; font-size: 15px; margin-left: 6px; }
-  .hero-art { display: flex; align-items: flex-end; justify-content: center; gap: 2px; }
-  /* The renders are on white; multiply drops the white onto whatever is behind. */
-  .hero-art img, .mini-wall img { mix-blend-mode: multiply; }
-  .hero-art img { width: 30%; height: auto; }
-  .hero-art img.short { width: 30%; }
-  @media (max-width: 800px) { .hero .wrap { grid-template-columns: 1fr; } .hero h1 { font-size: 28px; } }
+  /* ---- product detail (mirrors .product-detail-page) ---- */
+  .crumbs { max-width: 1280px; margin: 0 auto; padding: 32px 16px 16px; font-size: 14px; }
+  .crumbs a { text-decoration: underline; }
+  .pdp { max-width: 1280px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: 96px minmax(0, 575px) minmax(0, 664px); gap: 0 40px; align-items: start; }
+  .thumbs { display: grid; gap: 18px; }
+  .thumb { border: 1px solid transparent; padding: 0; background: none; width: 78px; height: 78px; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .thumb.on { border-color: #000; }
+  .stage { position: relative; aspect-ratio: 1 / 1.087; background: #eee; }
+  .stage img { width: 100%; height: 100%; object-fit: cover; }
+  .arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; border: 0; background: #fff; font-size: 22px; line-height: 48px; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+  .arrow.prev { left: 20px; } .arrow.next { right: 20px; }
 
-  /* ---- NEW: planner section ---- */
-  .planner { padding: 40px 0 8px; }
-  .planner-card {
-    border: 1px solid var(--rule); border-radius: 14px; overflow: hidden;
-    display: grid; grid-template-columns: 1fr 1.05fr; background: var(--surface);
-    box-shadow: 0 1px 2px rgba(18,34,59,0.04), 0 8px 24px rgba(18,34,59,0.06);
+  .info h1 { font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.25; letter-spacing: 0.02em; margin: 6px 0 26px; }
+  .starting { color: var(--muted); font-size: 16px; margin: 0 0 20px; }
+  .starting strong { color: #000; font-family: sans-serif; font-size: 17px; }
+  .lead { display: flex; gap: 52px; margin-bottom: 24px; }
+  .lead p { display: flex; align-items: center; gap: 12px; margin: 0; font-size: 16px; }
+  .lead img { width: 48px; height: 48px; }
+  .btn-start { display: flex; justify-content: center; align-items: center; gap: 10px; background: var(--dark); color: #fff; text-decoration: none; border-radius: 999px; height: 44px; font-weight: 700; font-size: 15px; margin-bottom: 24px; }
+  .btn-start:hover { background: var(--dark-hover); }
+
+  /* the 6-piece set: .basic-kit-prod */
+  .kit { display: flex; align-items: center; gap: 32px; padding: 16px 24px; border: 1px solid var(--rule); border-radius: 4px; margin-bottom: 24px; }
+  .kit-body { flex: 1; }
+  .kit h2 { font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 8px 0 14px; }
+  .kit .price { font-family: sans-serif; font-size: 18px; }
+  .kit .price b { font-weight: 700; }
+  .kit .caption { margin: 12px 0 4px; font-size: 14px; color: var(--caption); font-family: var(--serif); }
+  .sand { background: var(--sand); color: #000; border: 0; border-radius: 999px; padding: 12px 24px; font-family: var(--sans); font-weight: 700; font-size: 16px; white-space: nowrap; }
+  .sand:hover { background: var(--sand-hover); }
+
+  /* NEW #1 — the planner, cut from the same cloth as the 6-piece set directly above it. */
+  .kit.planner-kit { border-color: var(--dark); }
+  .planner-kit .steps { font-family: var(--sans); font-size: 14px; color: var(--body); margin: 0; }
+
+  /* the sample door: .sample-form */
+  .sample { display: flex; gap: 24px; background: var(--stone); padding: 16px 24px; margin-bottom: 20px; }
+  .sample img { width: 102px; height: 154px; object-fit: cover; border: 1px solid #ddd; }
+  .sample-body { flex: 1; }
+  .sample h2 { font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 6px 0 0; }
+  .sample .val { font-family: sans-serif; }
+  .sample .val s { color: #777; margin-right: 6px; }
+  .sample .val b { font-size: 17px; }
+  .sample .perks { display: flex; gap: 16px; font-size: 14px; margin: 26px 0 18px; }
+  .sample .sand { width: 100%; border-radius: 0; padding: 10px; }
+
+  .info hr { border: 0; border-top: 1px solid var(--rule); margin: 20px 0; }
+  .info h3 { font-family: var(--serif); font-weight: 400; font-size: 18px; margin: 0 0 12px; }
+  .desc { color: var(--body); line-height: 1.6; margin: 0 0 24px; }
+  .question { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .question a { text-decoration: underline; }
+  .design-help { display: flex; align-items: center; background: var(--stone); }
+  .design-help img { width: 190px; height: 126px; object-fit: cover; }
+  .design-help div { flex: 1; text-align: center; padding: 0 24px; }
+  .design-help p { font-family: var(--serif); font-size: 17px; margin: 0 0 14px; }
+  .design-help .sand { display: block; width: 100%; text-align: left; }
+  .trade { margin: 24px 0 0; font-size: 15px; }
+
+  @media (max-width: 1024px) {
+    .pdp { grid-template-columns: 1fr; }
+    .thumbs { display: none; }
+    .info h1 { font-size: 26px; margin-top: 24px; }
   }
-  .planner-copy { padding: 32px 32px 28px; }
-  .badge { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--wood-deep); margin-bottom: 8px; }
-  .planner h2 { font-size: 28px; line-height: 1.2; margin: 0 0 8px; color: var(--navy); }
-  .planner-copy > p { margin: 0 0 20px; color: var(--muted); max-width: 46ch; }
-  .steps { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 6px; font-size: 14px; }
-  .steps li { display: flex; gap: 10px; align-items: baseline; }
-  .steps b { color: var(--navy); min-width: 1.2em; }
-  .cta:focus-visible, .drawer-close:focus-visible { outline: 3px solid #7aa7ff; outline-offset: 2px; }
-  .cta { background: var(--navy); color: #fff; border: 0; border-radius: 8px; padding: 13px 20px; font-weight: 700; font-size: 16px; cursor: pointer; }
-  .cta:hover { background: #1c3357; }
-  .or { display: inline-block; margin-left: 14px; font-size: 14px; color: var(--muted); }
-  .or a { color: var(--navy); }
+  @media (max-width: 600px) {
+    .kit { display: block; padding: 16px; }
+    .kit .sand { width: 100%; margin-top: 8px; padding: 10px 24px; font-size: 14px; }
+    .lead { gap: 20px; }
+    .lead img { width: 40px; height: 40px; }
+    .design-help img { width: 110px; }
+  }
 
-  .planner-visual { background: var(--page); padding: 24px; display: flex; flex-direction: column; justify-content: center; gap: 12px; border-left: 1px solid var(--rule); }
-  .mini-sheet { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; }
-  .mini-head { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 10px; }
-  .mini-head b { color: var(--navy); font-size: 14px; }
-  .mini-wall { display: flex; align-items: flex-end; gap: 1px; height: 120px; }
-  .mini-wall img { height: 100%; width: auto; object-fit: contain; }
-  .mini-wall img.base { height: 46%; }
-  .mini-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 14px; }
-  .mini-foot b { font-size: 18px; color: var(--navy); }
-  .mini-foot span { background: var(--wood); padding: 6px 10px; border-radius: 6px; font-weight: 700; font-size: 13px; }
-  .proof { font-size: 13px; color: var(--muted); }
+  /* ---- value proposition: copied from the live page ---- */
+  .value-proposition { background: var(--stone); margin: 60px 0; }
+  .value-proposition-div { max-width: 1440px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 40px 16px; flex-wrap: wrap; gap: 16px; }
+  .value-proposition-div > div { display: flex; align-items: center; color: #333; }
+  .value-proposition svg { margin-right: 12px; }
 
+  /* ---- feature blocks: .feature-content-blocks ---- */
+  .feature-content-blocks { max-width: 1440px; padding: 0 16px; margin: 0 auto; }
+  .feature-content-blocks-div { display: flex; justify-content: space-between; align-items: center; gap: 48px; margin-bottom: 40px; }
+  .feature-content-blocks-div > div { flex: 1 1 0; }
+  .feature-content-blocks-div img { width: 800px; max-width: 100%; height: 400px; object-fit: contain; }
+  .feature-content-info { max-width: 600px; }
+  .feature-content-blocks h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; line-height: 36px; margin: 0 0 12px; }
+  .feature-content-blocks p { font-size: 16px; line-height: 26px; color: var(--muted); margin: 0; }
   @media (max-width: 860px) {
-    .planner-card { grid-template-columns: 1fr; }
-    .planner-visual { border-left: 0; border-top: 1px solid var(--rule); }
-    .planner-copy { padding: 24px 20px; }
-    .planner h2 { font-size: 24px; }
-    .or { display: block; margin: 12px 0 0; }
-    .mini-wall { overflow: hidden; }
-    .mini-wall img:nth-child(n+5) { display: none; }
+    .feature-content-blocks-div { flex-direction: column; gap: 16px; }
+    .feature-content-blocks-div.solid-wood-feature-block { flex-direction: column-reverse; }
+    .feature-content-blocks-div img { height: auto; }
   }
 
-  /* ---- existing: start shopping (stand-in) ---- */
-  .shop { padding: 32px 0 56px; }
-  .shop h2 { font-size: 22px; color: var(--navy); margin: 0 0 14px; }
-  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
-  .filters span { border: 1px solid var(--rule); border-radius: 999px; padding: 6px 12px; font-size: 13px; color: var(--muted); }
-  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .card { border: 1px solid var(--rule); border-radius: 10px; padding: 14px; font-size: 14px; }
-  .card img { height: 140px; width: 100%; object-fit: contain; margin-bottom: 10px; }
-  .card b { display: block; color: var(--navy); }
-  .card .p { margin-top: 6px; }
-  .card button { margin-top: 10px; width: 100%; border: 1px solid var(--navy); background: var(--surface); color: var(--navy); border-radius: 6px; padding: 8px; cursor: not-allowed; }
-  @media (max-width: 860px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-  .later { padding: 0 0 64px; color: var(--muted); font-size: 14px; }
-  .later h3 { color: var(--navy); font-size: 18px; margin: 18px 0 4px; }
+  /* NEW #2 — a feature block like the others, with a button. Its picture is the planner's own
+     product renders, built as a little wall on white so it matches the detail shots beside it. */
+  .feature-actions { display: flex; align-items: center; gap: 20px; margin-top: 24px; flex-wrap: wrap; }
+  .feature-actions a { font-size: 15px; }
+  .wall-art { height: 400px; display: flex; align-items: flex-end; justify-content: center; padding: 24px 0 40px; background: #fff; }
+  .wall-art .col { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; }
+  .wall-art img { width: auto; height: auto; object-fit: contain; }
+  .wall-art .tall { height: 300px; }
+  .wall-art .upper { height: 96px; margin-bottom: 64px; }
+  .wall-art .base { height: 118px; }
+  .wall-art .top { height: 14px; width: 100%; }
+  @media (max-width: 860px) {
+    .wall-art { height: 260px; }
+    .wall-art .tall { height: 196px; }
+    .wall-art .upper { height: 62px; margin-bottom: 42px; }
+    .wall-art .base { height: 78px; }
+    .wall-art .col:nth-child(n+5) { display: none; }
+  }
 
-  /* ---- the slide-out ---- */
-  .scrim { position: fixed; inset: 0; background: rgba(18,34,59,0.5); opacity: 0; pointer-events: none; transition: opacity 0.25s ease; z-index: 10; }
+  /* ---- start shopping (stand-in for the product list) ---- */
+  .shop { max-width: 1280px; margin: 0 auto; padding: 24px 16px 72px; }
+  .shop h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 0 0 20px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .card { font-size: 15px; }
+  .card img { height: 200px; width: 100%; object-fit: contain; margin-bottom: 12px; }
+  .card b { display: block; font-family: var(--serif); font-weight: 400; font-size: 17px; }
+  .card .p { margin: 6px 0 10px; font-family: sans-serif; font-weight: 700; }
+  .card .sand { width: 100%; padding: 9px; font-size: 14px; cursor: not-allowed; opacity: 0.85; }
+  @media (max-width: 860px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ---- the slide-out (unchanged behaviour) ---- */
+  .scrim { position: fixed; inset: 0; background: rgba(0,0,0,0.45); opacity: 0; pointer-events: none; transition: opacity 0.25s ease; z-index: 10; }
   .drawer {
     position: fixed; top: 0; right: 0; bottom: 0; width: min(1360px, 94vw);
-    background: var(--surface); z-index: 11; display: flex; flex-direction: column;
+    background: #fff; z-index: 11; display: flex; flex-direction: column;
     transform: translateX(100%); transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
-    box-shadow: -12px 0 32px rgba(18,34,59,0.18); visibility: hidden;
+    box-shadow: -12px 0 32px rgba(0,0,0,0.18); visibility: hidden;
   }
   body.open .scrim { opacity: 1; pointer-events: auto; }
   body.open .drawer { transform: none; visibility: visible; }
   body.open { overflow: hidden; }
-  .drawer-head { display: flex; align-items: center; gap: 12px; padding: 12px 16px 12px 20px; border-bottom: 1px solid var(--rule); }
-  .drawer-head b { color: var(--navy); font-size: 16px; }
+  .drawer-head { display: flex; align-items: center; gap: 12px; padding: 12px 16px 12px 20px; border-bottom: 1px solid #e6e6e6; }
+  .drawer-head b { font-family: var(--serif); font-weight: 500; font-size: 18px; }
   .drawer-head small { color: var(--muted); }
-  .drawer-close { margin-left: auto; border: 1px solid #c9ced6; background: var(--surface); border-radius: 999px; padding: 8px 16px; cursor: pointer; font-weight: 600; color: var(--navy); }
+  .drawer-close { margin-left: auto; border: 1px solid var(--rule); background: #fff; border-radius: 999px; padding: 8px 18px; font-weight: 700; }
   .drawer iframe { flex: 1; width: 100%; border: 0; }
-
-  /* On a phone it is the whole screen, sliding up like a native sheet. */
   @media (max-width: 700px) {
-    .drawer { width: 100vw; top: 0; transform: translateY(100%); }
+    .drawer { width: 100vw; transform: translateY(100%); }
     .drawer-head small { display: none; }
   }
   @media (prefers-reduced-motion: reduce) { .drawer, .scrim { transition: none; } }
 </style>
 </head>
 <body>
-  <div class="proto-flag">Prototype for discussion: the new section and slide-out. The rest of the page is a simplified stand-in.</div>
+  <div class="proto-flag">Prototype for discussion. This mirrors the live garage page; the two pieces marked <b>New</b> are the only additions.</div>
 
   <header class="store-head">
-    <div class="wrap">
-      <span class="store-name">RTA Cabinet Store</span>
-      <nav class="store-nav"><span>Kitchen</span><span>Bath</span><b>Garage</b><span>Samples</span><span>Design help</span></nav>
-      <span class="store-cart" id="cart">Cart (0)</span>
+    <div class="in">
+      <span class="logo">RTA Cabinet Store</span>
+      <nav class="nav"><span>Kitchen Cabinets</span><span>Bathroom</span><b>Garage</b><span>Samples</span><span>Design Services</span><span>Resources</span></nav>
+      <span class="head-right"><span>800.580.5535</span><span>Cart (0)</span></span>
     </div>
   </header>
 
-  <section class="hero">
-    <div class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#">Home</a> &gt; <a href="#"><b>RTA Garage Cabinets</b></a></nav>
+
+  <main class="pdp">
+    <div class="thumbs"><button type="button" class="thumb on" data-src="https://rtacabinetstore.blob.core.windows.net/store/0066208_signature-gray-garage-cabinets.webp" aria-label="Photo 1"><img src="https://rtacabinetstore.blob.core.windows.net/store/0066208_signature-gray-garage-cabinets.webp" alt=""></button><button type="button" class="thumb" data-src="https://rtacabinetstore.blob.core.windows.net/store/0066294_signature-gray-garage-cabinets.webp" aria-label="Photo 2"><img src="https://rtacabinetstore.blob.core.windows.net/store/0066294_signature-gray-garage-cabinets.webp" alt=""></button><button type="button" class="thumb" data-src="https://rtacabinetstore.blob.core.windows.net/store/0066207_signature-gray-garage-cabinets.webp" aria-label="Photo 3"><img src="https://rtacabinetstore.blob.core.windows.net/store/0066207_signature-gray-garage-cabinets.webp" alt=""></button><button type="button" class="thumb" data-src="https://rtacabinetstore.blob.core.windows.net/store/0066210_signature-gray-garage-cabinets.webp" aria-label="Photo 4"><img src="https://rtacabinetstore.blob.core.windows.net/store/0066210_signature-gray-garage-cabinets.webp" alt=""></button><button type="button" class="thumb" data-src="https://rtacabinetstore.blob.core.windows.net/store/0066209_signature-gray-garage-cabinets.webp" aria-label="Photo 5"><img src="https://rtacabinetstore.blob.core.windows.net/store/0066209_signature-gray-garage-cabinets.webp" alt=""></button><button type="button" class="thumb" data-src="https://rtacabinetstore.blob.core.windows.net/store/0066211_signature-gray-garage-cabinets.webp" aria-label="Photo 6"><img src="https://rtacabinetstore.blob.core.windows.net/store/0066211_signature-gray-garage-cabinets.webp" alt=""></button></div>
+
+    <div class="stage">
+      <img id="hero" src="https://rtacabinetstore.blob.core.windows.net/store/0066208_signature-gray-garage-cabinets.webp" alt="Signature Gray garage cabinets with a butcher block workbench">
+      <button type="button" class="arrow prev" data-step="-1" aria-label="Previous photo">&#8249;</button>
+      <button type="button" class="arrow next" data-step="1" aria-label="Next photo">&#8250;</button>
+    </div>
+
+    <div class="info">
+      <h1>Fully Assembled Heavy-Duty Garage Cabinets</h1>
+      <p class="starting">Starting at <strong>$2,770.83 (25%&#8595;)</strong> for a basic garage</p>
+      <div class="lead">
+        <p><img src="https://www.rtacabinetstore.com/images/garage-cabinets/garage-quick-ship.png" alt="">7 - 10 business days</p>
+        <p><img src="https://www.rtacabinetstore.com/images/garage-cabinets/garage-assembled.png" alt="">Delivered Assembled</p>
+      </div>
+      <a class="btn-start" href="#start">Start Shopping Now <span aria-hidden="true">&#8659;</span></a>
+
+      <div class="kit">
+        <div class="kit-body">
+          <h2>Signature Gray 6-Piece Garage Cabinet Set</h2>
+          <div class="price"><b>$2,770.83</b> (25%&#8595;)</div>
+          <p class="caption">Disclaimer: The price is based on a fixed SKU list that cannot be modified.</p>
+        </div>
+        <button type="button" class="sand" disabled style="cursor:not-allowed">Add to cart</button>
+      </div>
+
+      <!-- NEW #1 -->
+      <div class="kit planner-kit">
+        <div class="kit-body">
+          <h2><span class="new-pill">New</span>Design Your Own Garage Wall</h2>
+          <p class="steps">Enter your wall size and what it's for. We'll draw three complete, priced layouts from this collection, and you can add a whole wall to your cart in one click.</p>
+          <p class="caption">Free, about two minutes. Nothing is ordered until you say so.</p>
+        </div>
+        <button type="button" class="sand" data-open data-from="buy-box">Plan my wall</button>
+      </div>
+
+      <div class="sample">
+        <img src="https://rtacabinetstore.blob.core.windows.net/store/0066190_gray-garage-sample-door.webp?v=108" alt="Signature Gray Garage Cabinets Sample Door">
+        <div class="sample-body">
+          <h2>Signature Gray Garage Sample Door</h2>
+          <div class="val"><s>$20.00</s><b>$9.99</b></div>
+          <div class="perks"><span>&#8634; 100% Refundable</span><span>Free Shipping</span></div>
+          <button type="button" class="sand" disabled style="cursor:not-allowed">Add to Cart ($9.99)</button>
+        </div>
+      </div>
+
+      <hr>
+      <h3>Description</h3>
+      <p class="desc">Transform your garage from cluttered chaos into a clean, organized workspace. Signature Gray Garage Cabinets, RTA Cabinet Store's modular wood garage cabinets, are engineered with the same precision joinery and premium materials found in fine kitchen cabinetry&mdash;now purpose-built for the demands of garage storage.</p>
+
+      <div class="question"><h3 style="margin:0">Have a Question?</h3><a href="#">800.580.5535</a></div>
+      <div class="design-help">
+        <img src="https://www.rtacabinetstore.com/Themes/RTA/Content/images/free-design.jpg" alt="">
+        <div>
+          <p>FREE Professional Design Consultation</p>
+          <button type="button" class="sand" disabled style="cursor:not-allowed">Free Design Help</button>
+        </div>
+      </div>
+      <p class="trade">Trade Pro? <a href="#">Unlock Insider Pricing</a></p>
+    </div>
+  </main>
+
+  <section class="value-proposition"><div class="value-proposition-div"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.45285 15.8461L6.91185 16.3561L4 4.84603L12.0861 2.17004L12.9896 5.73985" stroke="black" stroke-width="1.6" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" /><path d="M20 9.06887L11.6245 8.11584L10.5161 20.8654L18.8916 21.8184L20 9.06887Z" stroke="black" stroke-width="1.6" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" /></svg><span>Refundable Samples</span></div><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.6471 4C17.9706 4 16.5176 5.58667 16.2941 6.26667C12.3824 4.56667 4 5.92667 4 11.9333C4 13.9733 4 15.3333 6.23529 17.0333V21H10.7059V18.7333H14.0588V21H18.5294V16.4667C19.6471 15.9 20.4294 15.3333 20.7647 14.2H23V9.66667H20.7647C20.7647 8.53333 20.2059 7.96667 19.6471 7.4V4Z" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /><path d="M1 9V10C1 11.1 1.9 12 3 12H4" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>0% APR Financing</span></div><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 12V2H12L21.44 11.44C21.8125 11.8147 22.0216 12.3216 22.0216 12.85C22.0216 13.3784 21.8125 13.8853 21.44 14.26L14.26 21.44C13.8853 21.8125 13.3784 22.0216 12.85 22.0216C12.3216 22.0216 11.8147 21.8125 11.44 21.44L2 12Z" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /><path d="M6 6H6.01" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /><path d="M8.70715 8.70703L15.7782 15.7781" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /><path d="M11.8891 8.35359L9.23744 11.0052C8.90925 11.3334 8.70625 11.7599 8.6731 12.1909C8.63995 12.6219 8.77936 13.022 9.06066 13.3033C9.34196 13.5846 9.74212 13.7241 10.1731 13.6909C10.6041 13.6577 11.0306 13.4547 11.3588 13.1266L13.1265 11.3588C13.4547 11.0306 13.8812 10.8276 14.3122 10.7945C14.7432 10.7613 15.1433 10.9007 15.4246 11.182C15.7059 11.4633 15.8453 11.8635 15.8122 12.2945C15.779 12.7254 15.576 13.1519 15.2478 13.4801L12.2426 16.4853" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>Lowest Price Guarantee</span></div><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.425 16.95H22.625V13.28C22.625 12.7 22.515 12.13 22.295 11.6C22.075 11.07 21.755 10.58 21.345 10.17L19.335 8.16H13.835V16.95H14.935M2.635 16.95H13.825V3.75H2.625" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /><path d="M3.92505 17.5C3.92505 19.02 5.15505 20.25 6.67505 20.25C8.19505 20.25 9.42505 19.02 9.42505 17.5" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /><path d="M17.675 20.25C19.195 20.25 20.425 19.02 20.425 17.5C20.425 15.98 19.195 14.75 17.675 14.75C16.155 14.75 14.925 15.98 14.925 17.5C14.925 19.02 16.155 20.25 17.675 20.25Z" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /><path d="M1.375 6.85986H5.375" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /><path d="M1.375 10.3799H5.375" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /><path d="M1.375 13.8398H5.375" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>Fast Cabinet Shipping</span></div></div></section>
+
+  <section class="feature-content-blocks">
+    <!-- NEW #2 -->
+    <div class="feature-content-blocks-div">
       <div>
-        <h1>Signature Gray Garage Cabinets</h1>
-        <p class="price">Starting at $2,770.83 <span class="save">Save 25%</span></p>
-        <p>Fully assembled · Ships in 7–10 business days</p>
+        <div class="wall-art" aria-hidden="true">
+          <div class="col"><img class="tall" src="../web/public/renders/MV-PC3084-320.webp" alt=""></div>
+          <div class="col"><img class="upper" src="../web/public/renders/MV-W3030-320.webp" alt=""><img class="base" src="../web/public/renders/MV-DB30-3-320.webp" alt=""></div>
+          <div class="col"><img class="upper" src="../web/public/renders/MV-W3030-320.webp" alt=""><img class="base" src="../web/public/renders/MV-B30-F-320.webp" alt=""></div>
+          <div class="col"><img class="upper" src="../web/public/renders/MV-W3030-320.webp" alt=""><img class="base" src="../web/public/renders/MV-DB30-4-320.webp" alt=""></div>
+          <div class="col"><img class="tall" src="../web/public/renders/MV-PC3084-320.webp" alt=""></div>
+        </div>
       </div>
-      <div class="hero-art" aria-hidden="true">
-        <img src="../web/public/renders/MV-PC3084-320.webp" alt="">
-        <img class="short" src="../web/public/renders/MV-DB30-4-320.webp" alt="">
-        <img src="../web/public/renders/MV-PC3084-320.webp" alt="">
+      <div class="feature-content-info">
+        <h2><span class="new-pill">New</span>Plan Your Whole Wall in Minutes</h2>
+        <p>Not sure which cabinets fit? Tell us your wall length, ceiling height, and anything in the way&mdash;a window, a door, the water heater. Pick a workbench, max storage, or a bit of both, and we'll lay out three complete walls from the Signature Gray line, each priced to the penny. See it in 3D, swap any cabinet, then add the whole wall to your cart.</p>
+        <div class="feature-actions">
+          <button type="button" class="sand" data-open data-from="feature">Plan my wall</button>
+          <a href="#start">or shop individual cabinets</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-content-blocks-div solid-wood-feature-block">
+      <div class="feature-content-info">
+        <h2>The Invisible Difference</h2>
+        <p>Most garage cabinets look like rough&mdash;exposed screws, visible seams, raw edges. Ours don't. The patented Invisa-Lock&trade; hidden joinery and Invisa-Edge&trade; banding technology deliver a seamless, furniture-grade finish with zero visible fasteners or raw edges. It's not just garage storage&mdash;it's a statement.</p>
+      </div>
+      <div><img src="https://www.rtacabinetstore.com/images/garage-cabinets/Detail-Shot-1.webp" alt="american crafted quality"></div>
+    </div>
+
+    <div class="feature-content-blocks-div">
+      <div><img src="https://www.rtacabinetstore.com/images/garage-cabinets/Detail-Shot-2.webp" alt="professional grade construction"></div>
+      <div class="feature-content-info">
+        <h2>Engineered for Real Garage Work</h2>
+        <p>These aren't showroom cabinets&mdash;they're workhorses. From 3/4" heavy-duty furniture board and metal corner brackets to drawer glides rated at 100 lbs., every component is spec'd for the weight, moisture, and abuse that comes with real garage use.</p>
       </div>
     </div>
   </section>
 
-  <!-- NEW -->
-  <section class="planner" aria-labelledby="planner-title">
-    <div class="wrap">
-      <div class="planner-card">
-        <div class="planner-copy">
-          <span class="badge">New · Wall planner</span>
-          <h2 id="planner-title">Plan your whole wall in two minutes</h2>
-          <p>Give us the wall length and what it’s for. We’ll draw three complete layouts from cabinets in stock, each priced to the penny, and put the whole wall in your cart in one click.</p>
-          <ul class="steps">
-            <li><b>1</b>Measure your wall, any length</li>
-            <li><b>2</b>Pick what it’s for: workbench, storage or a bit of both</li>
-            <li><b>3</b>Compare three priced walls, then add one to your cart</li>
-          </ul>
-
-          <button class="cta" data-open>Plan my wall</button>
-          <span class="or">or <a href="#start">shop individual cabinets ↓</a></span>
-        </div>
-
-        <div class="planner-visual" aria-hidden="true">
-          <div class="mini-sheet">
-            <div class="mini-head"><b>Recommended</b><span>20′ wall · 1 of 3</span></div>
-            <div class="mini-wall">
-              <img src="../web/public/renders/MV-PC3084-320.webp" alt="">
-              <img class="base" src="../web/public/renders/MV-B30-F-320.webp" alt="">
-              <img class="base" src="../web/public/renders/MV-B30-F-320.webp" alt="">
-              <img src="../web/public/renders/MV-PC3084-320.webp" alt="">
-              <img class="base" src="../web/public/renders/MV-DB30-3-320.webp" alt="">
-              <img class="base" src="../web/public/renders/MV-B30-F-320.webp" alt="">
-            </div>
-            <div class="mini-foot"><b>$7,568</b><span>Add entire wall to cart</span></div>
-          </div>
-          <p class="proof">See it in 3D, swap any cabinet, and move things around before you buy.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- EXISTING -->
   <section class="shop" id="start">
-    <div class="wrap">
-      <h2>Start shopping now</h2>
-      <div class="filters"><span>Type</span><span>Width</span><span>Depth</span><span>Base</span><span>Wall</span><span>Pantry</span><span>Countertops</span></div>
-      <div class="grid">
-        <div class="card"><img src="../web/public/renders/MV-B30-F-320.webp" alt=""><b>MV-B30-F</b>Full Height Door Base Cabinet<div class="p">$662</div><button disabled>Add to cart</button></div>
-        <div class="card"><img src="../web/public/renders/MV-DB30-3-320.webp" alt=""><b>MV-DB30-3</b>3-Drawer Base Cabinet<div class="p">$930</div><button disabled>Add to cart</button></div>
-        <div class="card"><img src="../web/public/renders/MV-PC3084-320.webp" alt=""><b>MV-PC3084</b>Double Door Pantry Cabinet<div class="p">$1,151</div><button disabled>Add to cart</button></div>
-        <div class="card"><img src="../web/public/renders/MV-W3030-320.webp" alt=""><b>MV-W3030</b>Double Door Wall Cabinet<div class="p">$261</div><button disabled>Add to cart</button></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="later">
-    <div class="wrap">
-      <h3>The Invisible Difference</h3><p>…existing content continues…</p>
-      <h3>Engineered for Real Garage Work</h3><p>…</p>
-      <h3>Fully Assembled. Infinitely Configurable.</h3><p>…</p>
+    <h2>Start Shopping Now</h2>
+    <div class="grid">
+      <div class="card"><img src="../web/public/renders/MV-B30-F-320.webp" alt=""><b>Full Height Door Base Cabinet 30"W</b><div class="p">$662.18</div><button class="sand" disabled>Add to cart</button></div>
+      <div class="card"><img src="../web/public/renders/MV-DB30-4-320.webp" alt=""><b>Base Drawer Cabinet 30"W</b><div class="p">$930.11</div><button class="sand" disabled>Add to cart</button></div>
+      <div class="card"><img src="../web/public/renders/MV-PC3084-320.webp" alt=""><b>Double Door Pantry Cabinet 30"W</b><div class="p">$1,150.94</div><button class="sand" disabled>Add to cart</button></div>
+      <div class="card"><img src="../web/public/renders/MV-W3030-320.webp" alt=""><b>Double Door Wall Cabinet 30"W</b><div class="p">$260.71</div><button class="sand" disabled>Add to cart</button></div>
     </div>
   </section>
 
@@ -225,7 +326,7 @@
   <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
     <div class="drawer-head">
       <b id="drawer-title">Garage Wall Planner</b>
-      <small>You’re still on the garage page. Close any time and your wall is kept.</small>
+      <small>You're still on the garage page. Close any time and your wall is kept.</small>
       <button class="drawer-close" data-close>Close</button>
     </div>
     <!-- Loaded on first open, then kept, so closing and reopening keeps the customer's wall. -->
@@ -256,6 +357,18 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && document.body.classList.contains('open')) close()
   })
+
+  // The gallery: thumbnails and arrows, as on the live page.
+  const hero = document.getElementById('hero')
+  const thumbs = [...document.querySelectorAll('.thumb')]
+  let shown = 0
+  function show(i) {
+    shown = (i + thumbs.length) % thumbs.length
+    hero.src = thumbs[shown].dataset.src
+    thumbs.forEach((t, n) => t.classList.toggle('on', n === shown))
+  }
+  thumbs.forEach((t, n) => t.addEventListener('click', () => show(n)))
+  document.querySelectorAll('[data-step]').forEach((b) => b.addEventListener('click', () => show(shown + Number(b.dataset.step))))
 </script>
 </body>
 </html>
