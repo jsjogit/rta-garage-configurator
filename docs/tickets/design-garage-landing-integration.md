@@ -1,5 +1,6 @@
-# Jira draft — Design: integrate the Garage Wall Planner into /garage-cabinets
+# RTA-3374 — (Design) Garage: integrate the Garage Wall Planner into /garage-cabinets
 
+**Jira:** https://renovationbrands.atlassian.net/browse/RTA-3374 (Story under epic RTA-3215). Jira is the source of truth; this is the copy as filed.
 **Type:** Story (Design) · **Component:** Garage / Category pages · **Priority:** High
 **Reporter:** Joshua Sjogren · **Labels:** garage-planner, ux-research, category-page
 
