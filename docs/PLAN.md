@@ -72,4 +72,17 @@ only new edit is reordering cabinets, in the 2D editor. No stain toggle, no expo
 > edges, laminate and butcher-block materials, studio lighting and shadows. Plan:
 > docs/superpowers/plans/2026-10-06-render-accuracy-and-3d-quality.md (Tasks 7–9).
 
+### Stakeholder demo — approved 2026-10-29 (`demo-2.0-1d`)
+> 2.0 with 1D's pop-up in place of 1C's in-card 3D, plus demo-day fixes on `v1a` (upper swaps keep the
+> option's height, Max storage ranks by total storage, Done editing stays after an edit) and
+> `prototype/garage-page.html`, the live garage page with three planner entry points opening a slide-out.
+
+Next:
+1. Design team: how the planner sits in the live `/garage-cabinets` page
+   (`docs/tickets/design-garage-landing-integration.md`).
+2. Hiten: the nop build — planner page vs. category-page slide-out is decided with the design work
+   (DECISIONS → "Needs Hiten").
+3. Close the "Needs Joshua" items that block launch: `IC-MW-W3015`'s product id, the bundle budget,
+   the electrical-panel clearances.
+
 ## Phase 3 — AI edges (photo intake via Azure OpenAI vision, intent chat, deterministic render → style pass)

@@ -9,3 +9,4 @@ local.settings.json
 
 # Manufacturer reference renders (~280 MB). Only derived web-size copies are committed.
 assets/reference/
+.DS_Store

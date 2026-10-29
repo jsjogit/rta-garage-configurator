@@ -21,8 +21,8 @@ data/                          catalog.json, wall fixtures, nop product-id map
 ## Running it locally
 
 ```bash
-dotnet test                                  # 451 Core + 108 API tests
-cd web && npm install && npm test            # 175 web tests (2.0)
+dotnet test                                  # 464 Core + 108 API tests
+cd web && npm install && npm test            # 184 web tests (demo-2.0-1d)
 ```
 
 The full stack is three processes:
@@ -53,6 +53,21 @@ API payload. See `web/README.md` for the full list of demo fixtures.
 
 `?demo=vignette-72`, then **See it in 3D** on any card, shows the 3D view without the API.
 
+### Running the stakeholder demo
+
+Use a production build, not `npm run dev`, and keep each process in its own Terminal window:
+
+```bash
+node ~/.local/lib/node_modules/azurite/dist/src/azurite.js --silent --location .azurite
+func start --script-root src/GarageConfigurator.Api          # :7071 — start only one
+cd web && npm run build && npx vite preview --port 4173      # planner on :4173
+python3 -m http.server 8090 --bind 127.0.0.1                 # from the repo root
+```
+
+Open `http://localhost:8090/prototype/garage-page.html`. Every planner CTA opens the slide-out on :4173.
+"Refused to connect" in the slide-out means those windows were closed or the Mac slept: restart them.
+A 500 from `/api/*` means the API on :7071 is down.
+
 ### Versions
 
 Phase 2 ships as optional branches, each built from Phase 1 (decided 2026-10-05, see DECISIONS):
@@ -64,6 +79,7 @@ Phase 2 ships as optional branches, each built from Phase 1 (decided 2026-10-05,
 | `v1c-3d` | "See it in 3D" — a view-only, lazily loaded Three.js view per layout | 148 |
 | `v2.0` | 1A + 1B + 1C together | 175 |
 | `v1d-3d-quality` | 1C's 3D in a large pop-up, modeled to the manufacturer's renders (optional; not in 2.0) | 152 |
+| `demo-2.0-1d` | 2.0 with 1D's pop-up in place of 1C's 3D, plus the prototype page. **Approved by stakeholders 2026-10-29** | 184 |
 
 1B and 1C do not depend on each other; either can be dropped. `npm run check:bundle` (on `v1c-3d` and
 `v2.0`) fails the build if the page everyone loads grows past budget or Three.js leaks into it.
