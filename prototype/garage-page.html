@@ -6,10 +6,11 @@
 <title>Garage Page Planner Prototype</title>
 <!--
   Clickable prototype for the stakeholder demo: the live /garage-cabinets page, mirrored closely enough
-  that the only new things on it are the two planner entry points (a card between the 6-piece set and
+  that the only new things on it are the three planner entry points (a "Design My Space" pill on
+  the gallery photo, a card between the 6-piece set and
   the sample door, and a feature block in the "Invisible Difference" style). Photos load from the live
   store; the slide-out runs the real planner from the local demo stack (http://localhost:4173).
-  Not for production: in nop these become two small partials on the existing page.
+  Not for production: in nop these become three small partials on the existing page.
 -->
 <link rel="stylesheet" href="https://use.typekit.net/cei3mta.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,6 +63,12 @@
   .stage img { width: 100%; height: 100%; object-fit: cover; }
   .arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; border: 0; background: #fff; font-size: 22px; line-height: 48px; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
   .arrow.prev { left: 20px; } .arrow.next { right: 20px; }
+
+  /* NEW #0 — the same pill the kitchen pages use for "Visualize in My Space", on the hero photo. */
+  .design-pill { position: absolute; right: 20px; bottom: 20px; display: inline-flex; align-items: center; gap: 10px; background: #fff; color: #000; border: 0; border-radius: 999px; padding: 12px 22px 12px 18px; font-family: var(--sans); font-weight: 700; font-size: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.18); }
+  .design-pill:hover { background: #f6f5f3; }
+  .design-pill svg { flex: none; }
+  @media (max-width: 600px) { .design-pill { right: 12px; bottom: 12px; padding: 10px 16px 10px 14px; font-size: 14px; } }
 
   .info h1 { font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.25; letter-spacing: 0.02em; margin: 6px 0 26px; }
   .starting { color: var(--muted); font-size: 16px; margin: 0 0 20px; }
@@ -196,7 +203,7 @@
 </style>
 </head>
 <body>
-  <div class="proto-flag">Prototype for discussion. This mirrors the live garage page; the two pieces marked <b>New</b> are the only additions.</div>
+  <div class="proto-flag">Prototype for discussion. This mirrors the live garage page; the three planner buttons are the only additions.</div>
 
   <header class="store-head">
     <div class="in">
@@ -215,6 +222,11 @@
       <img id="hero" src="https://rtacabinetstore.blob.core.windows.net/store/0066208_signature-gray-garage-cabinets.webp" alt="Signature Gray garage cabinets with a butcher block workbench">
       <button type="button" class="arrow prev" data-step="-1" aria-label="Previous photo">&#8249;</button>
       <button type="button" class="arrow next" data-step="1" aria-label="Next photo">&#8250;</button>
+      <!-- NEW #0 -->
+      <button type="button" class="design-pill" data-open data-from="gallery">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
+        Design My Space
+      </button>
     </div>
 
     <div class="info">
