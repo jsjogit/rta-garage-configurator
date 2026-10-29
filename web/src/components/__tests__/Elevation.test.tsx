@@ -245,3 +245,105 @@ describe('moving an obstruction', () => {
     expect(handle).toHaveAttribute('aria-valuemax', '204')
   })
 })
+
+describe('reordering in edit mode', () => {
+  const layout = (vignette as SolveResponse).options[0].standard.layout
+
+  function editable() {
+    const onReorder = vi.fn()
+    const onSelect = vi.fn()
+    const utils = render(
+      <Elevation layout={layout} wallLength={72} ceiling={96} id="r" onSelect={onSelect} onReorder={onReorder} />,
+    )
+    const svg = utils.container.querySelector('svg')!
+    // viewBox is "-10 -14 92 140"; pretend it is drawn at 2px per inch.
+    const [, , width, height] = svg.getAttribute('viewBox')!.split(' ').map(Number)
+    svg.getBoundingClientRect = () =>
+      ({ left: 0, top: 0, width: width * 2, height: height * 2, right: width * 2, bottom: height * 2, x: 0, y: 0, toJSON: () => ({}) })
+    const first = utils.getAllByRole('button', { name: /MV-B24-F, 24 inches wide/i })[0]
+    return { ...utils, onReorder, onSelect, first }
+  }
+
+  it('drops a cabinet one place along once it passes its neighbour’s middle', () => {
+    const { first, onReorder } = editable()
+
+    fireEvent.pointerDown(first, { clientX: 44, pointerId: 1 }) // x = 12, the cabinet's centre
+    fireEvent.pointerMove(first, { clientX: 104, pointerId: 1 }) // +30 inches
+    fireEvent.pointerUp(first, { clientX: 104, pointerId: 1 })
+
+    expect(onReorder).toHaveBeenCalledWith(0, 1)
+  })
+
+  it('ignores a wiggle, so a tap still selects', () => {
+    const { first, onReorder, onSelect } = editable()
+
+    fireEvent.pointerDown(first, { clientX: 44, pointerId: 1 })
+    fireEvent.pointerMove(first, { clientX: 46, pointerId: 1 })
+    fireEvent.pointerUp(first, { clientX: 46, pointerId: 1 })
+    fireEvent.click(first)
+
+    expect(onReorder).not.toHaveBeenCalled()
+    expect(onSelect).toHaveBeenCalledWith(0)
+  })
+
+  it('does not treat the end of a drag as a tap', () => {
+    const { first, onSelect } = editable()
+
+    fireEvent.pointerDown(first, { clientX: 44, pointerId: 1 })
+    fireEvent.pointerMove(first, { clientX: 104, pointerId: 1 })
+    fireEvent.pointerUp(first, { clientX: 104, pointerId: 1 })
+    fireEvent.click(first)
+
+    expect(onSelect).not.toHaveBeenCalled()
+  })
+
+  it('still selects on the next tap after a touch drag, which sends no click', () => {
+    const { first, onSelect } = editable()
+
+    // A finger drag: browsers send no click when the finger moved.
+    fireEvent.pointerDown(first, { clientX: 44, pointerId: 1 })
+    fireEvent.pointerMove(first, { clientX: 104, pointerId: 1 })
+    fireEvent.pointerUp(first, { clientX: 104, pointerId: 1 })
+    // Then a plain tap.
+    fireEvent.pointerDown(first, { clientX: 44, pointerId: 2 })
+    fireEvent.pointerUp(first, { clientX: 44, pointerId: 2 })
+    fireEvent.click(first)
+
+    expect(onSelect).toHaveBeenCalledWith(0)
+  })
+
+  it('shows the neighbours making room while the drag is still going', () => {
+    const { first, getByRole } = editable()
+    const kneeX = () => getByRole('button', { name: /open knee space/i }).querySelector('rect')!.getAttribute('x')
+    expect(kneeX()).toBe('24')
+
+    fireEvent.pointerDown(first, { clientX: 44, pointerId: 1 })
+    fireEvent.pointerMove(first, { clientX: 104, pointerId: 1 }) // past the knee space's middle
+
+    expect(kneeX()).toBe('0')
+
+    fireEvent.pointerUp(first, { clientX: 104, pointerId: 1 })
+    expect(kneeX()).toBe('24') // the parent owns the real layout; the preview ends with the drag
+  })
+
+  it('moves the focused cabinet with the arrow keys', () => {
+    const { first, onReorder } = editable()
+
+    fireEvent.keyDown(first, { key: 'ArrowRight' })
+    expect(onReorder).toHaveBeenLastCalledWith(0, 1)
+
+    fireEvent.keyDown(first, { key: 'ArrowLeft' })
+    expect(onReorder).toHaveBeenLastCalledWith(0, -1)
+  })
+
+  it('keeps an item’s element when it moves, so keyboard focus stays on it', () => {
+    const { container, rerender } = render(
+      <Elevation layout={layout} wallLength={72} ceiling={96} id="k" onSelect={vi.fn()} onReorder={vi.fn()} />,
+    )
+    const before = container.querySelectorAll('[role=button]')[1]
+    const moved = { ...layout, items: layout.items.map((i, n) => (n === 0 ? { ...i, x: 24 } : n === 1 ? { ...i, x: 0 } : i)) }
+    rerender(<Elevation layout={moved} wallLength={72} ceiling={96} id="k" onSelect={vi.fn()} onReorder={vi.fn()} />)
+
+    expect(container.querySelectorAll('[role=button]')[1]).toBe(before)
+  })
+})

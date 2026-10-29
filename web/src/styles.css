@@ -292,6 +292,7 @@ table.parts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 
 /* ---- editor ------------------------------------------------------------ */
 .editor { border-top: 1px solid var(--color-rule); padding: 14px 16px; display: grid; gap: 10px; background: #fafbfc; }
+.move-row .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .editor h4 { font-size: 15px; font-weight: 700; color: var(--color-heading); margin: 0; }
 .editor .dims { font-size: 13px; color: var(--color-muted); }
 .editor .swaps { display: grid; gap: 6px; }
@@ -326,6 +327,8 @@ table.parts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .elev-hit { cursor: pointer; }
 .elev-hit:focus { outline: none; }
 .elev-hit:focus-visible { outline: none; }
+.elev-movable { cursor: grab; touch-action: pan-y; }
+.elev-movable:active { cursor: grabbing; }
 .elev-drag { cursor: grab; touch-action: none; }
 .elev-drag:active { cursor: grabbing; }
 .elev-drag-hit { fill: var(--color-heading); fill-opacity: 0.06; }
@@ -367,6 +370,11 @@ table.parts-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 @media (prefers-reduced-motion: no-preference) {
   .results { scroll-behavior: smooth; }
 }
+
+/* The 3D view sits where the drawing was, same width, with Front view tucked in its corner. */
+.wall3d { position: relative; }
+.wall3d-canvas canvas { display: block; width: 100%; height: auto; border-radius: 6px; touch-action: none; }
+.wall3d-front { position: absolute; right: 8px; top: 8px; min-height: 36px; padding: 6px 12px; font-size: 14px; background: #fff; }
 
 /* Manufacturer renders beside each SKU: small in the parts table, larger in the cabinet panel. */
 .sku-image { display: block; object-fit: contain; background: #fff; border-radius: 4px; }

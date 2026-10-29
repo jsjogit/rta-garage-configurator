@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import type { LayoutDto, LayoutOptionDto, SolveResponse, Tier, WallDto } from '../api/types'
 import { buildCart, track } from '../api/client'
 import { Elevation, formatInches } from './Elevation'
@@ -7,6 +7,12 @@ import { money } from './Money'
 import { SkuImage } from './SkuImage'
 import { CabinetPanel } from './CabinetPanel'
 import { useWallEditor } from '../hooks/useWallEditor'
+import { canMove, reorder, rowOf } from '../editor/reorder'
+import { hasWebGL } from '../three/support'
+import { ThreeBoundary } from '../three/ThreeBoundary'
+
+// Three.js arrives only when someone asks for it; it never touches the main bundle.
+const Wall3D = lazy(() => import('../three/Wall3D'))
 
 const TIER_NOTES: Record<Tier, string> = {
   Standard: 'Full-height doors on the base cabinets.',
@@ -103,11 +109,22 @@ function Sheet({
   const [tier, setTier] = useState<Tier>(fixedTier ? (option.standard.layout.tier ?? 'Standard') : 'Standard')
   const [editing, setEditing] = useState(false)
   const [selected, setSelected] = useState<number | null>(null)
+  const [webgl] = useState(hasWebGL)
+  const [threeD, setThreeD] = useState(false)
+  const [threeDFailed, setThreeDFailed] = useState(false)
   const chosen = tier === 'Standard' ? option.standard : option.premiere
   const editor = useWallEditor(chosen, wall, configId)
   const priced = editor.priced
   const saving = priced.subtotalList - priced.subtotalPromo
   const blocked = editor.violations.length > 0
+
+  const onMove = (index: number, steps: number) => {
+    const item = editor.layout.items[index]
+    if (!item || reorder(editor.layout, index, steps) === editor.layout) return
+    editor.move(index, steps)
+    onTouch()
+    track('layout_reordered', configId, { rank: String(rank), row: rowOf(item) ?? '' })
+  }
 
   useEffect(() => setSelected(null), [tier])
 
@@ -124,15 +141,49 @@ function Sheet({
 
       <div className="sheet-body">
         <div className="drawing">
-          <Elevation
-            layout={editor.layout}
-            wallLength={wall.length}
-            ceiling={wall.ceiling}
-            obstructions={wall.obstructions ?? []}
-            id={`sheet-${rank}-${tier.toLowerCase()}`}
-            selected={editing ? selected : null}
-            onSelect={editing ? setSelected : undefined}
-          />
+          {threeD && !threeDFailed ? (
+            <ThreeBoundary
+              onError={() => {
+                setThreeDFailed(true)
+                setThreeD(false)
+              }}
+            >
+              <Suspense fallback={<p className="dims">Loading 3D…</p>}>
+                <Wall3D layout={editor.layout} wall={wall} />
+              </Suspense>
+            </ThreeBoundary>
+          ) : (
+            <Elevation
+              layout={editor.layout}
+              wallLength={wall.length}
+              ceiling={wall.ceiling}
+              obstructions={wall.obstructions ?? []}
+              id={`sheet-${rank}-${tier.toLowerCase()}`}
+              selected={editing ? selected : null}
+              onSelect={editing ? setSelected : undefined}
+              onReorder={editing ? onMove : undefined}
+            />
+          )}
+
+          {threeDFailed && (
+            <p className="dims" role="status">
+              We couldn’t show this wall in 3D on this device.
+            </p>
+          )}
+
+          {webgl && !threeDFailed && !editing && (
+            <button
+              type="button"
+              className="linklike"
+              aria-pressed={threeD}
+              onClick={() => {
+                if (!threeD) track('view_3d_opened', configId, { rank: String(rank), tier })
+                setThreeD(!threeD)
+              }}
+            >
+              {threeD ? 'Back to the drawing' : 'See it in 3D'}
+            </button>
+          )}
         </div>
 
         <div className="parts">
@@ -211,6 +262,7 @@ function Sheet({
               onClick={() => {
                 setEditing((on) => !on)
                 setSelected(null)
+                setThreeD(false)
               }}
             >
               {editing ? 'Done editing' : 'Edit this wall'}
@@ -244,12 +296,15 @@ function Sheet({
             setSelected(null)
           }}
           onClose={() => setSelected(null)}
+          onMove={onMove}
+          canMoveLeft={canMove(editor.layout, selected, -1)}
+          canMoveRight={canMove(editor.layout, selected, 1)}
         />
       )}
 
       {editing && selected === null && (
         <div className="editor">
-          <p className="dims">Tap a cabinet in the drawing to swap or remove it.</p>
+          <p className="dims">Tap a cabinet to swap or remove it, or drag one along its row to reorder.</p>
         </div>
       )}
     </article>

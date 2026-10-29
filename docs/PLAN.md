@@ -51,19 +51,19 @@ and **1C** is Session 9 on `v1c-3d`. Each is built from 1A and each is optional.
 Goal: confidence to buy. View-only plain Three.js, built from the same layout data as the SVG; the
 only new edit is reordering cabinets, in the 2D editor. No stain toggle, no export, no AR.
 
-### Session 8 — Reorder in the 2D editor
+### Session 8 — Reorder in the 2D editor — done 2026-10-05 (`v1b-reorder`)
 > Read the Phase 2 design spec. Add web/src/editor/reorder.ts (row + unbroken-stretch rules, re-pack
 > from the stretch's left edge, fillers and counters fixed), useWallEditor.move, drag-to-reorder in
 > edit mode, Move left/right in CabinetPanel, arrow keys. One drop = one validate + price round trip.
 > Tests first.
 
-### Session 9 — 3D view
+### Session 9 — 3D view — done 2026-10-05 (`v1c-3d`)
 > Extract web/src/geometry/fronts.ts from Elevation (snapshots must not change). Add
 > web/src/three/buildScene.ts (pure, unit-tested) and Wall3D.tsx (the only Three.js file: clamped
 > OrbitControls, Front view, render on demand, full disposal). "See it in 3D" toggle per card via
 > React.lazy; hidden without WebGL; falls back to 2D on error.
 
-### Session 10 — Polish + prototype build
+### Session 10 — Polish + prototype build — done 2026-10-05 (`v2.0`)
 > Real-browser pass desktop + 390px, touch inside a scrolling page, view_3d_opened and
 > layout_reordered events, main-bundle size check in CI, memory check across cards and tiers, docs.
 

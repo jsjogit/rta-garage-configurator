@@ -16,6 +16,9 @@ export function CabinetPanel({
   onSwap,
   onRemove,
   onClose,
+  onMove,
+  canMoveLeft,
+  canMoveRight,
 }: {
   item: PlacedItemDto
   index: number
@@ -23,6 +26,9 @@ export function CabinetPanel({
   onSwap: (index: number, option: SwapOptionDto) => void
   onRemove: (index: number) => void
   onClose: () => void
+  onMove: (index: number, steps: number) => void
+  canMoveLeft: boolean
+  canMoveRight: boolean
 }) {
   const [options, setOptions] = useState<SwapOptionDto[] | null>(null)
   const panel = useRef<HTMLDivElement>(null)
@@ -91,6 +97,15 @@ export function CabinetPanel({
       )}
 
       {options?.length === 0 && <p className="dims">Nothing else fits this spot.</p>}
+
+      <div className="row move-row" role="group" aria-label="Move this cabinet">
+        <button type="button" className="btn ghost" disabled={!canMoveLeft} onClick={() => onMove(index, -1)}>
+          Move left
+        </button>
+        <button type="button" className="btn ghost" disabled={!canMoveRight} onClick={() => onMove(index, 1)}>
+          Move right
+        </button>
+      </div>
 
       <div className="row">
         <button type="button" className="btn ghost" onClick={() => onRemove(index)}>
