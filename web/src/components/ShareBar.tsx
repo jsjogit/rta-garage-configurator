@@ -47,14 +47,22 @@ export function ShareBar({
     setBusy(true)
     setProblem(null)
 
-    try {
-      const id = await ensureSaved()
-      const url = `${window.location.origin}${DESIGN_PATH}/${id}`
+    let url: string
 
-      if (navigator.clipboard) await navigator.clipboard.writeText(url)
-      setSent(`Link copied: ${url}`)
+    try {
+      url = `${window.location.origin}${DESIGN_PATH}/${await ensureSaved()}`
     } catch {
       setProblem('We couldn’t save the design just now. Try again in a moment.')
+      setBusy(false)
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(url)
+      setSent(`Link copied: ${url}`)
+    } catch {
+      // Saved, but the browser would not copy: no clipboard, or an embedded frame that is not allowed one.
+      setSent(`Saved. Copy your link: ${url}`)
     } finally {
       setBusy(false)
     }

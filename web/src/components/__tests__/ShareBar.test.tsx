@@ -11,13 +11,17 @@ const layout: LayoutDto = {
 
 let calls: { url: string; body?: Record<string, unknown> }[] = []
 
-function stub(options: { leadFails?: boolean } = {}) {
+function stub(options: { leadFails?: boolean; saveFails?: boolean; clipboard?: 'works' | 'refuses' | 'missing' } = {}) {
   calls = []
   vi.stubGlobal(
     'fetch',
     vi.fn(async (url: string, init?: RequestInit) => {
       const body = init?.body ? JSON.parse(init.body as string) : undefined
       calls.push({ url, body })
+
+      if (url === '/api/design' && options.saveFails) {
+        return { ok: false, status: 500, json: async () => ({}) } as Response
+      }
 
       if (url === '/api/design') {
         return { ok: true, status: 200, json: async () => ({ configId: '7K2MQ4' }) } as Response
@@ -34,7 +38,11 @@ function stub(options: { leadFails?: boolean } = {}) {
       return { ok: true, status: 200, json: async () => ({ received: true }) } as Response
     }),
   )
-  vi.stubGlobal('navigator', { clipboard: { writeText: vi.fn(async () => undefined) } })
+  const clipboard = options.clipboard ?? 'works'
+  const writeText = vi.fn(async () => {
+    if (clipboard === 'refuses') throw new DOMException('Write permission denied.', 'NotAllowedError')
+  })
+  vi.stubGlobal('navigator', clipboard === 'missing' ? {} : { clipboard: { writeText } })
 }
 
 function show(configId: string | null = null, onSaved = vi.fn()) {
@@ -65,6 +73,42 @@ describe('ShareBar', () => {
     await user.click(screen.getByRole('button', { name: /save & copy link/i }))
 
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('/garage/design/7K2MQ4'))
+  })
+
+  it('still hands over the link when the browser will not copy it', async () => {
+    // Inside the garage page's slide-out the browser refused the clipboard, and the customer was told the save failed.
+    const user = userEvent.setup()
+    stub({ clipboard: 'refuses' })
+    show()
+
+    await user.click(screen.getByRole('button', { name: /save & copy link/i }))
+
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('/garage/design/7K2MQ4'))
+    expect(screen.getByRole('status')).toHaveTextContent(/copy/i)
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
+
+  it('hands over the link in a browser with no clipboard at all', async () => {
+    const user = userEvent.setup()
+    stub({ clipboard: 'missing' })
+    show()
+
+    await user.click(screen.getByRole('button', { name: /save & copy link/i }))
+
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('/garage/design/7K2MQ4'))
+    expect(screen.getByRole('status')).not.toHaveTextContent(/copied/i)
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
+
+  it('says the save failed only when it did', async () => {
+    const user = userEvent.setup()
+    stub({ saveFails: true })
+    show()
+
+    await user.click(screen.getByRole('button', { name: /save & copy link/i }))
+
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/couldn’t save/i))
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
   })
 
   it('does not save the same design twice', async () => {
