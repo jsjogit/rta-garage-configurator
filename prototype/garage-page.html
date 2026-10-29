@@ -342,7 +342,7 @@
       <button class="drawer-close" data-close>Close</button>
     </div>
     <!-- Loaded on first open, then kept, so closing and reopening keeps the customer's wall. -->
-    <iframe id="planner" title="Garage wall planner"></iframe>
+    <iframe id="planner" title="Garage wall planner" allow="clipboard-write"></iframe>
   </aside>
 
 <script>
@@ -369,6 +369,13 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && document.body.classList.contains('open')) close()
   })
+
+  // A shared link, slide-out style: /garage-cabinets?design=K7M2QX lands on the page with that design open.
+  const shared = new URLSearchParams(location.search).get('design')
+  if (/^[A-Z0-9]{6}$/.test(shared ?? '')) {
+    frame.src = PLANNER + 'garage/design/' + shared
+    document.body.classList.add('open')
+  }
 
   // The gallery: thumbnails and arrows, as on the live page.
   const hero = document.getElementById('hero')
